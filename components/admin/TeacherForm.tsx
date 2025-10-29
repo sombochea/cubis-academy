@@ -10,6 +10,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Trans } from '@lingui/react/macro';
 
+// Helper to extract error message
+const getErrorMessage = (error: any): string => {
+  if (typeof error === 'string') return error;
+  if (error?.message) return error.message;
+  if (error?.toString) return error.toString();
+  return 'Invalid value';
+};
+
 const teacherSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
@@ -112,7 +120,7 @@ export function TeacherForm({ locale, initialData, teacherId }: TeacherFormProps
               className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+              <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
             )}
           </div>
         )}
@@ -134,7 +142,7 @@ export function TeacherForm({ locale, initialData, teacherId }: TeacherFormProps
               disabled={!!teacherId}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+              <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
             )}
           </div>
         )}
@@ -173,7 +181,7 @@ export function TeacherForm({ locale, initialData, teacherId }: TeacherFormProps
                 className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
               />
               {field.state.meta.errors.length > 0 && (
-                <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+                <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
               )}
             </div>
           )}

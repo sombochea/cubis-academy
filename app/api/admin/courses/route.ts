@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       title: validatedData.title,
       desc: validatedData.desc || null,
       category: validatedData.category || null,
-      teacherId: validatedData.teacherId || null,
+      teacherId: (validatedData.teacherId && validatedData.teacherId !== 'none') ? validatedData.teacherId : null,
       price: validatedData.price,
       duration: parseInt(validatedData.duration),
       level: validatedData.level,

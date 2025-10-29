@@ -11,6 +11,14 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Trans } from '@lingui/react/macro';
 
+// Helper to extract error message
+const getErrorMessage = (error: any): string => {
+  if (typeof error === 'string') return error;
+  if (error?.message) return error.message;
+  if (error?.toString) return error.toString();
+  return 'Invalid value';
+};
+
 const courseSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
   desc: z.string(),
@@ -120,7 +128,7 @@ export function CourseForm({ locale, teachers, initialData, courseId }: CourseFo
               className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+              <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
             )}
           </div>
         )}
@@ -168,14 +176,14 @@ export function CourseForm({ locale, teachers, initialData, courseId }: CourseFo
                 <Trans>Assign Teacher</Trans>
               </Label>
               <Select
-                value={field.state.value}
-                onValueChange={(value) => field.handleChange(value)}
+                value={field.state.value || 'none'}
+                onValueChange={(value) => field.handleChange(value === 'none' ? '' : value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a teacher" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">
+                  <SelectItem value="none">
                     <Trans>No teacher assigned</Trans>
                   </SelectItem>
                   {teachers.map((teacher) => (
@@ -206,7 +214,7 @@ export function CourseForm({ locale, teachers, initialData, courseId }: CourseFo
                 className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
               />
               {field.state.meta.errors.length > 0 && (
-                <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+                <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
               )}
             </div>
           )}
@@ -227,7 +235,7 @@ export function CourseForm({ locale, teachers, initialData, courseId }: CourseFo
                 className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
               />
               {field.state.meta.errors.length > 0 && (
-                <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+                <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
               )}
             </div>
           )}
@@ -279,7 +287,7 @@ export function CourseForm({ locale, teachers, initialData, courseId }: CourseFo
               className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+              <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
             )}
           </div>
         )}
@@ -301,7 +309,7 @@ export function CourseForm({ locale, teachers, initialData, courseId }: CourseFo
               className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-600">{String(field.state.meta.errors[0])}</p>
+              <p className="text-sm text-red-600">{getErrorMessage(field.state.meta.errors[0])}</p>
             )}
           </div>
         )}
