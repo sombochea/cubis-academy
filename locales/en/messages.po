@@ -13,25 +13,147 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: course.level
+#. placeholder {0}: enrollment.status
 #. placeholder {0}: feature.description
-#. placeholder {0}: feature.title
+#: app/[locale]/(admin)/admin/courses/page.tsx:114
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:92
+#: app/[locale]/(admin)/admin/page.tsx:111
+#: app/[locale]/(admin)/admin/payments/page.tsx:105
+#: components/admin/AdminNav.tsx:49
 #: components/landing-page.tsx:372
 #: components/landing-page.tsx:375
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:84
+#: app/[locale]/(admin)/admin/students/page.tsx:87
+#: app/[locale]/(admin)/admin/teachers/page.tsx:76
+msgid "Actions"
+msgstr "Actions"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:123
+#: app/[locale]/(admin)/admin/students/page.tsx:130
+#: app/[locale]/(admin)/admin/teachers/page.tsx:101
+msgid "Active"
+msgstr "Active"
 
 #~ msgid "Active Students"
 #~ msgstr "Active Students"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:53
+#: app/[locale]/(admin)/admin/page.tsx:133
+msgid "Add Course"
+msgstr "Add Course"
+
+#: app/[locale]/(admin)/admin/courses/new/page.tsx:34
+msgid "Add New Course"
+msgstr "Add New Course"
+
+#: app/[locale]/(admin)/admin/teachers/new/page.tsx:22
+msgid "Add New Teacher"
+msgstr "Add New Teacher"
+
+#: app/[locale]/(admin)/admin/page.tsx:127
+#: app/[locale]/(admin)/admin/teachers/page.tsx:51
+msgid "Add Teacher"
+msgstr "Add Teacher"
+
+#: app/[locale]/(admin)/admin/page.tsx:88
+msgid "Admin Dashboard"
+msgstr "Admin Dashboard"
+
+#: components/admin/CourseForm.tsx:257
+msgid "Advanced"
+msgstr "Advanced"
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:63
+msgid "Amount"
+msgstr "Amount"
+
+#: components/admin/CourseForm.tsx:168
+msgid "Assign Teacher"
+msgstr "Assign Teacher"
+
+#: components/admin/CourseForm.tsx:251
+msgid "Beginner"
+msgstr "Beginner"
+
+#: components/admin/TeacherForm.tsx:204
+msgid "Biography"
+msgstr "Biography"
+
+#: components/admin/CourseForm.tsx:329
+#: components/admin/TeacherForm.tsx:237
+msgid "Cancel"
+msgstr "Cancel"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:66
+#: components/admin/CourseForm.tsx:151
+msgid "Category"
+msgstr "Category"
 
 #: components/landing-page.tsx:346
 msgid "Comprehensive learning experience designed for your success"
 msgstr "Comprehensive learning experience designed for your success"
 
-#~ msgid "CUBIS Academy"
-#~ msgstr "CUBIS Academy"
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:59
+#: app/[locale]/(admin)/admin/payments/page.tsx:60
+msgid "Course"
+msgstr "Course"
+
+#: components/admin/CourseForm.tsx:105
+msgid "Course saved successfully! Redirecting..."
+msgstr "Course saved successfully! Redirecting..."
+
+#: components/admin/CourseForm.tsx:113
+msgid "Course Title"
+msgstr "Course Title"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:121
+msgid "courses"
+msgstr "courses"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:42
+msgid "Courses Management"
+msgstr "Courses Management"
+
+#: app/[locale]/(admin)/admin/courses/new/page.tsx:37
+msgid "Create a new course in the catalog"
+msgstr "Create a new course in the catalog"
+
+#: app/[locale]/(admin)/admin/teachers/new/page.tsx:25
+msgid "Create a new teacher account"
+msgstr "Create a new teacher account"
+
+#: components/admin/AdminNav.tsx:30
+msgid "CUBIS Academy"
+msgstr "CUBIS Academy"
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:72
+msgid "Date"
+msgstr "Date"
+
+#: components/admin/CourseForm.tsx:133
+msgid "Description"
+msgstr "Description"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:75
+msgid "Duration"
+msgstr "Duration"
+
+#: components/admin/CourseForm.tsx:219
+msgid "Duration (hours)"
+msgstr "Duration (hours)"
 
 #~ msgid "Earn certificates that boost your career prospects"
 #~ msgstr "Earn certificates that boost your career prospects"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:72
+#: app/[locale]/(admin)/admin/teachers/page.tsx:64
+#: components/admin/TeacherForm.tsx:125
+msgid "Email"
+msgstr "Email"
 
 #: components/landing-page.tsx:446
 msgid "Empowering learners with professional skills for the digital age"
@@ -39,6 +161,18 @@ msgstr "Empowering learners with professional skills for the digital age"
 
 #~ msgid "Engage with teachers and peers in live sessions"
 #~ msgstr "Engage with teachers and peers in live sessions"
+
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:68
+msgid "Enrolled Date"
+msgstr "Enrolled Date"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:81
+msgid "Enrollments"
+msgstr "Enrollments"
+
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:40
+msgid "Enrollments Overview"
+msgstr "Enrollments Overview"
 
 #: components/landing-page.tsx:343
 msgid "Everything You Need to Succeed"
@@ -59,13 +193,35 @@ msgstr "Everything You Need to Succeed"
 #~ msgid "Featured"
 #~ msgstr "Featured"
 
+#: components/admin/TeacherForm.tsx:105
+msgid "Full Name"
+msgstr "Full Name"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:78
+msgid "Gender"
+msgstr "Gender"
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:89
+msgid "General Payment"
+msgstr "General Payment"
+
 #: components/landing-page.tsx:113
 #: components/landing-page.tsx:417
 msgid "Get Started Free"
 msgstr "Get Started Free"
 
+#: app/[locale]/(admin)/admin/courses/page.tsx:123
+#: app/[locale]/(admin)/admin/students/page.tsx:130
+#: app/[locale]/(admin)/admin/teachers/page.tsx:101
+msgid "Inactive"
+msgstr "Inactive"
+
 #~ msgid "Interactive Learning"
 #~ msgstr "Interactive Learning"
+
+#: components/admin/CourseForm.tsx:254
+msgid "Intermediate"
+msgstr "Intermediate"
 
 #~ msgid "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
 #~ msgstr "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
@@ -76,18 +232,115 @@ msgstr "Get Started Free"
 #~ msgid "Learn Skills That Matter"
 #~ msgstr "Learn Skills That Matter"
 
+#: app/[locale]/(admin)/admin/courses/page.tsx:78
+#: components/admin/CourseForm.tsx:240
+msgid "Level"
+msgstr "Level"
+
 #: components/landing-page.tsx:107
 msgid "Login"
 msgstr "Login"
 
+#: components/admin/AdminNav.tsx:62
+msgid "Logout"
+msgstr "Logout"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:45
+msgid "Manage course catalog and assignments"
+msgstr "Manage course catalog and assignments"
+
+#: app/[locale]/(admin)/admin/teachers/page.tsx:43
+msgid "Manage teachers and assign courses"
+msgstr "Manage teachers and assign courses"
+
+#: app/[locale]/(admin)/admin/page.tsx:91
+msgid "Manage your learning management system"
+msgstr "Manage your learning management system"
+
 #~ msgid "Master technology skills with expert-led courses. From Web Development to DevOps, accelerate your career with hands-on learning and real-world projects."
 #~ msgstr "Master technology skills with expert-led courses. From Web Development to DevOps, accelerate your career with hands-on learning and real-world projects."
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:66
+msgid "Method"
+msgstr "Method"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:69
+#: app/[locale]/(admin)/admin/teachers/page.tsx:61
+msgid "Name"
+msgstr "Name"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:157
+msgid "No courses found. Add your first course to get started."
+msgstr "No courses found. Add your first course to get started."
+
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:118
+msgid "No enrollments found."
+msgstr "No enrollments found."
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:120
+msgid "No payments found."
+msgstr "No payments found."
+
+#: app/[locale]/(admin)/admin/students/page.tsx:151
+msgid "No students found."
+msgstr "No students found."
+
+#: components/admin/CourseForm.tsx:179
+msgid "No teacher assigned"
+msgstr "No teacher assigned"
+
+#: app/[locale]/(admin)/admin/teachers/page.tsx:136
+msgid "No teachers found. Add your first teacher to get started."
+msgstr "No teachers found. Add your first teacher to get started."
+
+#: components/admin/TeacherForm.tsx:165
+msgid "Password"
+msgstr "Password"
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:41
+msgid "Payments Tracking"
+msgstr "Payments Tracking"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:75
+#: app/[locale]/(admin)/admin/teachers/page.tsx:67
+#: components/admin/TeacherForm.tsx:147
+msgid "Phone"
+msgstr "Phone"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:72
+msgid "Price"
+msgstr "Price"
+
+#: components/admin/CourseForm.tsx:198
+msgid "Price ($)"
+msgstr "Price ($)"
+
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:65
+msgid "Progress"
+msgstr "Progress"
+
+#: app/[locale]/(admin)/admin/page.tsx:120
+msgid "Quick Actions"
+msgstr "Quick Actions"
 
 #~ msgid "Ready to Transform Your Career?"
 #~ msgstr "Ready to Transform Your Career?"
 
 #~ msgid "Recognized Certificates"
 #~ msgstr "Recognized Certificates"
+
+#: components/admin/CourseForm.tsx:318
+msgid "Save Course"
+msgstr "Save Course"
+
+#: components/admin/TeacherForm.tsx:226
+msgid "Save Teacher"
+msgstr "Save Teacher"
+
+#: components/admin/CourseForm.tsx:318
+#: components/admin/TeacherForm.tsx:226
+msgid "Saving..."
+msgstr "Saving..."
 
 #~ msgid "Short-term courses designed for quick skill acquisition"
 #~ msgstr "Short-term courses designed for quick skill acquisition"
@@ -96,22 +349,97 @@ msgstr "Login"
 msgid "Sign In"
 msgstr "Sign In"
 
+#: app/[locale]/(admin)/admin/teachers/page.tsx:70
+#: components/admin/TeacherForm.tsx:187
+msgid "Specialization"
+msgstr "Specialization"
+
 #: components/landing-page.tsx:175
 msgid "Start Learning Free"
 msgstr "Start Learning Free"
 
+#: app/[locale]/(admin)/admin/courses/page.tsx:81
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:62
+#: app/[locale]/(admin)/admin/payments/page.tsx:69
+#: app/[locale]/(admin)/admin/students/page.tsx:84
+#: app/[locale]/(admin)/admin/teachers/page.tsx:73
+msgid "Status"
+msgstr "Status"
+
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:53
+#: app/[locale]/(admin)/admin/payments/page.tsx:57
+msgid "Student"
+msgstr "Student"
+
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:56
+#: app/[locale]/(admin)/admin/students/page.tsx:66
+msgid "Student ID"
+msgstr "Student ID"
+
 #~ msgid "students"
 #~ msgstr "students"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:53
+msgid "Students Overview"
+msgstr "Students Overview"
 
 #~ msgid "Success Rate"
 #~ msgstr "Success Rate"
 
+#: app/[locale]/(admin)/admin/courses/page.tsx:69
+msgid "Teacher"
+msgstr "Teacher"
+
+#: components/admin/TeacherForm.tsx:97
+msgid "Teacher saved successfully! Redirecting..."
+msgstr "Teacher saved successfully! Redirecting..."
+
+#: app/[locale]/(admin)/admin/teachers/page.tsx:40
+msgid "Teachers Management"
+msgstr "Teachers Management"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:63
+msgid "Title"
+msgstr "Title"
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:54
+msgid "Transaction ID"
+msgstr "Transaction ID"
+
 #~ msgid "Transform Your Career Today"
 #~ msgstr "Transform Your Career Today"
+
+#: app/[locale]/(admin)/admin/courses/page.tsx:98
+msgid "Unassigned"
+msgstr "Unassigned"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:139
+msgid "View"
+msgstr "View"
+
+#: app/[locale]/(admin)/admin/students/page.tsx:56
+msgid "View all registered students and their enrollments"
+msgstr "View all registered students and their enrollments"
+
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:43
+msgid "View all student course enrollments"
+msgstr "View all student course enrollments"
+
+#: app/[locale]/(admin)/admin/payments/page.tsx:44
+msgid "View and manage all payment transactions"
+msgstr "View and manage all payment transactions"
 
 #: components/landing-page.tsx:314
 msgid "View Details"
 msgstr "View Details"
+
+#: app/[locale]/(admin)/admin/page.tsx:145
+msgid "View Payments"
+msgstr "View Payments"
+
+#: app/[locale]/(admin)/admin/page.tsx:139
+msgid "View Students"
+msgstr "View Students"
 
 #: components/landing-page.tsx:183
 msgid "Watch Demo"
@@ -120,3 +448,59 @@ msgstr "Watch Demo"
 #: components/landing-page.tsx:339
 msgid "Why Choose Us"
 msgstr "Why Choose Us"
+
+#: components/admin/CourseForm.tsx:270
+msgid "YouTube URL"
+msgstr "YouTube URL"
+
+#: components/admin/CourseForm.tsx:292
+msgid "Zoom URL"
+msgstr "Zoom URL"
+
+#: app/[locale]/(admin)/admin/page.tsx
+msgid "Total Students"
+msgstr "Total Students"
+
+#: app/[locale]/(admin)/admin/page.tsx
+msgid "Total Teachers"
+msgstr "Total Teachers"
+
+#: app/[locale]/(admin)/admin/page.tsx
+msgid "Total Courses"
+msgstr "Total Courses"
+
+#: app/[locale]/(admin)/admin/page.tsx
+msgid "Active Enrollments"
+msgstr "Active Enrollments"
+
+#: app/[locale]/(admin)/admin/page.tsx
+msgid "Total Revenue"
+msgstr "Total Revenue"
+
+#: app/[locale]/(admin)/admin/page.tsx
+msgid "Pending Payments"
+msgstr "Pending Payments"
+
+#: components/admin/AdminNav.tsx
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: components/admin/AdminNav.tsx
+msgid "Teachers"
+msgstr "Teachers"
+
+#: components/admin/AdminNav.tsx
+msgid "Courses"
+msgstr "Courses"
+
+#: components/admin/AdminNav.tsx
+msgid "Students"
+msgstr "Students"
+
+#: components/admin/AdminNav.tsx
+msgid "Enrollments"
+msgstr "Enrollments"
+
+#: components/admin/AdminNav.tsx
+msgid "Payments"
+msgstr "Payments"
