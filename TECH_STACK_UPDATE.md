@@ -2,12 +2,13 @@
 
 ## ✅ What's Been Updated
 
-### 📦 New Dependencies Installed
+### 📦 Dependencies Installed
 
 ```bash
 @tanstack/react-form@1.23.8        # High-performance form management
-@tanstack/zod-form-adapter@0.42.1  # Zod integration for TanStack Form
 ```
+
+**Note:** No adapter needed! Zod v4+ implements Standard Schema and works directly with TanStack Form.
 
 ### 📚 Documentation Updated
 
@@ -64,20 +65,36 @@
 
 ## 🚀 Quick Start
 
-### Basic Form Example
+### Basic Form Example (Modern Approach)
 
 ```typescript
 'use client';
 
 import { useForm } from '@tanstack/react-form';
-import { zodValidator } from '@tanstack/zod-form-adapter';
 import { z } from 'zod';
+import type { AnyFieldApi } from '@tanstack/react-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
+// Reusable field error component
+function FieldInfo({ field }: { field: AnyFieldApi }) {
+  return (
+    <>
+      {field.state.meta.isTouched && field.state.meta.errors.length > 0 ? (
+        <p className="text-sm text-red-600">
+          {field.state.meta.errors.map((err) => err.message).join(', ')}
+        </p>
+      ) : null}
+      {field.state.meta.isValidating ? (
+        <p className="text-sm text-gray-500">Validating...</p>
+      ) : null}
+    </>
+  );
+}
+
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
@@ -87,14 +104,15 @@ export default function LoginForm() {
       email: '',
       password: '',
     },
-    validatorAdapter: zodValidator(),
+    validators: {
+      onChange: loginSchema, // Zod works directly via Standard Schema!
+    },
     onSubmit: async ({ value }) => {
-      const res = await fetch('/api/login', {
+      await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(value),
       });
-      // Handle response
     },
   });
 
@@ -107,12 +125,7 @@ export default function LoginForm() {
       }}
       className="space-y-4"
     >
-      <form.Field
-        name="email"
-        validators={{
-          onChange: loginSchema.shape.email,
-        }}
-      >
+      <form.Field name="email">
         {(field) => (
           <div className="space-y-2">
             <Label htmlFor={field.name}>Email</Label>
@@ -124,19 +137,12 @@ export default function LoginForm() {
               onChange={(e) => field.handleChange(e.target.value)}
               className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
             />
-            {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-600">{field.state.meta.errors[0]}</p>
-            )}
+            <FieldInfo field={field} />
           </div>
         )}
       </form.Field>
 
-      <form.Field
-        name="password"
-        validators={{
-          onChange: loginSchema.shape.password,
-        }}
-      >
+      <form.Field name="password">
         {(field) => (
           <div className="space-y-2">
             <Label htmlFor={field.name}>Password</Label>
@@ -148,20 +154,30 @@ export default function LoginForm() {
               onChange={(e) => field.handleChange(e.target.value)}
               className={field.state.meta.errors.length > 0 ? 'border-red-500' : ''}
             />
-            {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-red-600">{field.state.meta.errors[0]}</p>
-            )}
+            <FieldInfo field={field} />
           </div>
         )}
       </form.Field>
 
-      <Button type="submit" className="w-full">
-        Sign In
-      </Button>
+      <form.Subscribe
+        selector={(state) => [state.canSubmit, state.isSubmitting]}
+      >
+        {([canSubmit, isSubmitting]) => (
+          <Button type="submit" disabled={!canSubmit || isSubmitting}>
+            {isSubmitting ? 'Signing in...' : 'Sign In'}
+          </Button>
+        )}
+      </form.Subscribe>
     </form>
   );
 }
 ```
+
+**Key Changes:**
+- ❌ Removed deprecated `@tanstack/zod-form-adapter`
+- ✅ Zod works directly via Standard Schema
+- ✅ Cleaner, simpler code
+- ✅ Better performance
 
 ## 📋 Updated Tech Stack
 

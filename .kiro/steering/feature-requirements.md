@@ -4,72 +4,109 @@ inclusion: always
 
 # Feature Requirements & User Roles
 
-## Role-Based Access Control
+## Role-Based Access Control (RBAC)
+
+This system has three roles with distinct permissions and route access.
 
 ### Student (`role: 'student'`)
+
 Routes: `/student/*`
-- Register (email/password or Google OAuth2)
-- Manage profile (full_name, email, phone_number, gender, date_of_birth, address, profile_photo)
-- Browse and enroll in courses
-- Submit payments (manual for MVP)
+
+Capabilities:
+- Register with email/password or Google OAuth2
+- Manage profile: `full_name`, `email`, `phone_number`, `gender`, `date_of_birth`, `address`, `profile_photo`
+- Browse course catalog and enroll in courses
+- Submit manual payment records (MVP - no payment gateway)
 - View payment history
-- Access enrolled course materials only (videos, Zoom links)
-- View own scores and attendance
+- Access course materials ONLY for enrolled courses (videos, Zoom links, documents)
+- View own scores and attendance records
+
+Restrictions:
+- Cannot access teacher or admin routes
+- Cannot view other students' data
+- Cannot modify course content or scores
 
 ### Teacher (`role: 'teacher'`)
+
 Routes: `/teacher/*`
-- Login (email/password or Google OAuth2)
+
+Capabilities:
+- Login with email/password or Google OAuth2
 - View assigned courses and schedules
-- Manage course materials (upload docs, add YouTube/Zoom links)
-- Add/update student scores
-- Mark attendance
-- View class rosters
+- Manage course materials (upload documents, add YouTube/Zoom links)
+- Add/update student scores for assigned courses
+- Mark attendance for assigned courses
+- View class rosters for assigned courses
+
+Restrictions:
+- Cannot access admin routes
+- Cannot manage other teachers
+- Cannot view courses not assigned to them
 
 ### Admin (`role: 'admin'`)
+
 Routes: `/admin/*`
-- Full system access
-- Manage teachers (add/remove, assign courses)
+
+Capabilities:
+- Full system access (all routes)
+- Manage teachers (create, update, delete, assign courses)
 - View all students and enrollments
-- Oversee courses and payments
+- Manage courses (create, update, delete)
+- Track all payments
 - Access all data for reporting
 
-## MVP Features
+## MVP Feature Scope
 
-### Authentication (Auth.js)
-- Email/password + Google OAuth2
-- Role-based route protection
+### Authentication (Auth.js v5)
+- Email/password authentication
+- Google OAuth2 integration
+- Role-based route protection via middleware
 - Session management
 - Password reset flow
 
 ### Student Portal (`/student/*`)
-- Registration form: full_name, email, phone_number, gender, date_of_birth, address, profile_photo
-- Profile editing
-- Course catalog with enrollment
-- Manual payment submission
+- Registration form with fields: `full_name`, `email`, `phone_number`, `gender`, `date_of_birth`, `address`, `profile_photo`
+- Profile editing page
+- Course catalog with search/filter
+- Enrollment button (creates enrollment record)
+- Manual payment submission form
 - Payment history table
-- Course materials (restricted to enrolled courses)
+- Course materials page (restricted to enrolled courses)
 - Scores and attendance view
 
 ### Teacher Dashboard (`/teacher/*`)
-- Schedule calendar
-- Course material management (docs, YouTube links, Zoom links)
-- Student scoring interface
-- Attendance marking
-- Class roster
+- Schedule calendar showing assigned courses
+- Course material management (upload docs, add YouTube/Zoom links)
+- Student scoring interface (add/update scores)
+- Attendance marking interface
+- Class roster view
 
 ### Admin Backoffice (`/admin/*`)
-- Teacher CRUD and course assignment
-- Student and enrollment overview
-- Course management
-- Payment tracking
+- Teacher CRUD operations
+- Course assignment to teachers
+- Student and enrollment overview tables
+- Course management (CRUD)
+- Payment tracking dashboard
 
-## Implementation Rules
-- Protect all routes with middleware checking user role
-- Validate all form inputs with Zod schemas
-- Use useSWR for client-side data fetching
-- Implement loading and error states for all async operations
-- Show clear user feedback for all actions
-- Ensure WCAG AA compliance on all pages
+## Implementation Requirements
+
+When building features:
+- Protect ALL routes with middleware checking session + role
+- Validate ALL form inputs with Zod schemas (client + server)
+- Use useSWR for client-side data fetching with proper caching
+- Implement loading states (spinners, skeletons) for async operations
+- Implement error states with user-friendly messages
+- Show success feedback after actions (toasts, messages)
+- Ensure WCAG AA accessibility compliance
+- Use database field names in `snake_case` (e.g., `full_name`, `created_at`)
 
 ## Out of Scope (Post-MVP)
-Payment gateways, assignments, forums, messaging, certificates, analytics
+
+Do NOT implement these features:
+- Payment gateway integration (Stripe, PayPal, etc.)
+- Assignment submission system
+- Discussion forums
+- Direct messaging between users
+- Certificate generation
+- Analytics dashboards
+- Email notifications (beyond password reset)

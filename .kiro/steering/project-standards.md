@@ -4,68 +4,104 @@ inclusion: always
 
 # Project Standards
 
-## Tech Stack
-- Next.js 16+ (App Router with Server Components)
-- TailwindCSS v4+ (Utility-first CSS)
-- ShadCN UI components (Accessible, customizable)
-- TanStack Form (High-performance form management)
-- Motion 12+ (Smooth animations)
-- PostgreSQL 18+ with Drizzle ORM (Type-safe queries)
-- Auth.js v5 beta (Authentication & authorization)
-- Zod (TypeScript-first validation)
-- useSWR (React Hooks for data fetching)
-- Resend (Email service)
+## Tech Stack (Non-Negotiable)
 
-## Naming Conventions (Critical)
-- Database fields: `snake_case` (e.g., `full_name`, `created_at`)
-- TypeScript variables/functions: `camelCase`
-- React components: `PascalCase`
-- Files: `kebab-case` (except component files which use `PascalCase`)
+- Next.js 16+ App Router with Server Components (default to server, use 'use client' only when needed)
+- TailwindCSS v4+ for styling
+- ShadCN UI components (accessible, customizable)
+- TanStack Form + Zod for all forms
+- Motion 12+ for animations
+- PostgreSQL 18+ with Drizzle ORM
+- Auth.js v5 beta for authentication
+- useSWR for client-side data fetching
+- Resend for emails
 
-## Code Style Rules
-- Use TypeScript strictly - never use `any` type (use `unknown` if needed)
-- Prefer server components over client components
-- Use TanStack Form for all forms (with Zod validation)
-- Use useSWR for client-side data fetching
-- Validate all inputs on both client and server with Zod schemas
-- Follow WCAG AA accessibility standards
-- Create reusable components and utilities (DRY principle)
-- Keep components small and focused (Single Responsibility)
-- Use composition over inheritance
-- Implement proper error boundaries
-- Always handle loading and error states
+## Naming Conventions (Critical - Must Follow)
+
+- Database fields: `snake_case` (e.g., `full_name`, `created_at`, `user_id`)
+- TypeScript variables/functions: `camelCase` (e.g., `getUserById`, `isLoading`)
+- React components: `PascalCase` (e.g., `LoginForm`, `UserProfile`)
+- Component files: `PascalCase.tsx` (e.g., `LoginForm.tsx`)
+- Non-component files: `kebab-case` (e.g., `auth-utils.ts`, `db-queries.ts`)
+- API routes: `kebab-case` (e.g., `route.ts` in `api/user-profile/`)
+
+## TypeScript Rules
+
+- NEVER use `any` type (use `unknown` if type is truly unknown)
+- Define explicit return types for functions
+- Use Zod schemas for runtime validation, infer TypeScript types from them
+- Prefer `interface` for object shapes, `type` for unions/intersections
+- Use strict mode (already configured in tsconfig.json)
+
+## Component Architecture
+
+- Default to Server Components (no 'use client' directive)
+- Use 'use client' only for: forms, interactive UI, hooks (useState, useEffect, useSWR)
+- Keep components small (<150 lines) and single-purpose
+- Extract reusable logic into custom hooks or utilities
+- Use composition over prop drilling (Context API when needed)
+- Implement error boundaries for client components
+
+## Data Fetching Patterns
+
+- Server Components: Direct database queries via Drizzle
+- Client Components: useSWR for caching and revalidation
+- API Routes: Validate with Zod, return typed responses
+- Always handle loading and error states explicitly
+
+## Form Handling
+
+- Use TanStack Form + Zod for ALL forms
+- Validate on client (TanStack Form) AND server (API route)
+- Pass Zod schemas directly to `validators.onChange` (no adapter)
+- Show field-level errors below inputs
+- Disable submit button when invalid or submitting
+
+## Security Requirements (Non-Negotiable)
+
+- Hash passwords with bcrypt (never store plain text)
+- Validate ALL inputs on both client and server
+- Implement RBAC: Student, Teacher, Admin roles
+- Protect routes with middleware checking session + role
+- Never expose sensitive data in client-side code
+- Use CSRF tokens on forms (Auth.js handles this)
+
+## Accessibility (WCAG AA Compliance)
+
+- Use semantic HTML (`<button>`, `<label>`, `<nav>`)
+- Pair all inputs with labels (`htmlFor` + `id`)
+- Provide alt text for images
+- Ensure keyboard navigation works
+- Use `aria-invalid`, `aria-describedby` for form errors
+- Test with screen readers
 
 ## Project Structure
+
 ```
 app/
-├── (auth)/          # Auth routes (login, register)
-├── (student)/       # Student portal
-├── (teacher)/       # Teacher dashboard
-├── (admin)/         # Admin backoffice
+├── (auth)/          # Login, register routes
+├── (student)/       # Student portal (/student/*)
+├── (teacher)/       # Teacher dashboard (/teacher/*)
+├── (admin)/         # Admin backoffice (/admin/*)
 └── api/             # API routes
 
 components/
-├── ui/              # ShadCN components
-├── forms/           # Form components
-└── shared/          # Reusable components
+├── ui/              # ShadCN components (Button, Input, etc.)
+└── [feature]/       # Feature-specific components
 
 lib/
-├── auth/            # Auth utilities
-├── drizzle/         # DB schema & queries
-├── utils/           # General utilities
-└── validations/     # Zod schemas
+├── auth/            # Auth utilities (session.ts)
+├── drizzle/         # DB schema, queries, migrations
+├── validations/     # Zod schemas (auth.ts, course.ts, etc.)
+└── utils.ts         # General utilities
+
+middleware.ts        # Route protection (role-based)
 ```
 
-## Security (Non-Negotiable)
-- Hash all passwords
-- Validate inputs client and server-side
-- Implement RBAC (Student, Teacher, Admin roles)
-- Use CSRF protection on forms
-- Never expose sensitive data client-side
-- Protect routes based on user role
+## Performance
 
-## Performance Targets
-- Dashboard pages: <300ms response time
-- Use server components by default
-- Implement proper caching with useSWR
-- Optimize images with Next.js Image component
+- Target <300ms response time for dashboard pages
+- Use Server Components by default (faster initial load)
+- Implement useSWR caching for client-side data
+- Optimize images with Next.js `<Image>` component
+- Lazy load heavy components with `next/dynamic`
