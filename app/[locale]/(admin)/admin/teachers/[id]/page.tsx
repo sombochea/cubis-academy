@@ -9,6 +9,7 @@ import { Edit, Trash2, ArrowLeft, Mail, Phone, BookOpen, Calendar } from 'lucide
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
 import { ResetPasswordDialog } from '@/components/admin/ResetPasswordDialog';
+import { ChangeEmailDialog } from '@/components/admin/ChangeEmailDialog';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
@@ -100,6 +101,13 @@ export default async function TeacherViewPage({
                 </div>
               </div>
               <div className="flex gap-2">
+                <ChangeEmailDialog
+                  userId={id}
+                  currentEmail={teacher.email}
+                  userName={teacher.name}
+                  userRole="teacher"
+                  locale={locale}
+                />
                 <ResetPasswordDialog
                   userId={id}
                   userName={teacher.name}

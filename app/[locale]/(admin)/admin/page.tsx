@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Users, BookOpen, DollarSign, GraduationCap, TrendingUp, UserCheck } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
+import { VerificationStatsWidget } from '@/components/admin/VerificationStatsWidget';
+import { ExportUnverifiedButton } from '@/components/admin/ExportUnverifiedButton';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 
@@ -119,11 +121,19 @@ export default async function AdminDashboard({ params }: { params: Promise<{ loc
           ))}
         </div>
 
+        {/* Email Verification Stats */}
+        <div className="mb-8">
+          <VerificationStatsWidget />
+        </div>
+
         {/* Quick Actions */}
         <div className="bg-white rounded-xl p-6 border border-gray-100">
-          <h3 className="text-xl font-bold text-[#17224D] mb-6">
-            <Trans>Quick Actions</Trans>
-          </h3>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-bold text-[#17224D]">
+              <Trans>Quick Actions</Trans>
+            </h3>
+            <ExportUnverifiedButton />
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link
               href={`/${locale}/admin/teachers/new`}

@@ -13,10 +13,12 @@ export default function EnrollButton({ courseId, courseName, price }: EnrollButt
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const handleEnroll = async () => {
     setLoading(true);
     setError('');
+    setErrorCode(null);
 
     try {
       const res = await fetch('/api/enrollments', {
@@ -28,7 +30,8 @@ export default function EnrollButton({ courseId, courseName, price }: EnrollButt
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Failed to enroll');
+        setError(data.message || data.error || 'Failed to enroll');
+        setErrorCode(data.code || null);
         setLoading(false);
         return;
       }
@@ -44,8 +47,33 @@ export default function EnrollButton({ courseId, courseName, price }: EnrollButt
   return (
     <div>
       {error && (
-        <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
-          {error}
+        <div className={`mb-4 p-4 rounded-lg border ${
+          errorCode === 'EMAIL_NOT_VERIFIED' 
+            ? 'bg-yellow-50 border-yellow-200' 
+            : 'bg-red-50 border-red-200'
+        }`}>
+          <div className="flex items-start gap-3">
+            <div className="flex-1">
+              <p className={`text-sm font-semibold ${
+                errorCode === 'EMAIL_NOT_VERIFIED' ? 'text-yellow-800' : 'text-red-800'
+              }`}>
+                {errorCode === 'EMAIL_NOT_VERIFIED' ? 'Email Verification Required' : 'Enrollment Failed'}
+              </p>
+              <p className={`text-sm mt-1 ${
+                errorCode === 'EMAIL_NOT_VERIFIED' ? 'text-yellow-700' : 'text-red-600'
+              }`}>
+                {error}
+              </p>
+              {errorCode === 'EMAIL_NOT_VERIFIED' && (
+                <button
+                  onClick={() => router.push('/student')}
+                  className="mt-2 text-sm font-medium text-yellow-800 hover:text-yellow-900 underline"
+                >
+                  Go to Dashboard to Verify Email
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       )}
       <button

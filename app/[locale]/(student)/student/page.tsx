@@ -5,6 +5,8 @@ import { db } from '@/lib/drizzle/db';
 import { enrollments } from '@/lib/drizzle/schema';
 import { eq, and, count } from 'drizzle-orm';
 import Link from 'next/link';
+import { EmailVerificationBanner } from '@/components/student/EmailVerificationBanner';
+import { VerifiedBadge } from '@/components/student/VerifiedBadge';
 
 async function getEnrollmentCount(userId: string) {
   const result = await db.select({ count: count() })
@@ -70,9 +72,16 @@ export default async function StudentDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Welcome, {user?.name}!</h2>
+          <div className="flex items-center gap-3 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900">Welcome, {user?.name}!</h2>
+            {user?.emailVerifiedAt && <VerifiedBadge size="md" showText />}
+          </div>
           <p className="text-gray-600">Student ID: {user?.student?.suid}</p>
         </div>
+
+        {!user?.emailVerifiedAt && user?.email && (
+          <EmailVerificationBanner userEmail={user.email} />
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Link href="/student/courses" className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">

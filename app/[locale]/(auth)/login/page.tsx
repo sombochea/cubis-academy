@@ -66,12 +66,16 @@ export default function LoginPage() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#007FFF]/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-              <BookOpen className="w-7 h-7 text-white" />
+          <Link href={"/"}>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                <BookOpen className="w-7 h-7 text-white" />
+              </div>
+              <span className="text-2xl font-bold text-white">
+                CUBIS Academy
+              </span>
             </div>
-            <span className="text-2xl font-bold text-white">CUBIS Academy</span>
-          </div>
+          </Link>
 
           <div className="mt-16">
             <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
@@ -108,14 +112,16 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-6 sm:p-8 bg-[#F4F5F7]">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-2 mb-8">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-lg flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-white" />
+          <Link href={"/"}>
+            <div className="lg:hidden flex items-center gap-2 mb-8">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-lg flex items-center justify-center">
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-xl font-bold text-[#17224D]">
+                CUBIS Academy
+              </span>
             </div>
-            <span className="text-xl font-bold text-[#17224D]">
-              CUBIS Academy
-            </span>
-          </div>
+          </Link>
 
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div className="mb-8">

@@ -13,8 +13,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
     Credentials({
       credentials: {
@@ -52,21 +52,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   events: {
     async signIn({ user, account }) {
-      if (account?.provider === "google") {
+      // Handle OAuth2 providers (Google, GitHub, etc.)
+      if (account?.provider && account.provider !== "credentials") {
         const existingUser = await db.query.users.findFirst({
           where: eq(users.email, user.email!),
         });
 
         if (!existingUser) {
-          // Create new user with Google OAuth
+          // Create new user with OAuth2
+          // OAuth2 providers verify email, so we set emailVerifiedAt
           const [newUser] = await db
             .insert(users)
             .values({
               name: user.name!,
               email: user.email!,
-              googleId: account.providerAccountId,
+              googleId:
+                account.provider === "google"
+                  ? account.providerAccountId
+                  : undefined,
               role: "student",
               isActive: true,
+              emailVerifiedAt: new Date(), // Auto-verify OAuth2 emails
             })
             .returning();
 
@@ -76,6 +82,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userId: newUser.id,
             suid,
           });
+        } else if (!existingUser.emailVerifiedAt) {
+          // If user exists but email not verified, verify it now
+          // OAuth2 providers have already verified the email
+          await db
+            .update(users)
+            .set({
+              emailVerifiedAt: new Date(),
+              updated: new Date(),
+            })
+            .where(eq(users.id, existingUser.id));
         }
       }
     },

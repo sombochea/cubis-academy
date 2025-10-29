@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { db } from '@/lib/drizzle/db';
-import { enrollments, courses } from '@/lib/drizzle/schema';
+import { enrollments, courses, users } from '@/lib/drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 
 export async function POST(req: Request) {
@@ -12,6 +12,22 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    // Check if email is verified
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+    });
+
+    if (!user?.emailVerifiedAt) {
+      return NextResponse.json(
+        { 
+          error: 'Email verification required',
+          code: 'EMAIL_NOT_VERIFIED',
+          message: 'Please verify your email address before enrolling in courses.'
+        },
+        { status: 403 }
       );
     }
 

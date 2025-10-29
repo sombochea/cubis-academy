@@ -27,6 +27,7 @@ export default async function TeachersPage({ params }: { params: Promise<{ local
       userId: teachers.userId,
       name: users.name,
       email: users.email,
+      emailVerifiedAt: users.emailVerifiedAt,
       phone: users.phone,
       bio: teachers.bio,
       spec: teachers.spec,

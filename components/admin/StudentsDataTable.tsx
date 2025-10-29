@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Edit, Trash2, ArrowUpDown, MoreHorizontal, Eye, BookOpen } from 'lucide-react';
+import { Edit, Trash2, ArrowUpDown, MoreHorizontal, Eye, BookOpen, CheckCircle2 } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import * as React from 'react';
 
@@ -23,6 +23,7 @@ type Student = {
   suid: string;
   name: string;
   email: string;
+  emailVerifiedAt: Date | null;
   phone: string | null;
   gender: string | null;
   photo: string | null;
@@ -85,9 +86,33 @@ export function StudentsDataTable({ data, locale }: StudentsDataTableProps) {
     {
       accessorKey: 'email',
       header: () => <Trans>Email</Trans>,
-      cell: ({ row }) => (
-        <div className="text-[#363942]">{row.getValue('email')}</div>
-      ),
+      cell: ({ row }) => {
+        const student = row.original;
+        return (
+          <div className="flex items-center gap-2 text-[#363942]">
+            <span>{row.getValue('email')}</span>
+            {student.emailVerifiedAt && (
+              <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" title="Email verified" />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'emailVerifiedAt',
+      header: () => null,
+      cell: () => null,
+      enableHiding: true,
+      enableSorting: false,
+      filterFn: (row, columnId, filterValue) => {
+        const emailVerifiedAt = row.getValue(columnId) as Date | null;
+        if (filterValue === 'verified') {
+          return emailVerifiedAt !== null;
+        } else if (filterValue === 'unverified') {
+          return emailVerifiedAt === null;
+        }
+        return true;
+      },
     },
     {
       accessorKey: 'phone',

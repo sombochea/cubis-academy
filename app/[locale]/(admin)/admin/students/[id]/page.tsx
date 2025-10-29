@@ -8,6 +8,7 @@ import { Edit, Trash2, ArrowLeft, Mail, Phone, BookOpen, Calendar, User } from '
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
 import { ResetPasswordDialog } from '@/components/admin/ResetPasswordDialog';
+import { ChangeEmailDialog } from '@/components/admin/ChangeEmailDialog';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
@@ -106,6 +107,13 @@ export default async function StudentViewPage({
                 </div>
               </div>
               <div className="flex gap-2">
+                <ChangeEmailDialog
+                  userId={id}
+                  currentEmail={student.email}
+                  userName={student.name}
+                  userRole="student"
+                  locale={locale}
+                />
                 <ResetPasswordDialog
                   userId={id}
                   userName={student.name}

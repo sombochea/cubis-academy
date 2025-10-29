@@ -22,6 +22,9 @@ export function StudentFilters<TData>({ table }: StudentFiltersProps<TData>) {
   const genderFilter = table.getColumn('gender')?.getFilterValue() as string | undefined;
   const genderValue = genderFilter ?? 'all';
 
+  const verifiedFilter = table.getColumn('emailVerifiedAt')?.getFilterValue();
+  const verifiedValue = verifiedFilter === undefined ? 'all' : verifiedFilter === 'verified' ? 'verified' : 'unverified';
+
   return (
     <div className="flex items-center gap-2">
       {/* Status Filter */}
@@ -77,6 +80,33 @@ export function StudentFilters<TData>({ table }: StudentFiltersProps<TData>) {
           </SelectItem>
           <SelectItem value="other">
             <Trans>Other</Trans>
+          </SelectItem>
+        </SelectContent>
+      </Select>
+
+      {/* Email Verification Filter */}
+      <Select
+        value={verifiedValue}
+        onValueChange={(value) => {
+          if (value === 'all') {
+            table.getColumn('emailVerifiedAt')?.setFilterValue(undefined);
+          } else {
+            table.getColumn('emailVerifiedAt')?.setFilterValue(value);
+          }
+        }}
+      >
+        <SelectTrigger className="h-9 w-[140px] bg-[#F4F5F7] border-0 text-sm">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">
+            <Trans>All Emails</Trans>
+          </SelectItem>
+          <SelectItem value="verified">
+            <Trans>Verified</Trans>
+          </SelectItem>
+          <SelectItem value="unverified">
+            <Trans>Unverified</Trans>
           </SelectItem>
         </SelectContent>
       </Select>

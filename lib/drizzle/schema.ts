@@ -44,6 +44,7 @@ export const users = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     name: varchar("name", { length: 255 }).notNull(),
     email: varchar("email", { length: 255 }).notNull().unique(),
+    emailVerifiedAt: timestamp("email_verified_at"),
     phone: varchar("phone", { length: 50 }),
     role: roleEnum("role").notNull().default("student"),
     passHash: varchar("pass_hash", { length: 255 }),
@@ -56,6 +57,7 @@ export const users = pgTable(
     index("users_role_idx").on(table.role),
     index("users_is_active_idx").on(table.isActive),
     index("users_created_idx").on(table.created),
+    index("users_email_verified_at_idx").on(table.emailVerifiedAt),
   ]
 );
 
@@ -226,7 +228,10 @@ export const scores = pgTable(
   (table) => [
     index("scores_enrollment_id_idx").on(table.enrollmentId),
     index("scores_created_idx").on(table.created),
-    index("scores_enrollment_created_idx").on(table.enrollmentId, table.created),
+    index("scores_enrollment_created_idx").on(
+      table.enrollmentId,
+      table.created
+    ),
   ]
 );
 

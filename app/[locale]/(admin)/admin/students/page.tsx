@@ -28,6 +28,7 @@ export default async function StudentsPage({ params }: { params: Promise<{ local
       suid: students.suid,
       name: users.name,
       email: users.email,
+      emailVerifiedAt: users.emailVerifiedAt,
       phone: users.phone,
       gender: students.gender,
       photo: students.photo,
