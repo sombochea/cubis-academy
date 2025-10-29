@@ -190,7 +190,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm flex-1 flex flex-col min-h-0">
+      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm flex-1 flex flex-col min-h-0 mt-2">
         <div className="overflow-x-auto flex-shrink-0">
           <Table>
             <TableHeader className="sticky top-0 z-10 bg-white">

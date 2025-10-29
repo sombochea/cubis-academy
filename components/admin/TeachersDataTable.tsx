@@ -3,9 +3,18 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { Edit, Trash2, BookOpen, ArrowUpDown } from 'lucide-react';
+import { Edit, Trash2, BookOpen, ArrowUpDown, MoreHorizontal, Eye } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
+import * as React from 'react';
 
 type Teacher = {
   userId: string;
@@ -83,31 +92,50 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
     },
     {
       id: 'actions',
-      header: () => <div className="text-right"><Trans>Actions</Trans></div>,
+      enableHiding: false,
       cell: ({ row }) => {
         const teacher = row.original;
         return (
-          <div className="flex items-center justify-end gap-2">
-            <Link
-              href={`/${locale}/admin/teachers/${teacher.userId}/courses`}
-              className="p-2 text-[#007FFF] hover:bg-[#007FFF]/10 rounded-lg transition-colors"
-              title="Assign Courses"
-            >
-              <BookOpen className="w-4 h-4" />
-            </Link>
-            <Link
-              href={`/${locale}/admin/teachers/${teacher.userId}/edit`}
-              className="p-2 text-[#007FFF] hover:bg-[#007FFF]/10 rounded-lg transition-colors"
-            >
-              <Edit className="w-4 h-4" />
-            </Link>
-            <Link
-              href={`/${locale}/admin/teachers/${teacher.userId}/delete`}
-              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Link>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel><Trans>Actions</Trans></DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/admin/teachers/${teacher.userId}`} className="cursor-pointer">
+                  <Eye className="mr-2 h-4 w-4" />
+                  <Trans>View details</Trans>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/admin/teachers/${teacher.userId}/edit`} className="cursor-pointer">
+                  <Edit className="mr-2 h-4 w-4" />
+                  <Trans>Edit teacher</Trans>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/admin/teachers/${teacher.userId}/courses`} className="cursor-pointer">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  <Trans>Assign courses</Trans>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link 
+                  href={`/${locale}/admin/teachers/${teacher.userId}/delete`} 
+                  className="cursor-pointer text-red-600 focus:text-red-600"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  <Trans>Delete teacher</Trans>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         );
       },
     },
@@ -119,6 +147,7 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
       data={data}
       searchKey="name"
       searchPlaceholder="Search teachers by name..."
+      showRowNumber={true}
     />
   );
 }
