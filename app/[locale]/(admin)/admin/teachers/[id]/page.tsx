@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { users, teachers, courses } from '@/lib/drizzle/schema';
+import { users, teachers, teacherCourses } from '@/lib/drizzle/schema';
 import { eq, count } from 'drizzle-orm';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -51,8 +51,8 @@ export default async function TeacherViewPage({
 
   const [courseCount] = await db
     .select({ count: count() })
-    .from(courses)
-    .where(eq(courses.teacherId, id));
+    .from(teacherCourses)
+    .where(eq(teacherCourses.teacherId, id));
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">

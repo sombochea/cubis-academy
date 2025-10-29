@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { users, teachers, courses } from '@/lib/drizzle/schema';
+import { users, teachers, courses, teacherCourses } from '@/lib/drizzle/schema';
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -50,15 +50,22 @@ export default async function AssignCoursesPage({
       title: courses.title,
       category: courses.category,
       level: courses.level,
-      teacherId: courses.teacherId,
       isActive: courses.isActive,
     })
     .from(courses)
     .orderBy(courses.title);
 
+  // Get courses assigned to this teacher
+  const assignedCourseIds = await db
+    .select({ courseId: teacherCourses.courseId })
+    .from(teacherCourses)
+    .where(eq(teacherCourses.teacherId, id));
+
+  const assignedIds = new Set(assignedCourseIds.map(a => a.courseId));
+
   // Separate assigned and available courses
-  const assignedCourses = allCourses.filter(c => c.teacherId === id);
-  const availableCourses = allCourses.filter(c => c.teacherId !== id);
+  const assignedCourses = allCourses.filter(c => assignedIds.has(c.id));
+  const availableCourses = allCourses.filter(c => !assignedIds.has(c.id));
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">

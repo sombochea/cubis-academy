@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { db } from '@/lib/drizzle/db';
-import { courses } from '@/lib/drizzle/schema';
-import { eq, inArray } from 'drizzle-orm';
+import { teacherCourses } from '@/lib/drizzle/schema';
+import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
 const assignCoursesSchema = z.object({
@@ -24,16 +24,17 @@ export async function POST(
     const body = await request.json();
     const { courseIds } = assignCoursesSchema.parse(body);
 
-    // First, unassign all courses from this teacher
-    await db.update(courses)
-      .set({ teacherId: null })
-      .where(eq(courses.teacherId, teacherId));
+    // First, remove all existing assignments for this teacher
+    await db.delete(teacherCourses)
+      .where(eq(teacherCourses.teacherId, teacherId));
 
-    // Then, assign the selected courses
+    // Then, create new assignments
     if (courseIds.length > 0) {
-      await db.update(courses)
-        .set({ teacherId })
-        .where(inArray(courses.id, courseIds));
+      await db.insert(teacherCourses)
+        .values(courseIds.map(courseId => ({
+          teacherId,
+          courseId,
+        })));
     }
 
     return NextResponse.json({ success: true });

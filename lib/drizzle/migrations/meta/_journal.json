@@ -15,6 +15,20 @@
       "when": 1761749535050,
       "tag": "0001_furry_sunfire",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1761752371172,
+      "tag": "0002_sudden_sister_grimm",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1761753151738,
+      "tag": "0003_eager_longshot",
+      "breakpoints": true
     }
   ]
 }

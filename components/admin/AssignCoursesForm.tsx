@@ -12,7 +12,6 @@ type Course = {
   title: string;
   category: string | null;
   level: 'beginner' | 'intermediate' | 'advanced';
-  teacherId: string | null;
   isActive: boolean;
 };
 

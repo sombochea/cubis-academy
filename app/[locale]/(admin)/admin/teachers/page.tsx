@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { users, teachers, courses } from '@/lib/drizzle/schema';
+import { users, teachers, teacherCourses } from '@/lib/drizzle/schema';
 import { eq, count } from 'drizzle-orm';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
@@ -36,14 +36,14 @@ export default async function TeachersPage({ params }: { params: Promise<{ local
     .from(teachers)
     .innerJoin(users, eq(teachers.userId, users.id));
 
-  // Get course counts for each teacher
+  // Get course counts for each teacher from junction table
   const courseCounts = await db
     .select({
-      teacherId: courses.teacherId,
+      teacherId: teacherCourses.teacherId,
       count: count(),
     })
-    .from(courses)
-    .groupBy(courses.teacherId);
+    .from(teacherCourses)
+    .groupBy(teacherCourses.teacherId);
 
   const courseCountMap = new Map(
     courseCounts.map((c) => [c.teacherId, c.count])
