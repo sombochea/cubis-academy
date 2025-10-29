@@ -95,7 +95,7 @@ function FieldInfo({ field }: { field: AnyFieldApi }) {
 
 const loginSchema = z.object({
   email: z.email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 export default function LoginForm() {

@@ -328,7 +328,7 @@ export default function RegisterPage() {
                       name="password"
                       validators={{
                         onBlur: ({ value }) => {
-                          const result = z.string().min(8, 'Password must be at least 8 characters').safeParse(value);
+                          const result = z.string().min(6, 'Password must be at least 6 characters').safeParse(value);
                           return result.success ? undefined : result.error.issues[0].message;
                         },
                       }}
@@ -404,7 +404,7 @@ export default function RegisterPage() {
                   <div className="flex items-center gap-2 p-3 bg-[#E5F2FF] rounded-lg border border-[#007FFF]/20">
                     <Lock className="w-4 h-4 text-[#007FFF] flex-shrink-0" />
                     <p className="text-xs text-[#17224D]">
-                      Password must be at least 8 characters long
+                      Password must be at least 6 characters long
                     </p>
                   </div>
                 </div>

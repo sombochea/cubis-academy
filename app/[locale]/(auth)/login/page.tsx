@@ -13,7 +13,7 @@ import { BookOpen, Mail, Lock, AlertCircle } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export default function LoginPage() {
@@ -197,7 +197,7 @@ export default function LoginPage() {
                   onBlur: ({ value }) => {
                     const result = z
                       .string()
-                      .min(8, "Password must be at least 8 characters")
+                      .min(6, "Password must be at least 6 characters")
                       .safeParse(value);
                     return result.success
                       ? undefined

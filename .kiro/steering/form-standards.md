@@ -25,7 +25,7 @@ import { z } from "zod";
 // Define schema
 const formSchema = z.object({
   email: z.email("Invalid email"),
-  password: z.string().min(8, "Min 8 characters"),
+  password: z.string().min(6, "Min 6 characters"),
 });
 
 export default function MyForm() {
