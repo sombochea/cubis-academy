@@ -1,17 +1,16 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { courses, users, teachers } from '@/lib/drizzle/schema';
-import { eq } from 'drizzle-orm';
+import { courseCategories } from '@/lib/drizzle/schema';
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
-import { CoursesDataTable } from '@/components/admin/CoursesDataTable';
-import { CourseManagementMenu } from '@/components/admin/CourseManagementMenu';
+import { CategoriesDataTable } from '@/components/admin/CategoriesDataTable';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 
-export default async function CoursesPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function CategoriesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   await loadCatalog(locale);
   setI18n(i18n);
@@ -22,20 +21,10 @@ export default async function CoursesPage({ params }: { params: Promise<{ locale
     redirect(`/${locale}/login`);
   }
 
-  const coursesList = await db
-    .select({
-      id: courses.id,
-      title: courses.title,
-      category: courses.category,
-      price: courses.price,
-      duration: courses.duration,
-      level: courses.level,
-      isActive: courses.isActive,
-      teacherName: users.name,
-    })
-    .from(courses)
-    .leftJoin(teachers, eq(courses.teacherId, teachers.userId))
-    .leftJoin(users, eq(teachers.userId, users.id));
+  const categories = await db
+    .select()
+    .from(courseCategories)
+    .orderBy(courseCategories.name);
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
@@ -45,16 +34,22 @@ export default async function CoursesPage({ params }: { params: Promise<{ locale
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold text-[#17224D] mb-2">
-              <Trans>Courses Management</Trans>
+              <Trans>Course Categories</Trans>
             </h2>
             <p className="text-[#363942]/70">
-              <Trans>Manage course catalog and assignments</Trans>
+              <Trans>Manage course categories and organization</Trans>
             </p>
           </div>
-          <CourseManagementMenu locale={locale} />
+          <Link
+            href={`/${locale}/admin/categories/new`}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#007FFF] to-[#17224D] text-white rounded-xl hover:shadow-xl transition-all font-semibold"
+          >
+            <Plus className="w-5 h-5" />
+            <Trans>Add Category</Trans>
+          </Link>
         </div>
 
-        <CoursesDataTable data={coursesList} locale={locale} />
+        <CategoriesDataTable data={categories} locale={locale} />
       </div>
     </div>
   );

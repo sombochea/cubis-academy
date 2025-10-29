@@ -125,6 +125,27 @@ export const uploads = pgTable(
   ]
 );
 
+// Course categories table (must be before courses table)
+export const courseCategories = pgTable(
+  "course_categories",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: varchar("name", { length: 100 }).notNull().unique(),
+    slug: varchar("slug", { length: 100 }).notNull().unique(),
+    description: text("description"),
+    icon: varchar("icon", { length: 50 }),
+    color: varchar("color", { length: 20 }),
+    isActive: boolean("is_active").notNull().default(true),
+    created: timestamp("created").notNull().defaultNow(),
+    updated: timestamp("updated").notNull().defaultNow(),
+  },
+  (table) => [
+    index("course_categories_name_idx").on(table.name),
+    index("course_categories_slug_idx").on(table.slug),
+    index("course_categories_is_active_idx").on(table.isActive),
+  ]
+);
+
 // Courses table
 export const courses = pgTable(
   "courses",
@@ -132,13 +153,17 @@ export const courses = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     title: varchar("title", { length: 255 }).notNull(),
     desc: text("desc"),
-    category: varchar("category", { length: 100 }),
+    category: varchar("category", { length: 100 }), // Keep for backward compatibility
+    categoryId: uuid("category_id").references(() => courseCategories.id, {
+      onDelete: "set null",
+    }),
     teacherId: uuid("teacher_id").references(() => teachers.userId, {
       onDelete: "set null",
     }),
     price: decimal("price", { precision: 10, scale: 2 }).notNull().default("0"),
     duration: integer("duration"),
     level: courseLevelEnum("level").notNull().default("beginner"),
+    coverImage: varchar("cover_image", { length: 500 }),
     isActive: boolean("is_active").notNull().default(true),
     youtubeUrl: varchar("youtube_url", { length: 500 }),
     zoomUrl: varchar("zoom_url", { length: 500 }),
@@ -148,6 +173,7 @@ export const courses = pgTable(
   (table) => [
     index("courses_title_idx").on(table.title),
     index("courses_category_idx").on(table.category),
+    index("courses_category_id_idx").on(table.categoryId),
     index("courses_teacher_id_idx").on(table.teacherId),
     index("courses_level_idx").on(table.level),
     index("courses_is_active_idx").on(table.isActive),

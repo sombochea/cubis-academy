@@ -36,6 +36,20 @@
       "when": 1761753691607,
       "tag": "0004_shallow_skrulls",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1761758225024,
+      "tag": "0005_fine_prima",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1761758326629,
+      "tag": "0006_fresh_angel",
+      "breakpoints": true
     }
   ]
 }

@@ -39,6 +39,8 @@ msgstr "{level}"
 msgid "Access to the system"
 msgstr "Access to the system"
 
+#: components/admin/CategoriesDataTable.tsx:126
+#: components/admin/CourseManagementMenu.tsx:26
 #: components/admin/CoursesDataTable.tsx:151
 #: components/admin/StudentsDataTable.tsx:175
 #: components/admin/TeachersDataTable.tsx:183
@@ -52,6 +54,7 @@ msgstr "Actions"
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:214
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:178
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:172
+#: components/admin/CategoriesDataTable.tsx:107
 #: components/admin/CourseFilters.tsx:46
 #: components/admin/CoursesDataTable.tsx:132
 #: components/admin/StudentFilters.tsx:49
@@ -64,14 +67,27 @@ msgstr "Active"
 #~ msgid "Active Students"
 #~ msgstr "សិស្សសកម្ម"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:59
+#: app/[locale]/(admin)/admin/categories/page.tsx:48
+#: components/admin/CourseManagementMenu.tsx:55
+msgid "Add Category"
+msgstr "Add Category"
+
+#: components/admin/CourseManagementMenu.tsx:37
 #: components/admin/QuickActionsMenu.tsx:49
 msgid "Add Course"
 msgstr "Add Course"
 
+#: components/admin/CreateCourseWizard.tsx:566
+msgid "Add course cover image and learning resources"
+msgstr "Add course cover image and learning resources"
+
+#: app/[locale]/(admin)/admin/categories/new/page.tsx:27
+msgid "Add New Category"
+msgstr "Add New Category"
+
 #: app/[locale]/(admin)/admin/courses/new/page.tsx:39
-msgid "Add New Course"
-msgstr "Add New Course"
+#~ msgid "Add New Course"
+#~ msgstr "Add New Course"
 
 #: app/[locale]/(admin)/admin/students/new/page.tsx:43
 msgid "Add New Student"
@@ -107,6 +123,7 @@ msgstr "Admins"
 
 #: components/admin/CourseFilters.tsx:79
 #: components/admin/CourseForm.tsx:265
+#: components/admin/CreateCourseWizard.tsx:464
 msgid "Advanced"
 msgstr "Advanced"
 
@@ -175,6 +192,7 @@ msgid "Assign Courses"
 msgstr "Assign Courses"
 
 #: components/admin/CourseForm.tsx:176
+#: components/admin/CreateCourseWizard.tsx:365
 msgid "Assign Teacher"
 msgstr "Assign Teacher"
 
@@ -187,7 +205,6 @@ msgid "Available Courses"
 msgstr "Available Courses"
 
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:60
-#: app/[locale]/(admin)/admin/courses/[id]/edit/page.tsx:59
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:82
 msgid "Back to Course"
 msgstr "Back to Course"
@@ -216,8 +233,13 @@ msgstr "Back to Teacher"
 msgid "Back to Teachers"
 msgstr "Back to Teachers"
 
+#: components/admin/CreateCourseWizard.tsx:288
+msgid "Basic Information"
+msgstr "Basic Information"
+
 #: components/admin/CourseFilters.tsx:73
 #: components/admin/CourseForm.tsx:259
+#: components/admin/CreateCourseWizard.tsx:452
 msgid "Beginner"
 msgstr "Beginner"
 
@@ -231,6 +253,7 @@ msgid "browse"
 msgstr "browse"
 
 #: components/admin/AssignCoursesForm.tsx:231
+#: components/admin/CategoryForm.tsx:257
 #: components/admin/ChangeEmailDialog.tsx:200
 #: components/admin/CourseForm.tsx:337
 #: components/admin/DeleteCourseForm.tsx:88
@@ -244,10 +267,23 @@ msgstr "browse"
 msgid "Cancel"
 msgstr "Cancel"
 
+#: components/admin/CourseManagementMenu.tsx:49
+msgid "Categories"
+msgstr "Categories"
+
 #: components/admin/CourseForm.tsx:159
 #: components/admin/CoursesDataTable.tsx:58
+#: components/admin/CreateCourseWizard.tsx:320
 msgid "Category"
 msgstr "Category"
+
+#: components/admin/CategoryForm.tsx:122
+msgid "Category Name"
+msgstr "Category Name"
+
+#: components/admin/CategoryForm.tsx:114
+msgid "Category saved successfully! Redirecting..."
+msgstr "Category saved successfully! Redirecting..."
 
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:93
 msgid "Category:"
@@ -262,6 +298,10 @@ msgstr "Change Email"
 msgid "Change Email Address"
 msgstr "Change Email Address"
 
+#: components/admin/CreateCourseWizard.tsx:593
+msgid "Change Image"
+msgstr "Change Image"
+
 #: components/admin/ChangeEmailDialog.tsx:210
 msgid "Changing..."
 msgstr "Changing..."
@@ -270,9 +310,18 @@ msgstr "Changing..."
 #~ msgid "Choose Image"
 #~ msgstr "Choose Image"
 
+#: components/admin/CreateCourseWizard.tsx:616
+msgid "Click to upload or drag and drop"
+msgstr "Click to upload or drag and drop"
+
 #: components/admin/ResetPasswordDialog.tsx:230
 msgid "Close"
 msgstr "Close"
+
+#: components/admin/CategoriesDataTable.tsx:80
+#: components/admin/CategoryForm.tsx:207
+msgid "Color"
+msgstr "Color"
 
 #: components/ui/data-table.tsx:94
 #~ msgid "Columns"
@@ -295,6 +344,10 @@ msgstr "បទពិសោធន៍សិក្សាទូលំទូលាយ
 msgid "Confirm New Email"
 msgstr "Confirm New Email"
 
+#: components/admin/CreateCourseWizard.tsx:545
+msgid "Consider market rates and course value when setting the price."
+msgstr "Consider market rates and course value when setting the price."
+
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:188
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:182
 msgid "Contact Information"
@@ -313,7 +366,16 @@ msgstr "Course"
 msgid "Course assignments"
 msgstr "Course assignments"
 
+#: app/[locale]/(admin)/admin/categories/page.tsx:37
+msgid "Course Categories"
+msgstr "Course Categories"
+
+#: components/admin/CreateCourseWizard.tsx:573
+msgid "Course Cover Image"
+msgstr "Course Cover Image"
+
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:84
+#: components/admin/CreateCourseWizard.tsx:403
 msgid "Course Details"
 msgstr "Course Details"
 
@@ -325,15 +387,24 @@ msgstr "Course Enrollments"
 msgid "Course information and materials"
 msgstr "Course information and materials"
 
+#: components/admin/CreateCourseWizard.tsx:439
+msgid "Course Level"
+msgstr "Course Level"
+
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:190
 msgid "Course Links"
 msgstr "Course Links"
+
+#: components/admin/CourseManagementMenu.tsx:26
+#~ msgid "Course Management"
+#~ msgstr "Course Management"
 
 #: components/admin/CourseForm.tsx:113
 msgid "Course saved successfully! Redirecting..."
 msgstr "Course saved successfully! Redirecting..."
 
 #: components/admin/CourseForm.tsx:121
+#: components/admin/CreateCourseWizard.tsx:299
 msgid "Course Title"
 msgstr "Course Title"
 
@@ -342,6 +413,7 @@ msgstr "Course Title"
 #~ msgstr "courses"
 
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:146
+#: components/admin/CourseManagementMenu.tsx:31
 #: components/admin/TeachersDataTable.tsx:143
 msgid "Courses"
 msgstr "Courses"
@@ -354,9 +426,13 @@ msgstr "Courses assigned successfully!"
 msgid "Courses Management"
 msgstr "Courses Management"
 
+#: app/[locale]/(admin)/admin/categories/new/page.tsx:30
+msgid "Create a new course category"
+msgstr "Create a new course category"
+
 #: app/[locale]/(admin)/admin/courses/new/page.tsx:42
-msgid "Create a new course in the catalog"
-msgstr "Create a new course in the catalog"
+#~ msgid "Create a new course in the catalog"
+#~ msgstr "Create a new course in the catalog"
 
 #: app/[locale]/(admin)/admin/students/new/page.tsx:46
 msgid "Create a new student account"
@@ -366,9 +442,17 @@ msgstr "Create a new student account"
 msgid "Create a new teacher account"
 msgstr "Create a new teacher account"
 
+#: components/admin/CreateCourseWizard.tsx:713
+#~ msgid "Create Course"
+#~ msgstr "Create Course"
+
 #: components/admin/QuickActionsMenu.tsx:31
 msgid "Create New"
 msgstr "Create New"
+
+#: components/admin/CreateCourseWizard.tsx:205
+msgid "Create New Course"
+msgstr "Create New Course"
 
 #: components/admin/StudentForm.tsx:279
 msgid "Create Student"
@@ -379,6 +463,10 @@ msgstr "Create Student"
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:207
 msgid "Created"
 msgstr "Created"
+
+#: components/admin/CreateCourseWizard.tsx:708
+#~ msgid "Creating..."
+#~ msgstr "Creating..."
 
 #: components/admin/AdminNav.tsx:18
 msgid "CUBIS Academy"
@@ -402,6 +490,10 @@ msgstr "Date of Birth"
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:130
 msgid "Delete"
 msgstr "Delete"
+
+#: components/admin/CategoriesDataTable.tsx:141
+msgid "Delete category"
+msgstr "Delete category"
 
 #: components/admin/CoursesDataTable.tsx:178
 msgid "Delete course"
@@ -439,8 +531,15 @@ msgstr "Deleting this student will also remove all associated enrollments, payme
 msgid "Deleting..."
 msgstr "Deleting..."
 
+#: components/admin/CreateCourseWizard.tsx:406
+msgid "Describe what students will learn"
+msgstr "Describe what students will learn"
+
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:175
+#: components/admin/CategoriesDataTable.tsx:68
+#: components/admin/CategoryForm.tsx:167
 #: components/admin/CourseForm.tsx:141
+#: components/admin/CreateCourseWizard.tsx:414
 msgid "Description"
 msgstr "Description"
 
@@ -460,6 +559,7 @@ msgid "Duration"
 msgstr "Duration"
 
 #: components/admin/CourseForm.tsx:227
+#: components/admin/CreateCourseWizard.tsx:524
 msgid "Duration (hours)"
 msgstr "Duration (hours)"
 
@@ -472,11 +572,15 @@ msgstr "Duration (hours)"
 msgid "Edit"
 msgstr "Edit"
 
+#: components/admin/CategoriesDataTable.tsx:131
+msgid "Edit category"
+msgstr "Edit category"
+
 #: components/admin/CoursesDataTable.tsx:162
 msgid "Edit course"
 msgstr "Edit course"
 
-#: app/[locale]/(admin)/admin/courses/[id]/edit/page.tsx:65
+#: components/admin/CreateCourseWizard.tsx:205
 msgid "Edit Course"
 msgstr "Edit Course"
 
@@ -622,6 +726,10 @@ msgstr "Exporting..."
 msgid "Female"
 msgstr "Female"
 
+#: components/admin/CreateCourseWizard.tsx:252
+msgid "Fill in all required fields to create your course. You can always edit it later."
+msgstr "Fill in all required fields to create your course. You can always edit it later."
+
 #: components/admin/StudentForm.tsx:130
 #: components/admin/TeacherForm.tsx:126
 msgid "Full Name"
@@ -654,9 +762,14 @@ msgstr "Generating..."
 msgid "Get Started Free"
 msgstr "ចាប់ផ្តើមដោយឥតគិតថ្លៃ"
 
+#: components/admin/CategoryForm.tsx:186
+msgid "Icon (Emoji)"
+msgstr "Icon (Emoji)"
+
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:178
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:172
+#: components/admin/CategoriesDataTable.tsx:107
 #: components/admin/CourseFilters.tsx:49
 #: components/admin/CoursesDataTable.tsx:132
 #: components/admin/StudentFilters.tsx:52
@@ -671,6 +784,7 @@ msgstr "Inactive"
 
 #: components/admin/CourseFilters.tsx:76
 #: components/admin/CourseForm.tsx:262
+#: components/admin/CreateCourseWizard.tsx:458
 msgid "Intermediate"
 msgstr "Intermediate"
 
@@ -697,6 +811,10 @@ msgstr "Last Updated"
 #~ msgid "Learn Skills That Matter"
 #~ msgstr "រៀនជំនាញដែលសំខាន់"
 
+#: components/admin/CreateCourseWizard.tsx:291
+msgid "Let's start with the course name and category"
+msgstr "Let's start with the course name and category"
+
 #: components/admin/CourseForm.tsx:248
 #: components/admin/CoursesDataTable.tsx:105
 msgid "Level"
@@ -719,6 +837,10 @@ msgstr "Logout"
 msgid "Male"
 msgstr "Male"
 
+#: components/admin/CourseManagementMenu.tsx:61
+msgid "Manage Categories"
+msgstr "Manage Categories"
+
 #: app/[locale]/(admin)/admin/teachers/[id]/assign-courses/page.tsx:90
 msgid "Manage course assignments for"
 msgstr "Manage course assignments for"
@@ -726,6 +848,10 @@ msgstr "Manage course assignments for"
 #: app/[locale]/(admin)/admin/courses/page.tsx:51
 msgid "Manage course catalog and assignments"
 msgstr "Manage course catalog and assignments"
+
+#: app/[locale]/(admin)/admin/categories/page.tsx:40
+msgid "Manage course categories and organization"
+msgstr "Manage course categories and organization"
 
 #: app/[locale]/(admin)/admin/teachers/page.tsx:70
 msgid "Manage teachers and assign courses"
@@ -746,10 +872,15 @@ msgstr "Mark email as verified"
 #~ msgid "Master technology skills with expert-led courses. From Web Development to DevOps, accelerate your career with hands-on learning and real-world projects."
 #~ msgstr "ស្ទាត់ជំនាញបច្ចេកវិទ្យាជាមួយវគ្គសិក្សាដឹកនាំដោយអ្នកជំនាញ។ ពីការអភិវឌ្ឍន៍គេហទំព័រទៅ DevOps បង្កើនល្បឿនអាជីពរបស់អ្នកជាមួយការរៀនដោយដៃនិងគម្រោងពិតប្រាកដ។"
 
+#: components/admin/CreateCourseWizard.tsx:563
+msgid "Media & Resources"
+msgstr "Media & Resources"
+
 #: app/[locale]/(admin)/admin/payments/page.tsx:71
 msgid "Method"
 msgstr "Method"
 
+#: components/admin/CategoriesDataTable.tsx:46
 #: components/admin/StudentsDataTable.tsx:58
 #: components/admin/TeachersDataTable.tsx:66
 msgid "Name"
@@ -767,9 +898,13 @@ msgstr "New Email Address"
 msgid "New Password"
 msgstr "New Password"
 
-#: components/ui/data-table.tsx:294
-#~ msgid "Next"
-#~ msgstr "Next"
+#: components/admin/CreateCourseWizard.tsx:690
+msgid "Next"
+msgstr "Next"
+
+#: components/admin/CreateCourseWizard.tsx:354
+msgid "No categories available. Please create one first."
+msgstr "No categories available. Please create one first."
 
 #: components/admin/AssignCoursesForm.tsx:216
 msgid "No courses assigned yet"
@@ -814,6 +949,7 @@ msgstr "No students have enrolled in this course"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:184
 #: components/admin/CourseForm.tsx:187
+#: components/admin/CreateCourseWizard.tsx:376
 msgid "No teacher assigned"
 msgstr "No teacher assigned"
 
@@ -894,9 +1030,9 @@ msgstr "Phone Number"
 msgid "Please verify your email address"
 msgstr "Please verify your email address"
 
-#: components/ui/data-table.tsx:277
-#~ msgid "Previous"
-#~ msgstr "Previous"
+#: components/admin/CreateCourseWizard.tsx:678
+msgid "Previous"
+msgstr "Previous"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:127
 #: components/admin/CoursesDataTable.tsx:85
@@ -904,8 +1040,13 @@ msgid "Price"
 msgstr "Price"
 
 #: components/admin/CourseForm.tsx:206
+#: components/admin/CreateCourseWizard.tsx:499
 msgid "Price ($)"
 msgstr "Price ($)"
+
+#: components/admin/CreateCourseWizard.tsx:487
+msgid "Pricing & Duration"
+msgstr "Pricing & Duration"
 
 #: components/admin/StudentForm.tsx:117
 #: components/admin/TeacherForm.tsx:243
@@ -976,7 +1117,12 @@ msgstr "Revoke Verification"
 msgid "Save Assignments"
 msgstr "Save Assignments"
 
+#: components/admin/CategoryForm.tsx:245
+msgid "Save Category"
+msgstr "Save Category"
+
 #: components/admin/CourseForm.tsx:326
+#: components/admin/CreateCourseWizard.tsx:712
 msgid "Save Course"
 msgstr "Save Course"
 
@@ -985,11 +1131,17 @@ msgid "Save Teacher"
 msgstr "Save Teacher"
 
 #: components/admin/AssignCoursesForm.tsx:241
+#: components/admin/CategoryForm.tsx:242
 #: components/admin/CourseForm.tsx:326
+#: components/admin/CreateCourseWizard.tsx:707
 #: components/admin/StudentForm.tsx:274
 #: components/admin/TeacherForm.tsx:262
 msgid "Saving..."
 msgstr "Saving..."
+
+#: components/admin/CreateCourseWizard.tsx:336
+msgid "Select a category"
+msgstr "Select a category"
 
 #: components/admin/ResetPasswordDialog.tsx:211
 msgid "Send via Email"
@@ -1005,6 +1157,10 @@ msgstr "Sending..."
 msgid "Sent"
 msgstr "Sent"
 
+#: components/admin/CreateCourseWizard.tsx:490
+msgid "Set the course price and estimated duration"
+msgstr "Set the course price and estimated duration"
+
 #~ msgid "Short-term courses designed for quick skill acquisition"
 #~ msgstr "វគ្គសិក្សារយៈពេលខ្លីដែលរចនាឡើងសម្រាប់ការទទួលបានជំនាញរហ័ស"
 
@@ -1019,6 +1175,14 @@ msgstr "Sent"
 #: components/landing-page.tsx:424
 msgid "Sign In"
 msgstr "ចូលប្រើប្រាស់"
+
+#: components/admin/CategoryForm.tsx:197
+msgid "Single emoji character"
+msgstr "Single emoji character"
+
+#: components/admin/CategoryForm.tsx:143
+msgid "Slug"
+msgstr "Slug"
 
 #: components/admin/TeacherForm.tsx:208
 #: components/admin/TeachersDataTable.tsx:135
@@ -1038,6 +1202,7 @@ msgstr "ចាប់ផ្តើមរៀនដោយឥតគិតថ្លៃ
 #: app/[locale]/(admin)/admin/payments/page.tsx:74
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:176
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:170
+#: components/admin/CategoriesDataTable.tsx:98
 #: components/admin/CoursesDataTable.tsx:123
 #: components/admin/StudentsDataTable.tsx:147
 #: components/admin/TeachersDataTable.tsx:155
@@ -1125,6 +1290,10 @@ msgstr "This action cannot be undone"
 msgid "This student hasn't enrolled in any courses"
 msgstr "This student hasn't enrolled in any courses"
 
+#: components/admin/CreateCourseWizard.tsx:545
+msgid "Tip:"
+msgstr "Tip:"
+
 #: components/admin/CoursesDataTable.tsx:47
 msgid "Title"
 msgstr "Title"
@@ -1196,8 +1365,8 @@ msgid "Unverified"
 msgstr "Unverified"
 
 #: app/[locale]/(admin)/admin/courses/[id]/edit/page.tsx:68
-msgid "Update course information"
-msgstr "Update course information"
+#~ msgid "Update course information"
+#~ msgstr "Update course information"
 
 #: components/admin/ChangeEmailDialog.tsx:125
 msgid "Update email address for"
@@ -1219,9 +1388,14 @@ msgstr "Update teacher information"
 msgid "Uploaded!"
 msgstr "Uploaded!"
 
+#: components/admin/CreateCourseWizard.tsx:613
 #: components/admin/ImageUpload.tsx:232
 msgid "Uploading..."
 msgstr "Uploading..."
+
+#: components/admin/CategoryForm.tsx:154
+msgid "URL-friendly identifier (lowercase, hyphens only)"
+msgstr "URL-friendly identifier (lowercase, hyphens only)"
 
 #: components/admin/VerificationStatsWidget.tsx:227
 msgid "users verified their email in the last 7 days"
@@ -1264,6 +1438,10 @@ msgstr "Verifying..."
 #: components/admin/QuickActionsMenu.tsx:55
 msgid "View"
 msgstr "View"
+
+#: components/admin/CourseManagementMenu.tsx:43
+msgid "View All Courses"
+msgstr "View All Courses"
 
 #: app/[locale]/(admin)/admin/students/page.tsx:61
 #~ msgid "View all registered students and their enrollments"
@@ -1351,6 +1529,7 @@ msgid "You are about to delete:"
 msgstr "You are about to delete:"
 
 #: components/admin/CourseForm.tsx:278
+#: components/admin/CreateCourseWizard.tsx:631
 msgid "YouTube URL"
 msgstr "YouTube URL"
 
@@ -1361,6 +1540,10 @@ msgstr "YouTube Video"
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:211
 msgid "Zoom Meeting"
 msgstr "Zoom Meeting"
+
+#: components/admin/CreateCourseWizard.tsx:650
+msgid "Zoom Meeting URL"
+msgstr "Zoom Meeting URL"
 
 #: components/admin/CourseForm.tsx:300
 msgid "Zoom URL"
