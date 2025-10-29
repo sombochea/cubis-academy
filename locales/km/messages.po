@@ -18,7 +18,6 @@ msgstr ""
 #. placeholder {0}: feature.description
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:100
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:89
-#: app/[locale]/(admin)/admin/courses/page.tsx:119
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:97
 #: app/[locale]/(admin)/admin/page.tsx:116
 #: app/[locale]/(admin)/admin/payments/page.tsx:110
@@ -28,23 +27,34 @@ msgstr ""
 msgid "{0}"
 msgstr "{0}"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:89
+#: components/ui/data-table.tsx:248
+#~ msgid "{0}-{1} of {2}"
+#~ msgstr "{0}-{1} of {2}"
+
+#: components/admin/CoursesDataTable.tsx:116
+msgid "{level}"
+msgstr "{level}"
+
 #: app/[locale]/(admin)/admin/students/page.tsx:92
 #: app/[locale]/(admin)/admin/teachers/page.tsx:81
+#: components/admin/CoursesDataTable.tsx:151
+#: components/admin/TeachersDataTable.tsx:86
 msgid "Actions"
 msgstr "Actions"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
-#: app/[locale]/(admin)/admin/courses/page.tsx:128
 #: app/[locale]/(admin)/admin/students/page.tsx:135
 #: app/[locale]/(admin)/admin/teachers/page.tsx:106
+#: components/admin/CourseFilters.tsx:39
+#: components/admin/CoursesDataTable.tsx:132
+#: components/admin/TeachersDataTable.tsx:79
 msgid "Active"
 msgstr "Active"
 
 #~ msgid "Active Students"
 #~ msgstr "សិស្សសកម្ម"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:58
+#: app/[locale]/(admin)/admin/courses/page.tsx:59
 #: app/[locale]/(admin)/admin/page.tsx:138
 msgid "Add Course"
 msgstr "Add Course"
@@ -58,6 +68,7 @@ msgid "Add New Teacher"
 msgstr "Add New Teacher"
 
 #: app/[locale]/(admin)/admin/page.tsx:132
+#: app/[locale]/(admin)/admin/teachers-table/page.tsx:57
 #: app/[locale]/(admin)/admin/teachers/page.tsx:56
 msgid "Add Teacher"
 msgstr "Add Teacher"
@@ -66,6 +77,7 @@ msgstr "Add Teacher"
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
 
+#: components/admin/CourseFilters.tsx:72
 #: components/admin/CourseForm.tsx:265
 msgid "Advanced"
 msgstr "Advanced"
@@ -73,6 +85,14 @@ msgstr "Advanced"
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:120
 msgid "All enrollments and student progress"
 msgstr "All enrollments and student progress"
+
+#: components/admin/CourseFilters.tsx:63
+msgid "All Levels"
+msgstr "All Levels"
+
+#: components/admin/CourseFilters.tsx:36
+msgid "All Status"
+msgstr "All Status"
 
 #: app/[locale]/(admin)/admin/payments/page.tsx:68
 msgid "Amount"
@@ -95,6 +115,7 @@ msgstr "Back to Course"
 msgid "Back to Courses"
 msgstr "Back to Courses"
 
+#: components/admin/CourseFilters.tsx:66
 #: components/admin/CourseForm.tsx:259
 msgid "Beginner"
 msgstr "Beginner"
@@ -109,14 +130,18 @@ msgstr "Biography"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:71
 #: components/admin/CourseForm.tsx:159
+#: components/admin/CoursesDataTable.tsx:58
 msgid "Category"
 msgstr "Category"
 
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:93
 msgid "Category:"
 msgstr "Category:"
+
+#: components/ui/data-table.tsx:94
+#~ msgid "Columns"
+#~ msgstr "Columns"
 
 #: components/landing-page.tsx:346
 msgid "Comprehensive learning experience designed for your success"
@@ -151,7 +176,7 @@ msgstr "Course Title"
 msgid "courses"
 msgstr "courses"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:47
+#: app/[locale]/(admin)/admin/courses/page.tsx:48
 msgid "Courses Management"
 msgstr "Courses Management"
 
@@ -179,6 +204,10 @@ msgstr "Date"
 msgid "Delete"
 msgstr "Delete"
 
+#: components/admin/CoursesDataTable.tsx:172
+msgid "Delete course"
+msgstr "Delete course"
+
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:72
 #: components/admin/DeleteCourseForm.tsx:78
 msgid "Delete Course"
@@ -194,7 +223,7 @@ msgid "Description"
 msgstr "Description"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:139
-#: app/[locale]/(admin)/admin/courses/page.tsx:80
+#: components/admin/CoursesDataTable.tsx:97
 msgid "Duration"
 msgstr "Duration"
 
@@ -209,6 +238,10 @@ msgstr "Duration (hours)"
 msgid "Edit"
 msgstr "Edit"
 
+#: components/admin/CoursesDataTable.tsx:162
+msgid "Edit course"
+msgstr "Edit course"
+
 #: app/[locale]/(admin)/admin/courses/[id]/edit/page.tsx:65
 msgid "Edit Course"
 msgstr "Edit Course"
@@ -216,6 +249,7 @@ msgstr "Edit Course"
 #: app/[locale]/(admin)/admin/students/page.tsx:77
 #: app/[locale]/(admin)/admin/teachers/page.tsx:69
 #: components/admin/TeacherForm.tsx:133
+#: components/admin/TeachersDataTable.tsx:47
 msgid "Email"
 msgstr "Email"
 
@@ -242,6 +276,10 @@ msgstr "Enrollments Overview"
 #: components/landing-page.tsx:343
 msgid "Everything You Need to Succeed"
 msgstr "អ្វីគ្រប់យ៉ាងដែលអ្នកត្រូវការដើម្បីជោគជ័យ"
+
+#: app/[locale]/(admin)/admin/teachers-table/page.tsx:49
+msgid "Example using TanStack Table with pagination, search, and sorting"
+msgstr "Example using TanStack Table with pagination, search, and sorting"
 
 #~ msgid "Expert Courses"
 #~ msgstr "វគ្គសិក្សាជំនាញ"
@@ -276,15 +314,18 @@ msgid "Get Started Free"
 msgstr "ចាប់ផ្តើមដោយឥតគិតថ្លៃ"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
-#: app/[locale]/(admin)/admin/courses/page.tsx:128
 #: app/[locale]/(admin)/admin/students/page.tsx:135
 #: app/[locale]/(admin)/admin/teachers/page.tsx:106
+#: components/admin/CourseFilters.tsx:42
+#: components/admin/CoursesDataTable.tsx:132
+#: components/admin/TeachersDataTable.tsx:79
 msgid "Inactive"
 msgstr "Inactive"
 
 #~ msgid "Interactive Learning"
 #~ msgstr "ការរៀនអន្តរកម្ម"
 
+#: components/admin/CourseFilters.tsx:69
 #: components/admin/CourseForm.tsx:262
 msgid "Intermediate"
 msgstr "Intermediate"
@@ -302,8 +343,8 @@ msgstr "Last Updated"
 #~ msgid "Learn Skills That Matter"
 #~ msgstr "រៀនជំនាញដែលសំខាន់"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:83
 #: components/admin/CourseForm.tsx:248
+#: components/admin/CoursesDataTable.tsx:105
 msgid "Level"
 msgstr "Level"
 
@@ -319,7 +360,7 @@ msgstr "ចូលប្រើប្រាស់"
 msgid "Logout"
 msgstr "Logout"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:50
+#: app/[locale]/(admin)/admin/courses/page.tsx:51
 msgid "Manage course catalog and assignments"
 msgstr "Manage course catalog and assignments"
 
@@ -340,12 +381,17 @@ msgstr "Method"
 
 #: app/[locale]/(admin)/admin/students/page.tsx:74
 #: app/[locale]/(admin)/admin/teachers/page.tsx:66
+#: components/admin/TeachersDataTable.tsx:36
 msgid "Name"
 msgstr "Name"
 
+#: components/ui/data-table.tsx:294
+#~ msgid "Next"
+#~ msgstr "Next"
+
 #: app/[locale]/(admin)/admin/courses/page.tsx:162
-msgid "No courses found. Add your first course to get started."
-msgstr "No courses found. Add your first course to get started."
+#~ msgid "No courses found. Add your first course to get started."
+#~ msgstr "No courses found. Add your first course to get started."
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:177
 msgid "No description provided"
@@ -358,6 +404,10 @@ msgstr "No enrollments found."
 #: app/[locale]/(admin)/admin/payments/page.tsx:125
 msgid "No payments found."
 msgstr "No payments found."
+
+#: components/ui/data-table.tsx:213
+msgid "No results found."
+msgstr "No results found."
 
 #: app/[locale]/(admin)/admin/students/page.tsx:156
 msgid "No students found."
@@ -372,6 +422,14 @@ msgstr "No teacher assigned"
 msgid "No teachers found. Add your first teacher to get started."
 msgstr "No teachers found. Add your first teacher to get started."
 
+#: components/ui/data-table.tsx:254
+msgid "of"
+msgstr "of"
+
+#: components/ui/data-table.tsx:281
+#~ msgid "Page {0} of {1}"
+#~ msgstr "Page {0} of {1}"
+
 #: components/admin/TeacherForm.tsx:173
 msgid "Password"
 msgstr "Password"
@@ -383,11 +441,16 @@ msgstr "Payments Tracking"
 #: app/[locale]/(admin)/admin/students/page.tsx:80
 #: app/[locale]/(admin)/admin/teachers/page.tsx:72
 #: components/admin/TeacherForm.tsx:155
+#: components/admin/TeachersDataTable.tsx:54
 msgid "Phone"
 msgstr "Phone"
 
+#: components/ui/data-table.tsx:277
+#~ msgid "Previous"
+#~ msgstr "Previous"
+
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:127
-#: app/[locale]/(admin)/admin/courses/page.tsx:77
+#: components/admin/CoursesDataTable.tsx:85
 msgid "Price"
 msgstr "Price"
 
@@ -413,6 +476,14 @@ msgstr "Quick Actions"
 msgid "Related scores and attendance records"
 msgstr "Related scores and attendance records"
 
+#: components/ui/data-table.tsx:150
+#~ msgid "Reset"
+#~ msgstr "Reset"
+
+#: components/ui/data-table.tsx:228
+msgid "Rows per page"
+msgstr "Rows per page"
+
 #: components/admin/CourseForm.tsx:326
 msgid "Save Course"
 msgstr "Save Course"
@@ -429,12 +500,17 @@ msgstr "Saving..."
 #~ msgid "Short-term courses designed for quick skill acquisition"
 #~ msgstr "វគ្គសិក្សារយៈពេលខ្លីដែលរចនាឡើងសម្រាប់ការទទួលបានជំនាញរហ័ស"
 
+#: components/ui/data-table.tsx:173
+#~ msgid "Showing {0} to {1} of {2} results"
+#~ msgstr "Showing {0} to {1} of {2} results"
+
 #: components/landing-page.tsx:424
 msgid "Sign In"
 msgstr "ចូលប្រើប្រាស់"
 
 #: app/[locale]/(admin)/admin/teachers/page.tsx:75
 #: components/admin/TeacherForm.tsx:195
+#: components/admin/TeachersDataTable.tsx:62
 msgid "Specialization"
 msgstr "Specialization"
 
@@ -443,13 +519,18 @@ msgid "Start Learning Free"
 msgstr "ចាប់ផ្តើមរៀនដោយឥតគិតថ្លៃ"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:163
-#: app/[locale]/(admin)/admin/courses/page.tsx:86
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:67
 #: app/[locale]/(admin)/admin/payments/page.tsx:74
 #: app/[locale]/(admin)/admin/students/page.tsx:89
 #: app/[locale]/(admin)/admin/teachers/page.tsx:78
+#: components/admin/CoursesDataTable.tsx:123
+#: components/admin/TeachersDataTable.tsx:70
 msgid "Status"
 msgstr "Status"
+
+#: components/admin/CourseFilters.tsx:23
+#~ msgid "Status:"
+#~ msgstr "Status:"
 
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:58
 #: app/[locale]/(admin)/admin/payments/page.tsx:62
@@ -472,7 +553,7 @@ msgstr "Students Overview"
 #~ msgstr "អត្រាជោគជ័យ"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:182
-#: app/[locale]/(admin)/admin/courses/page.tsx:74
+#: components/admin/CoursesDataTable.tsx:66
 msgid "Teacher"
 msgstr "Teacher"
 
@@ -484,17 +565,25 @@ msgstr "Teacher saved successfully! Redirecting..."
 msgid "Teachers Management"
 msgstr "Teachers Management"
 
+#: app/[locale]/(admin)/admin/teachers-table/page.tsx:46
+msgid "Teachers Management (DataTable)"
+msgstr "Teachers Management (DataTable)"
+
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:75
 msgid "This action cannot be undone"
 msgstr "This action cannot be undone"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:68
+#: components/admin/CoursesDataTable.tsx:47
 msgid "Title"
 msgstr "Title"
 
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:88
 msgid "Title:"
 msgstr "Title:"
+
+#: components/ui/data-table.tsx:143
+msgid "Toggle columns"
+msgstr "Toggle columns"
 
 #: app/[locale]/(admin)/admin/payments/page.tsx:59
 msgid "Transaction ID"
@@ -503,11 +592,15 @@ msgstr "Transaction ID"
 #~ msgid "Transform Your Career Today"
 #~ msgstr "ផ្លាស់ប្តូរអាជីពរបស់អ្នកថ្ងៃនេះ"
 
+#: components/ui/data-table.tsx:214
+msgid "Try adjusting your search or filters"
+msgstr "Try adjusting your search or filters"
+
 #: components/admin/DeleteCourseForm.tsx:59
 msgid "Type DELETE to confirm"
 msgstr "Type DELETE to confirm"
 
-#: app/[locale]/(admin)/admin/courses/page.tsx:103
+#: components/admin/CoursesDataTable.tsx:71
 msgid "Unassigned"
 msgstr "Unassigned"
 
@@ -530,6 +623,10 @@ msgstr "View all student course enrollments"
 #: app/[locale]/(admin)/admin/payments/page.tsx:49
 msgid "View and manage all payment transactions"
 msgstr "View and manage all payment transactions"
+
+#: components/admin/CoursesDataTable.tsx:156
+msgid "View details"
+msgstr "View details"
 
 #: components/landing-page.tsx:314
 msgid "View Details"

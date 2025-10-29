@@ -10,6 +10,7 @@ inclusion: always
 - TailwindCSS v4+ for styling
 - ShadCN UI components (accessible, customizable)
 - TanStack Form + Zod for all forms
+- TanStack Table v8+ for data tables (with pagination, sorting, filtering)
 - Motion 12+ for animations
 - PostgreSQL 18+ with Drizzle ORM
 - Auth.js v5 beta for authentication
@@ -145,3 +146,197 @@ proxy.ts             # Route protection & locale routing (Next.js 16)
 - Implement useSWR caching for client-side data
 - Optimize images with Next.js `<Image>` component
 - Lazy load heavy components with `next/dynamic`
+
+
+## Data Tables (TanStack Table)
+
+Use the reusable `DataTable` component for all tabular data with pagination, sorting, and filtering.
+
+### Basic Usage
+
+```typescript
+'use client';
+
+import { DataTable } from '@/components/ui/data-table';
+import { ColumnDef } from '@tanstack/react-table';
+
+// Define columns
+const columns: ColumnDef<YourDataType>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      return (
+        <div className="flex gap-2">
+          <Button>Edit</Button>
+          <Button>Delete</Button>
+        </div>
+      );
+    },
+  },
+];
+
+// Use in component
+export default function MyPage() {
+  const data = [...]; // Your data array
+  
+  return (
+    <DataTable 
+      columns={columns} 
+      data={data}
+      searchKey="name"
+      searchPlaceholder="Search by name..."
+    />
+  );
+}
+```
+
+### Sortable Columns
+
+```typescript
+import { ArrowUpDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const columns: ColumnDef<YourDataType>[] = [
+  {
+    accessorKey: 'name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+];
+```
+
+### Custom Cell Rendering
+
+```typescript
+const columns: ColumnDef<YourDataType>[] = [
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const status = row.getValue('status') as string;
+      return (
+        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+          status === 'active' 
+            ? 'bg-green-100 text-green-700' 
+            : 'bg-gray-100 text-gray-700'
+        }`}>
+          {status}
+        </span>
+      );
+    },
+  },
+];
+```
+
+### Features
+
+- **Pagination**: Automatic pagination with page size control (10, 20, 30, 40, 50)
+- **Sorting**: Click column headers to sort (ascending/descending)
+- **Filtering**: Global search by specified column key
+- **Custom Filters**: Pass filter components for advanced filtering
+- **Row Numbering**: Optional row numbers that respect pagination
+- **Column Visibility**: Toggle column visibility via dropdown
+- **Responsive**: Mobile-friendly with horizontal scroll
+- **Internationalized**: All UI text wrapped with `<Trans>`
+
+### Props
+
+- `columns`: Array of column definitions (required)
+- `data`: Array of data objects (required)
+- `searchKey`: Column key to enable search filtering (optional)
+- `searchPlaceholder`: Placeholder text for search input (optional)
+- `filterComponent`: Function that receives table instance and returns filter UI (optional)
+- `showRowNumber`: Show row numbers in first column (optional, default: false)
+
+### Best Practices
+
+- Define columns outside component or use `useMemo` to prevent re-renders
+- Use `accessorKey` for simple data access
+- Use `accessorFn` for computed values
+- Keep cell renderers lightweight
+- Use proper TypeScript types for data
+
+
+### Row Numbering
+
+Enable row numbers with the `showRowNumber` prop:
+
+```typescript
+<DataTable 
+  columns={columns} 
+  data={data}
+  showRowNumber={true}
+/>
+```
+
+Row numbers:
+- Automatically adjust for pagination (e.g., page 2 starts at 11)
+- Cannot be hidden via column visibility toggle
+- Centered alignment with subtle styling
+- Fixed width of 60px
+
+### Custom Filters
+
+Create reusable filter components:
+
+```typescript
+// CourseFilters.tsx
+export function CourseFilters({ table }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Select
+        value={table.getColumn('status')?.getFilterValue() ?? 'all'}
+        onValueChange={(value) => {
+          table.getColumn('status')?.setFilterValue(
+            value === 'all' ? undefined : value
+          );
+        }}
+      >
+        <SelectTrigger className="h-9 w-[120px]">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All</SelectItem>
+          <SelectItem value="active">Active</SelectItem>
+          <SelectItem value="inactive">Inactive</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
+// Usage
+<DataTable 
+  columns={columns} 
+  data={data}
+  filterComponent={(table) => <CourseFilters table={table} />}
+/>
+```
+
+**Important**: Always derive filter values from table state to keep UI in sync:
+
+```typescript
+// ✅ Correct - derives from table state
+const filterValue = table.getColumn('status')?.getFilterValue();
+const displayValue = filterValue === undefined ? 'all' : filterValue;
+
+// ❌ Wrong - uses prop directly
+value={(table.getColumn('status')?.getFilterValue() as string) ?? 'all'}
+```

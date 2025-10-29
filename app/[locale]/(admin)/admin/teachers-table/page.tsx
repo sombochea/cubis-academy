@@ -1,17 +1,17 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { courses, users, teachers } from '@/lib/drizzle/schema';
+import { users, teachers } from '@/lib/drizzle/schema';
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
-import { CoursesDataTable } from '@/components/admin/CoursesDataTable';
+import { TeachersDataTable } from '@/components/admin/TeachersDataTable';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 
-export default async function CoursesPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function TeachersTablePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   await loadCatalog(locale);
   setI18n(i18n);
@@ -22,20 +22,18 @@ export default async function CoursesPage({ params }: { params: Promise<{ locale
     redirect(`/${locale}/login`);
   }
 
-  const coursesList = await db
+  const teachersList = await db
     .select({
-      id: courses.id,
-      title: courses.title,
-      category: courses.category,
-      price: courses.price,
-      duration: courses.duration,
-      level: courses.level,
-      isActive: courses.isActive,
-      teacherName: users.name,
+      userId: teachers.userId,
+      name: users.name,
+      email: users.email,
+      phone: users.phone,
+      bio: teachers.bio,
+      spec: teachers.spec,
+      isActive: users.isActive,
     })
-    .from(courses)
-    .leftJoin(teachers, eq(courses.teacherId, teachers.userId))
-    .leftJoin(users, eq(teachers.userId, users.id));
+    .from(teachers)
+    .innerJoin(users, eq(teachers.userId, users.id));
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
@@ -45,22 +43,22 @@ export default async function CoursesPage({ params }: { params: Promise<{ locale
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold text-[#17224D] mb-2">
-              <Trans>Courses Management</Trans>
+              <Trans>Teachers Management (DataTable)</Trans>
             </h2>
             <p className="text-[#363942]/70">
-              <Trans>Manage course catalog and assignments</Trans>
+              <Trans>Example using TanStack Table with pagination, search, and sorting</Trans>
             </p>
           </div>
           <Link
-            href={`/${locale}/admin/courses/new`}
+            href={`/${locale}/admin/teachers/new`}
             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#007FFF] to-[#17224D] text-white rounded-xl hover:shadow-xl transition-all font-semibold"
           >
             <Plus className="w-5 h-5" />
-            <Trans>Add Course</Trans>
+            <Trans>Add Teacher</Trans>
           </Link>
         </div>
 
-        <CoursesDataTable data={coursesList} locale={locale} />
+        <TeachersDataTable data={teachersList} locale={locale} />
       </div>
     </div>
   );
