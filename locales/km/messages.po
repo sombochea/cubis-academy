@@ -45,7 +45,7 @@ msgstr "Actions"
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
 #: app/[locale]/(admin)/admin/students/page.tsx:135
 #: app/[locale]/(admin)/admin/teachers/page.tsx:106
-#: components/admin/CourseFilters.tsx:39
+#: components/admin/CourseFilters.tsx:46
 #: components/admin/CoursesDataTable.tsx:132
 #: components/admin/TeachersDataTable.tsx:79
 msgid "Active"
@@ -77,7 +77,7 @@ msgstr "Add Teacher"
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
 
-#: components/admin/CourseFilters.tsx:72
+#: components/admin/CourseFilters.tsx:79
 #: components/admin/CourseForm.tsx:265
 msgid "Advanced"
 msgstr "Advanced"
@@ -86,11 +86,11 @@ msgstr "Advanced"
 msgid "All enrollments and student progress"
 msgstr "All enrollments and student progress"
 
-#: components/admin/CourseFilters.tsx:63
+#: components/admin/CourseFilters.tsx:70
 msgid "All Levels"
 msgstr "All Levels"
 
-#: components/admin/CourseFilters.tsx:36
+#: components/admin/CourseFilters.tsx:43
 msgid "All Status"
 msgstr "All Status"
 
@@ -115,7 +115,7 @@ msgstr "Back to Course"
 msgid "Back to Courses"
 msgstr "Back to Courses"
 
-#: components/admin/CourseFilters.tsx:66
+#: components/admin/CourseFilters.tsx:73
 #: components/admin/CourseForm.tsx:259
 msgid "Beginner"
 msgstr "Beginner"
@@ -273,6 +273,10 @@ msgstr "Enrollments"
 msgid "Enrollments Overview"
 msgstr "Enrollments Overview"
 
+#: components/ui/data-table.tsx:281
+#~ msgid "entries"
+#~ msgstr "entries"
+
 #: components/landing-page.tsx:343
 msgid "Everything You Need to Succeed"
 msgstr "អ្វីគ្រប់យ៉ាងដែលអ្នកត្រូវការដើម្បីជោគជ័យ"
@@ -316,7 +320,7 @@ msgstr "ចាប់ផ្តើមដោយឥតគិតថ្លៃ"
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
 #: app/[locale]/(admin)/admin/students/page.tsx:135
 #: app/[locale]/(admin)/admin/teachers/page.tsx:106
-#: components/admin/CourseFilters.tsx:42
+#: components/admin/CourseFilters.tsx:49
 #: components/admin/CoursesDataTable.tsx:132
 #: components/admin/TeachersDataTable.tsx:79
 msgid "Inactive"
@@ -325,7 +329,7 @@ msgstr "Inactive"
 #~ msgid "Interactive Learning"
 #~ msgstr "ការរៀនអន្តរកម្ម"
 
-#: components/admin/CourseFilters.tsx:69
+#: components/admin/CourseFilters.tsx:76
 #: components/admin/CourseForm.tsx:262
 msgid "Intermediate"
 msgstr "Intermediate"
@@ -405,7 +409,7 @@ msgstr "No enrollments found."
 msgid "No payments found."
 msgstr "No payments found."
 
-#: components/ui/data-table.tsx:213
+#: components/ui/data-table.tsx:244
 msgid "No results found."
 msgstr "No results found."
 
@@ -422,9 +426,17 @@ msgstr "No teacher assigned"
 msgid "No teachers found. Add your first teacher to get started."
 msgstr "No teachers found. Add your first teacher to get started."
 
-#: components/ui/data-table.tsx:254
+#: components/ui/data-table.tsx:288
 msgid "of"
 msgstr "of"
+
+#: components/ui/data-table.tsx:277
+msgid "page"
+msgstr "page"
+
+#: components/ui/data-table.tsx:349
+#~ msgid "Page"
+#~ msgstr "Page"
 
 #: components/ui/data-table.tsx:281
 #~ msgid "Page {0} of {1}"
@@ -481,8 +493,8 @@ msgstr "Related scores and attendance records"
 #~ msgstr "Reset"
 
 #: components/ui/data-table.tsx:228
-msgid "Rows per page"
-msgstr "Rows per page"
+#~ msgid "Rows per page"
+#~ msgstr "Rows per page"
 
 #: components/admin/CourseForm.tsx:326
 msgid "Save Course"
@@ -499,6 +511,10 @@ msgstr "Saving..."
 
 #~ msgid "Short-term courses designed for quick skill acquisition"
 #~ msgstr "វគ្គសិក្សារយៈពេលខ្លីដែលរចនាឡើងសម្រាប់ការទទួលបានជំនាញរហ័ស"
+
+#: components/ui/data-table.tsx:261
+#~ msgid "Show"
+#~ msgstr "Show"
 
 #: components/ui/data-table.tsx:173
 #~ msgid "Showing {0} to {1} of {2} results"
@@ -581,7 +597,7 @@ msgstr "Title"
 msgid "Title:"
 msgstr "Title:"
 
-#: components/ui/data-table.tsx:143
+#: components/ui/data-table.tsx:169
 msgid "Toggle columns"
 msgstr "Toggle columns"
 
@@ -592,7 +608,7 @@ msgstr "Transaction ID"
 #~ msgid "Transform Your Career Today"
 #~ msgstr "ផ្លាស់ប្តូរអាជីពរបស់អ្នកថ្ងៃនេះ"
 
-#: components/ui/data-table.tsx:214
+#: components/ui/data-table.tsx:245
 msgid "Try adjusting your search or filters"
 msgstr "Try adjusting your search or filters"
 

@@ -147,7 +147,6 @@ proxy.ts             # Route protection & locale routing (Next.js 16)
 - Optimize images with Next.js `<Image>` component
 - Lazy load heavy components with `next/dynamic`
 
-
 ## Data Tables (TanStack Table)
 
 Use the reusable `DataTable` component for all tabular data with pagination, sorting, and filtering.
@@ -186,10 +185,10 @@ const columns: ColumnDef<YourDataType>[] = [
 // Use in component
 export default function MyPage() {
   const data = [...]; // Your data array
-  
+
   return (
-    <DataTable 
-      columns={columns} 
+    <DataTable
+      columns={columns}
       data={data}
       searchKey="name"
       searchPlaceholder="Search by name..."
@@ -201,17 +200,17 @@ export default function MyPage() {
 ### Sortable Columns
 
 ```typescript
-import { ArrowUpDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const columns: ColumnDef<YourDataType>[] = [
   {
-    accessorKey: 'name',
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -227,16 +226,18 @@ const columns: ColumnDef<YourDataType>[] = [
 ```typescript
 const columns: ColumnDef<YourDataType>[] = [
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue('status') as string;
+      const status = row.getValue("status") as string;
       return (
-        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-          status === 'active' 
-            ? 'bg-green-100 text-green-700' 
-            : 'bg-gray-100 text-gray-700'
-        }`}>
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+            status === "active"
+              ? "bg-green-100 text-green-700"
+              : "bg-gray-100 text-gray-700"
+          }`}
+        >
           {status}
         </span>
       );
@@ -247,12 +248,13 @@ const columns: ColumnDef<YourDataType>[] = [
 
 ### Features
 
-- **Pagination**: Automatic pagination with page size control (10, 20, 30, 40, 50)
+- **Pagination**: Compact footer with page size control (10, 20, 30, 40, 50)
 - **Sorting**: Click column headers to sort (ascending/descending)
 - **Filtering**: Global search by specified column key
 - **Custom Filters**: Pass filter components for advanced filtering
 - **Row Numbering**: Optional row numbers that respect pagination
 - **Column Visibility**: Toggle column visibility via dropdown
+- **Fixed Height**: Table body scrolls with fixed header and footer
 - **Responsive**: Mobile-friendly with horizontal scroll
 - **Internationalized**: All UI text wrapped with `<Trans>`
 
@@ -272,21 +274,19 @@ const columns: ColumnDef<YourDataType>[] = [
 - Use `accessorFn` for computed values
 - Keep cell renderers lightweight
 - Use proper TypeScript types for data
-
+- Table height is fixed with `max-h-[calc(100vh-320px)]` for optimal viewport usage
+- Pagination footer is compact (py-3) to minimize vertical space
 
 ### Row Numbering
 
 Enable row numbers with the `showRowNumber` prop:
 
 ```typescript
-<DataTable 
-  columns={columns} 
-  data={data}
-  showRowNumber={true}
-/>
+<DataTable columns={columns} data={data} showRowNumber={true} />
 ```
 
 Row numbers:
+
 - Automatically adjust for pagination (e.g., page 2 starts at 11)
 - Cannot be hidden via column visibility toggle
 - Centered alignment with subtle styling
@@ -302,11 +302,11 @@ export function CourseFilters({ table }) {
   return (
     <div className="flex items-center gap-2">
       <Select
-        value={table.getColumn('status')?.getFilterValue() ?? 'all'}
+        value={table.getColumn("status")?.getFilterValue() ?? "all"}
         onValueChange={(value) => {
-          table.getColumn('status')?.setFilterValue(
-            value === 'all' ? undefined : value
-          );
+          table
+            .getColumn("status")
+            ?.setFilterValue(value === "all" ? undefined : value);
         }}
       >
         <SelectTrigger className="h-9 w-[120px]">
@@ -323,11 +323,11 @@ export function CourseFilters({ table }) {
 }
 
 // Usage
-<DataTable 
-  columns={columns} 
+<DataTable
+  columns={columns}
   data={data}
   filterComponent={(table) => <CourseFilters table={table} />}
-/>
+/>;
 ```
 
 **Important**: Always derive filter values from table state to keep UI in sync:

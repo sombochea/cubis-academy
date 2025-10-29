@@ -115,9 +115,9 @@ export function DataTable<TData, TValue>({
   const hasActiveFilters = columnFilters.length > 0;
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full flex flex-col h-[calc(100vh-200px)]">
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-200">
+      <div className="flex items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-200 flex-shrink-0">
         <div className="flex items-center gap-3 flex-1">
           {/* Search */}
           {searchKey && (
@@ -190,77 +190,81 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-gradient-to-r from-[#F4F5F7] to-[#FAFBFC] hover:from-[#F4F5F7] hover:to-[#FAFBFC] border-b border-gray-200">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className="font-semibold text-[#17224D] h-12">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className="hover:bg-[#F4F5F7]/30 transition-colors border-b border-gray-100 last:border-0"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-4">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm flex-1 flex flex-col min-h-0">
+        <div className="overflow-x-auto flex-shrink-0">
+          <Table>
+            <TableHeader className="sticky top-0 z-10 bg-white">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="bg-gradient-to-r from-[#F4F5F7] to-[#FAFBFC] hover:from-[#F4F5F7] hover:to-[#FAFBFC] border-b border-gray-200">
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id} className="font-semibold text-[#17224D] h-12">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-32 text-center"
-                >
-                  <div className="flex flex-col items-center justify-center text-[#363942]/70">
-                    <Search className="w-10 h-10 mb-2 opacity-20" />
-                    <p className="text-sm font-medium"><Trans>No results found.</Trans></p>
-                    <p className="text-xs mt-1"><Trans>Try adjusting your search or filters</Trans></p>
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+          </Table>
+        </div>
+        <div className="overflow-y-auto flex-1">
+          <Table>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    className="hover:bg-[#F4F5F7]/30 transition-colors border-b border-gray-100 last:border-0"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="py-4">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columnsWithRowNumber.length}
+                    className="h-32 text-center"
+                  >
+                    <div className="flex flex-col items-center justify-center text-[#363942]/70">
+                      <Search className="w-10 h-10 mb-2 opacity-20" />
+                      <p className="text-sm font-medium"><Trans>No results found.</Trans></p>
+                      <p className="text-xs mt-1"><Trans>Try adjusting your search or filters</Trans></p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between px-2">
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <p className="text-sm text-[#363942]/60 whitespace-nowrap">
-              <Trans>Rows per page</Trans>
-            </p>
+      <div className="flex items-center justify-between gap-3 px-2 py-3 bg-white rounded-lg border border-gray-200 flex-shrink-0 mt-4">
+        {/* Left side - Rows info */}
+        <div className="flex items-center gap-3 text-sm text-[#363942]/70">
+          <div className="flex items-center gap-1.5">
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
               }}
             >
-              <SelectTrigger className="h-8 w-[70px] text-sm">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectTrigger className="h-8 w-[70px] text-sm border-gray-200">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent side="top">
                 {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -270,66 +274,86 @@ export function DataTable<TData, TValue>({
                 ))}
               </SelectContent>
             </Select>
+            <span className="text-sm whitespace-nowrap">/ <Trans>page</Trans></span>
           </div>
-          <div className="text-sm text-[#363942]/60 whitespace-nowrap">
-            {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}-
-            {Math.min(
-              (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-              table.getFilteredRowModel().rows.length
-            )}{' '}
-            <Trans>of</Trans> {table.getFilteredRowModel().rows.length}
+          <div className="h-4 w-px bg-gray-200" />
+          <div className="text-sm whitespace-nowrap">
+            <span className="font-medium text-[#17224D]">
+              {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}-
+              {Math.min(
+                (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+                table.getFilteredRowModel().rows.length
+              )}
+            </span>
+            {' '}<Trans>of</Trans>{' '}
+            <span className="font-medium text-[#17224D]">
+              {table.getFilteredRowModel().rows.length}
+            </span>
           </div>
         </div>
         
+        {/* Right side - Navigation */}
         <div className="flex items-center gap-1">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 border-gray-200"
           >
-            <span className="sr-only">Go to first page</span>
-            <ChevronDown className="h-4 w-4 rotate-90" />
+            <span className="sr-only">First page</span>
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="11 17 6 12 11 7" />
+              <polyline points="18 17 13 12 18 7" />
+            </svg>
           </Button>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 border-gray-200"
           >
-            <span className="sr-only">Previous page</span>
-            <ChevronDown className="h-3.5 w-3.5 rotate-90" />
+            <span className="sr-only">Previous</span>
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
           </Button>
-          <div className="flex items-center gap-1 px-2">
-            <span className="text-sm font-medium text-[#17224D]">
+          
+          <div className="flex items-center gap-1 px-2 text-sm">
+            <span className="font-semibold text-[#17224D]">
               {table.getState().pagination.pageIndex + 1}
             </span>
-            <span className="text-sm text-[#363942]/40">/</span>
-            <span className="text-sm text-[#363942]/60">
+            <span className="text-[#363942]/40">/</span>
+            <span className="text-[#363942]/60">
               {table.getPageCount()}
             </span>
           </div>
+          
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 border-gray-200"
           >
-            <span className="sr-only">Next page</span>
-            <ChevronDown className="h-3.5 w-3.5 -rotate-90" />
+            <span className="sr-only">Next</span>
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
           </Button>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 border-gray-200"
           >
-            <span className="sr-only">Go to last page</span>
-            <ChevronDown className="h-4 w-4 -rotate-90" />
+            <span className="sr-only">Last page</span>
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="13 17 18 12 13 7" />
+              <polyline points="6 17 11 12 6 7" />
+            </svg>
           </Button>
         </div>
       </div>
