@@ -15,6 +15,8 @@ inclusion: always
 - Auth.js v5 beta for authentication
 - useSWR for client-side data fetching
 - Resend for emails
+- Lingui v5+ for internationalization (i18n)
+- React Country Flag for flag icons
 
 ## Naming Conventions (Critical - Must Follow)
 
@@ -75,27 +77,65 @@ inclusion: always
 - Use `aria-invalid`, `aria-describedby` for form errors
 - Test with screen readers
 
+## Internationalization (i18n)
+
+- Use Lingui v5+ for all translations
+- Supported languages: Khmer (km - default), English (en)
+- Wrap all user-facing text with `<Trans>` component
+- Use Kantumruy Pro font for Khmer text
+- Use Manrope font for English text
+- Store translations in `locales/{locale}/messages.po`
+- Run `pnpm i18n:extract` to extract messages
+- Run `pnpm i18n:compile` to compile translations
+- All routes must be locale-aware: `/{locale}/path`
+
+## Responsive Design (Cross-Platform)
+
+- Mobile-first approach (design for mobile, enhance for desktop)
+- Breakpoints: sm (640px), md (768px), lg (1024px), xl (1280px), 2xl (1536px)
+- Test on: Mobile (375px), Tablet (768px), Desktop (1440px)
+- Use Tailwind responsive prefixes: `sm:`, `md:`, `lg:`, `xl:`
+- Touch-friendly targets: minimum 44x44px for buttons
+- Optimize images with Next.js `<Image>` component (responsive)
+- Hide/show elements appropriately: `hidden lg:block`
+- Stack layouts vertically on mobile, horizontal on desktop
+- Test on iOS Safari, Android Chrome, Desktop Chrome/Firefox
+
 ## Project Structure
 
 ```
 app/
-├── (auth)/          # Login, register routes
-├── (student)/       # Student portal (/student/*)
-├── (teacher)/       # Teacher dashboard (/teacher/*)
-├── (admin)/         # Admin backoffice (/admin/*)
-└── api/             # API routes
+├── [locale]/        # Locale-aware routes (km, en)
+│   ├── (auth)/      # Login, register routes
+│   ├── (student)/   # Student portal (/student/*)
+│   ├── (teacher)/   # Teacher dashboard (/teacher/*)
+│   ├── (admin)/     # Admin backoffice (/admin/*)
+│   ├── unauthorized/
+│   ├── layout.tsx   # Locale layout with fonts
+│   └── page.tsx     # Landing page
+└── api/             # API routes (no locale)
 
 components/
 ├── ui/              # ShadCN components (Button, Input, etc.)
+├── LanguageProvider.tsx
+├── LanguageSwitcher.tsx
 └── [feature]/       # Feature-specific components
 
 lib/
 ├── auth/            # Auth utilities (session.ts)
 ├── drizzle/         # DB schema, queries, migrations
 ├── validations/     # Zod schemas (auth.ts, course.ts, etc.)
+├── hooks/           # Custom hooks (useLocale.ts)
+├── i18n.ts          # i18n configuration
 └── utils.ts         # General utilities
 
-middleware.ts        # Route protection (role-based)
+locales/
+├── km/              # Khmer translations
+│   └── messages.po
+└── en/              # English translations
+    └── messages.po
+
+proxy.ts             # Route protection & locale routing (Next.js 16)
 ```
 
 ## Performance
