@@ -8,7 +8,6 @@ import { Users, BookOpen, DollarSign, GraduationCap, TrendingUp, UserCheck } fro
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
 import { VerificationStatsWidget } from '@/components/admin/VerificationStatsWidget';
-import { ExportUnverifiedButton } from '@/components/admin/ExportUnverifiedButton';
 import { QuickActionsMenu } from '@/components/admin/QuickActionsMenu';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
@@ -101,7 +100,6 @@ export default async function AdminDashboard({ params }: { params: Promise<{ loc
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <ExportUnverifiedButton />
             <QuickActionsMenu locale={locale} />
           </div>
         </div>

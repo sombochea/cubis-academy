@@ -19,7 +19,7 @@ msgstr ""
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:100
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:89
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:97
-#: app/[locale]/(admin)/admin/page.tsx:125
+#: app/[locale]/(admin)/admin/page.tsx:123
 #: app/[locale]/(admin)/admin/payments/page.tsx:110
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
@@ -101,9 +101,13 @@ msgstr "Add Teacher"
 msgid "Address"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/page.tsx:97
+#: app/[locale]/(admin)/admin/page.tsx:96
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
+
+#: components/admin/ExportUsersButton.tsx:93
+msgid "Admins"
+msgstr ""
 
 #: components/admin/CourseFilters.tsx:79
 #: components/admin/CourseForm.tsx:265
@@ -132,6 +136,7 @@ msgid "All Levels"
 msgstr "All Levels"
 
 #: components/admin/ExportUnverifiedButton.tsx:57
+#: components/admin/ExportUsersButton.tsx:84
 msgid "All Roles"
 msgstr ""
 
@@ -140,6 +145,10 @@ msgstr ""
 #: components/admin/TeacherFilters.tsx:43
 msgid "All Status"
 msgstr "All Status"
+
+#: components/admin/ExportUsersButton.tsx:67
+msgid "All Users"
+msgstr ""
 
 #: app/[locale]/(admin)/admin/payments/page.tsx:68
 msgid "Amount"
@@ -517,7 +526,7 @@ msgstr ""
 msgid "Email Verification Required"
 msgstr ""
 
-#: components/admin/VerificationStatsWidget.tsx:81
+#: components/admin/VerificationStatsWidget.tsx:82
 msgid "Email Verification Statistics"
 msgstr ""
 
@@ -529,7 +538,7 @@ msgstr ""
 msgid "Email:"
 msgstr "Email:"
 
-#: components/admin/VerificationStatsWidget.tsx:199
+#: components/admin/VerificationStatsWidget.tsx:203
 msgid "Email/Password"
 msgstr ""
 
@@ -593,11 +602,16 @@ msgstr "Example using TanStack Table with pagination, search, and sorting"
 #~ msgid "Expert-Led Courses"
 #~ msgstr "Expert-Led Courses"
 
+#: components/admin/ExportUsersButton.tsx:113
+msgid "Export"
+msgstr ""
+
 #: components/admin/ExportUnverifiedButton.tsx:83
 msgid "Export Unverified"
 msgstr ""
 
 #: components/admin/ExportUnverifiedButton.tsx:78
+#: components/admin/ExportUsersButton.tsx:108
 msgid "Exporting..."
 msgstr ""
 
@@ -725,7 +739,7 @@ msgstr "Manage course catalog and assignments"
 msgid "Manage teachers and assign courses"
 msgstr "Manage teachers and assign courses"
 
-#: app/[locale]/(admin)/admin/page.tsx:100
+#: app/[locale]/(admin)/admin/page.tsx:99
 msgid "Manage your learning management system"
 msgstr "Manage your learning management system"
 
@@ -822,7 +836,7 @@ msgstr "No teacher assigned"
 msgid "Not provided"
 msgstr "Not provided"
 
-#: components/admin/VerificationStatsWidget.tsx:177
+#: components/admin/VerificationStatsWidget.tsx:181
 msgid "OAuth2 (Google, etc.)"
 msgstr ""
 
@@ -924,9 +938,9 @@ msgstr "Progress"
 msgid "Quick Actions"
 msgstr "Quick Actions"
 
-#: components/admin/VerificationStatsWidget.tsx:164
-#: components/admin/VerificationStatsWidget.tsx:190
-#: components/admin/VerificationStatsWidget.tsx:212
+#: components/admin/VerificationStatsWidget.tsx:168
+#: components/admin/VerificationStatsWidget.tsx:194
+#: components/admin/VerificationStatsWidget.tsx:216
 msgid "Rate"
 msgstr ""
 
@@ -940,7 +954,7 @@ msgstr ""
 msgid "Redirecting..."
 msgstr ""
 
-#: components/admin/VerificationStatsWidget.tsx:87
+#: components/admin/VerificationStatsWidget.tsx:89
 msgid "Refresh"
 msgstr ""
 
@@ -1064,6 +1078,7 @@ msgstr "Student ID"
 #~ msgstr "students"
 
 #: components/admin/ExportUnverifiedButton.tsx:60
+#: components/admin/ExportUsersButton.tsx:87
 msgid "Students"
 msgstr "Students"
 
@@ -1096,6 +1111,7 @@ msgid "Teacher saved successfully! Redirecting..."
 msgstr "Teacher saved successfully! Redirecting..."
 
 #: components/admin/ExportUnverifiedButton.tsx:63
+#: components/admin/ExportUsersButton.tsx:90
 msgid "Teachers"
 msgstr "Teachers"
 
@@ -1141,9 +1157,9 @@ msgstr ""
 msgid "Toggle columns"
 msgstr "Toggle columns"
 
-#: components/admin/VerificationStatsWidget.tsx:151
-#: components/admin/VerificationStatsWidget.tsx:181
-#: components/admin/VerificationStatsWidget.tsx:203
+#: components/admin/VerificationStatsWidget.tsx:155
+#: components/admin/VerificationStatsWidget.tsx:185
+#: components/admin/VerificationStatsWidget.tsx:207
 msgid "Total"
 msgstr ""
 
@@ -1175,7 +1191,7 @@ msgstr "Total Students"
 #~ msgid "Total Teachers"
 #~ msgstr "Total Teachers"
 
-#: components/admin/VerificationStatsWidget.tsx:101
+#: components/admin/VerificationStatsWidget.tsx:105
 msgid "Total Users"
 msgstr ""
 
@@ -1199,10 +1215,11 @@ msgstr "Type DELETE to confirm"
 msgid "Unassigned"
 msgstr "Unassigned"
 
+#: components/admin/ExportUsersButton.tsx:73
 #: components/admin/StudentFilters.tsx:109
 #: components/admin/TeacherFilters.tsx:76
-#: components/admin/VerificationStatsWidget.tsx:125
-#: components/admin/VerificationStatsWidget.tsx:159
+#: components/admin/VerificationStatsWidget.tsx:129
+#: components/admin/VerificationStatsWidget.tsx:163
 msgid "Unverified"
 msgstr ""
 
@@ -1234,7 +1251,7 @@ msgstr "Uploaded!"
 msgid "Uploading..."
 msgstr "Uploading..."
 
-#: components/admin/VerificationStatsWidget.tsx:223
+#: components/admin/VerificationStatsWidget.tsx:227
 msgid "users verified their email in the last 7 days"
 msgstr ""
 
@@ -1242,16 +1259,17 @@ msgstr ""
 msgid "Verification Code"
 msgstr ""
 
-#: components/admin/VerificationStatsWidget.tsx:137
+#: components/admin/VerificationStatsWidget.tsx:141
 msgid "Verification Rate"
 msgstr ""
 
+#: components/admin/ExportUsersButton.tsx:70
 #: components/admin/StudentFilters.tsx:106
 #: components/admin/TeacherFilters.tsx:73
-#: components/admin/VerificationStatsWidget.tsx:113
-#: components/admin/VerificationStatsWidget.tsx:155
-#: components/admin/VerificationStatsWidget.tsx:185
-#: components/admin/VerificationStatsWidget.tsx:207
+#: components/admin/VerificationStatsWidget.tsx:117
+#: components/admin/VerificationStatsWidget.tsx:159
+#: components/admin/VerificationStatsWidget.tsx:189
+#: components/admin/VerificationStatsWidget.tsx:211
 #: components/student/VerifiedBadge.tsx:32
 msgid "Verified"
 msgstr ""

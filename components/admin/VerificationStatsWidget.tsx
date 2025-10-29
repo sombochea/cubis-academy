@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle2, XCircle, Users, TrendingUp } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
+import { ExportUsersButton } from './ExportUsersButton';
 
 interface VerificationStats {
   overall: {
@@ -80,12 +81,15 @@ export function VerificationStatsWidget() {
         <h3 className="text-lg font-semibold text-[#17224D]">
           <Trans>Email Verification Statistics</Trans>
         </h3>
-        <button
-          onClick={fetchStats}
-          className="text-sm text-[#007FFF] hover:text-[#0066CC]"
-        >
-          <Trans>Refresh</Trans>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={fetchStats}
+            className="text-sm px-3 py-1.5 text-[#007FFF] hover:text-[#0066CC] hover:bg-blue-50 rounded-lg transition-colors font-medium"
+          >
+            <Trans>Refresh</Trans>
+          </button>
+          <ExportUsersButton />
+        </div>
       </div>
 
       {/* Overall Stats */}
