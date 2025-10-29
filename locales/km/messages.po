@@ -19,7 +19,7 @@ msgstr ""
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:100
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:89
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:97
-#: app/[locale]/(admin)/admin/page.tsx:118
+#: app/[locale]/(admin)/admin/page.tsx:125
 #: app/[locale]/(admin)/admin/payments/page.tsx:110
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
@@ -65,7 +65,7 @@ msgstr "Active"
 #~ msgstr "សិស្សសកម្ម"
 
 #: app/[locale]/(admin)/admin/courses/page.tsx:59
-#: app/[locale]/(admin)/admin/page.tsx:148
+#: components/admin/QuickActionsMenu.tsx:49
 msgid "Add Course"
 msgstr "Add Course"
 
@@ -82,12 +82,13 @@ msgid "Add New Teacher"
 msgstr "Add New Teacher"
 
 #: app/[locale]/(admin)/admin/students/page.tsx:79
+#: components/admin/QuickActionsMenu.tsx:43
 msgid "Add Student"
 msgstr "Add Student"
 
-#: app/[locale]/(admin)/admin/page.tsx:142
 #: app/[locale]/(admin)/admin/teachers-table/page.tsx:57
 #: app/[locale]/(admin)/admin/teachers/page.tsx:78
+#: components/admin/QuickActionsMenu.tsx:37
 msgid "Add Teacher"
 msgstr "Add Teacher"
 
@@ -96,7 +97,7 @@ msgstr "Add Teacher"
 msgid "Address"
 msgstr "Address"
 
-#: app/[locale]/(admin)/admin/page.tsx:95
+#: app/[locale]/(admin)/admin/page.tsx:97
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
 
@@ -355,6 +356,10 @@ msgstr "Create a new student account"
 #: app/[locale]/(admin)/admin/teachers/new/page.tsx:30
 msgid "Create a new teacher account"
 msgstr "Create a new teacher account"
+
+#: components/admin/QuickActionsMenu.tsx:31
+msgid "Create New"
+msgstr "Create New"
 
 #: components/admin/StudentForm.tsx:279
 msgid "Create Student"
@@ -712,7 +717,7 @@ msgstr "Manage course catalog and assignments"
 msgid "Manage teachers and assign courses"
 msgstr "Manage teachers and assign courses"
 
-#: app/[locale]/(admin)/admin/page.tsx:98
+#: app/[locale]/(admin)/admin/page.tsx:100
 msgid "Manage your learning management system"
 msgstr "Manage your learning management system"
 
@@ -899,7 +904,7 @@ msgstr "Profile Photo"
 msgid "Progress"
 msgstr "Progress"
 
-#: app/[locale]/(admin)/admin/page.tsx:133
+#: components/admin/QuickActionsMenu.tsx:26
 msgid "Quick Actions"
 msgstr "Quick Actions"
 
@@ -1238,9 +1243,9 @@ msgstr "Verify Your Email"
 msgid "Verifying..."
 msgstr "Verifying..."
 
-#: app/[locale]/(admin)/admin/students/page.tsx:144
-#~ msgid "View"
-#~ msgstr "View"
+#: components/admin/QuickActionsMenu.tsx:55
+msgid "View"
+msgstr "View"
 
 #: app/[locale]/(admin)/admin/students/page.tsx:61
 #~ msgid "View all registered students and their enrollments"
@@ -1262,6 +1267,10 @@ msgstr "View and manage student accounts"
 msgid "View Course"
 msgstr "View Course"
 
+#: components/admin/QuickActionsMenu.tsx:73
+msgid "View Courses"
+msgstr "View Courses"
+
 #: components/admin/CoursesDataTable.tsx:156
 #: components/admin/StudentsDataTable.tsx:180
 #: components/admin/TeachersDataTable.tsx:188
@@ -1277,7 +1286,7 @@ msgstr "មើលព័ត៌មានលម្អិត"
 msgid "View enrollments"
 msgstr "View enrollments"
 
-#: app/[locale]/(admin)/admin/page.tsx:160
+#: components/admin/QuickActionsMenu.tsx:79
 msgid "View Payments"
 msgstr "View Payments"
 
@@ -1285,9 +1294,13 @@ msgstr "View Payments"
 msgid "View Student"
 msgstr "View Student"
 
-#: app/[locale]/(admin)/admin/page.tsx:154
+#: components/admin/QuickActionsMenu.tsx:61
 msgid "View Students"
 msgstr "View Students"
+
+#: components/admin/QuickActionsMenu.tsx:67
+msgid "View Teachers"
+msgstr "View Teachers"
 
 #: components/admin/DeleteStudentForm.tsx:54
 msgid "Warning"
