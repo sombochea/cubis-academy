@@ -142,7 +142,7 @@ export default async function CourseViewPage({
                 </div>
               </div>
 
-              <div className="p-4 bg-[#F4F5F7] rounded-lg">
+              <Link href={`/${locale}/admin/courses/${id}/enrollments`} className="p-4 bg-[#F4F5F7] rounded-lg hover:bg-[#007FFF]/5 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#007FFF]/10 rounded-lg flex items-center justify-center">
                     <Users className="w-5 h-5 text-[#007FFF]" />
@@ -152,7 +152,7 @@ export default async function CourseViewPage({
                     <p className="text-lg font-bold text-[#17224D]">{enrollmentCount.count}</p>
                   </div>
                 </div>
-              </div>
+              </Link>
 
               <div className="p-4 bg-[#F4F5F7] rounded-lg">
                 <div className="flex items-center gap-3">

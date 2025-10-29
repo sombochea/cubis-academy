@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { Edit, Trash2, Eye, ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { Edit, Trash2, Eye, ArrowUpDown, MoreHorizontal, Users } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import * as React from 'react';
 
@@ -160,6 +160,12 @@ export function CoursesDataTable({ data, locale }: CoursesDataTableProps) {
                 <Link href={`/${locale}/admin/courses/${course.id}/edit`} className="cursor-pointer">
                   <Edit className="mr-2 h-4 w-4" />
                   <Trans>Edit course</Trans>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/${locale}/admin/courses/${course.id}/enrollments`} className="cursor-pointer">
+                  <Users className="mr-2 h-4 w-4" />
+                  <Trans>View enrollments</Trans>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

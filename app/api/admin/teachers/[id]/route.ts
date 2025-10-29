@@ -10,6 +10,7 @@ const teacherUpdateSchema = z.object({
   phone: z.string().optional(),
   bio: z.string().optional(),
   spec: z.string().optional(),
+  photo: z.string().optional(),
 });
 
 export async function PUT(
@@ -41,6 +42,7 @@ export async function PUT(
       .set({
         bio: validatedData.bio || null,
         spec: validatedData.spec || null,
+        photo: validatedData.photo || null,
       })
       .where(eq(teachers.userId, id));
 

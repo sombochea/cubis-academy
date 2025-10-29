@@ -36,6 +36,7 @@ export default async function TeacherViewPage({
       phone: users.phone,
       bio: teachers.bio,
       spec: teachers.spec,
+      photo: teachers.photo,
       isActive: users.isActive,
       created: users.created,
       updated: users.updated,
@@ -72,14 +73,30 @@ export default async function TeacherViewPage({
           {/* Header */}
           <div className="bg-gradient-to-r from-[#007FFF] to-[#17224D] px-8 py-6">
             <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2">{teacher.name}</h1>
-                <div className="flex items-center gap-4 text-white/90 text-sm">
-                  {teacher.spec && (
-                    <span className="px-3 py-1 bg-white/10 rounded-full text-xs font-semibold">
-                      {teacher.spec}
-                    </span>
+              <div className="flex items-start gap-6">
+                <div className="relative w-20 h-20 rounded-full overflow-hidden bg-white/10 flex-shrink-0">
+                  {teacher.photo ? (
+                    <Image
+                      src={teacher.photo}
+                      alt={teacher.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-white/20 text-white font-bold text-2xl">
+                      {teacher.name.charAt(0).toUpperCase()}
+                    </div>
                   )}
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-white mb-2">{teacher.name}</h1>
+                  <div className="flex items-center gap-4 text-white/90 text-sm">
+                    {teacher.spec && (
+                      <span className="px-3 py-1 bg-white/10 rounded-full text-xs font-semibold">
+                        {teacher.spec}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex gap-2">

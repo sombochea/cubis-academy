@@ -19,7 +19,7 @@ const getErrorMessage = (error: any): string => {
   return 'Invalid value';
 };
 
-const teacherSchema = z.object({
+const teacherCreateSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   phone: z.string(),
@@ -29,7 +29,17 @@ const teacherSchema = z.object({
   photo: z.string(),
 });
 
-type TeacherFormData = z.infer<typeof teacherSchema>;
+const teacherUpdateSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string(),
+  password: z.string().optional(),
+  bio: z.string(),
+  spec: z.string(),
+  photo: z.string(),
+});
+
+type TeacherFormData = z.infer<typeof teacherCreateSchema>;
 
 interface TeacherFormProps {
   locale: string;
@@ -53,7 +63,7 @@ export function TeacherForm({ locale, initialData, teacherId }: TeacherFormProps
       photo: initialData?.photo || '',
     },
     validators: {
-      onChange: teacherSchema,
+      onChange: teacherId ? teacherUpdateSchema : teacherCreateSchema,
     },
     onSubmit: async ({ value }) => {
       setError(null);

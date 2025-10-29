@@ -1,18 +1,18 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { users, teachers } from '@/lib/drizzle/schema';
+import { users, teachers, courses } from '@/lib/drizzle/schema';
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
-import { TeacherForm } from '@/components/admin/TeacherForm';
+import { AssignCoursesForm } from '@/components/admin/AssignCoursesForm';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
 
-export default async function EditTeacherPage({ 
+export default async function AssignCoursesPage({ 
   params 
 }: { 
   params: Promise<{ locale: string; id: string }> 
@@ -27,15 +27,13 @@ export default async function EditTeacherPage({
     redirect(`/${locale}/login`);
   }
 
+  // Get teacher info
   const [teacher] = await db
     .select({
       userId: teachers.userId,
       name: users.name,
       email: users.email,
-      phone: users.phone,
-      bio: teachers.bio,
       spec: teachers.spec,
-      photo: teachers.photo,
     })
     .from(teachers)
     .innerJoin(users, eq(teachers.userId, users.id))
@@ -45,11 +43,28 @@ export default async function EditTeacherPage({
     notFound();
   }
 
+  // Get all courses
+  const allCourses = await db
+    .select({
+      id: courses.id,
+      title: courses.title,
+      category: courses.category,
+      level: courses.level,
+      teacherId: courses.teacherId,
+      isActive: courses.isActive,
+    })
+    .from(courses)
+    .orderBy(courses.title);
+
+  // Separate assigned and available courses
+  const assignedCourses = allCourses.filter(c => c.teacherId === id);
+  const availableCourses = allCourses.filter(c => c.teacherId !== id);
+
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
       <AdminNav locale={locale} />
       
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-6">
           <Link
             href={`/${locale}/admin/teachers/${id}`}
@@ -62,28 +77,20 @@ export default async function EditTeacherPage({
 
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-[#17224D] mb-2">
-            <Trans>Edit Teacher</Trans>
+            <Trans>Assign Courses</Trans>
           </h2>
           <p className="text-[#363942]/70">
-            <Trans>Update teacher information</Trans>
+            <Trans>Manage course assignments for</Trans> <strong>{teacher.name}</strong>
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
-          <TeacherForm 
-            locale={locale} 
-            teacherId={id}
-            initialData={{
-              name: teacher.name,
-              email: teacher.email,
-              phone: teacher.phone || '',
-              password: '',
-              bio: teacher.bio || '',
-              spec: teacher.spec || '',
-              photo: teacher.photo || '',
-            }}
-          />
-        </div>
+        <AssignCoursesForm
+          teacherId={id}
+          teacherName={teacher.name}
+          assignedCourses={assignedCourses}
+          availableCourses={availableCourses}
+          locale={locale}
+        />
       </div>
     </div>
   );

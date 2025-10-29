@@ -3,6 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
+import { TeacherFilters } from '@/components/admin/TeacherFilters';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,7 @@ type Teacher = {
   spec: string | null;
   photo: string | null;
   isActive: boolean;
+  courseCount: number;
 };
 
 interface TeachersDataTableProps {
@@ -34,7 +36,23 @@ interface TeachersDataTableProps {
 }
 
 export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
-  const columns: ColumnDef<Teacher>[] = [
+  // Add a computed search field that combines name, email, and phone
+  const dataWithSearch = React.useMemo(() => 
+    data.map(teacher => ({
+      ...teacher,
+      searchField: `${teacher.name} ${teacher.email} ${teacher.phone || ''}`.toLowerCase(),
+    })),
+    [data]
+  );
+
+  const columns: ColumnDef<Teacher & { searchField: string }>[] = [
+    {
+      accessorKey: 'searchField',
+      header: () => null,
+      cell: () => null,
+      enableHiding: true,
+      enableSorting: false,
+    },
     {
       accessorKey: 'name',
       header: ({ column }) => {
@@ -96,6 +114,18 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
       },
     },
     {
+      accessorKey: 'courseCount',
+      header: () => <Trans>Courses</Trans>,
+      cell: ({ row }) => {
+        const count = row.getValue('courseCount') as number;
+        return (
+          <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#007FFF]/10 text-[#007FFF]">
+            {count}
+          </span>
+        );
+      },
+    },
+    {
       accessorKey: 'isActive',
       header: () => <Trans>Status</Trans>,
       cell: ({ row }) => {
@@ -140,7 +170,7 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/${locale}/admin/teachers/${teacher.userId}/courses`} className="cursor-pointer">
+                <Link href={`/${locale}/admin/teachers/${teacher.userId}/assign-courses`} className="cursor-pointer">
                   <BookOpen className="mr-2 h-4 w-4" />
                   <Trans>Assign courses</Trans>
                 </Link>
@@ -165,9 +195,10 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
   return (
     <DataTable 
       columns={columns} 
-      data={data}
-      searchKey="name"
-      searchPlaceholder="Search teachers by name..."
+      data={dataWithSearch}
+      searchKey="searchField"
+      searchPlaceholder="Search by name, email, or phone..."
+      filterComponent={(table) => <TeacherFilters table={table} />}
       showRowNumber={true}
     />
   );
