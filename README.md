@@ -31,14 +31,17 @@ CUBIS Academy focuses on technology-related subjects including Web Development, 
 
 ## Tech Stack
 
-- **Framework**: Next.js 16+
+- **Framework**: Next.js 16+ (App Router)
 - **Styling**: TailwindCSS v4+
 - **UI Components**: ShadCN UI
+- **Forms**: TanStack Form (React Form) - High-performance form management
+- **Animations**: Motion (Framer Motion)
 - **Database**: PostgreSQL
 - **ORM**: Drizzle ORM
-- **Authentication**: Auth.js (beta) with Email + Google OAuth2
+- **Authentication**: Auth.js v5 (beta) with Email + Google OAuth2
+- **Validation**: Zod - TypeScript-first schema validation
+- **Data Fetching**: useSWR - React Hooks for data fetching
 - **Email Service**: Resend
-- **Data Fetching**: useSWR
 - **Deployment**: Vercel
 
 ## Project Structure

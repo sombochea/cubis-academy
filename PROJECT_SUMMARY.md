@@ -30,16 +30,20 @@ A complete, production-ready Learning Management System (LMS) with:
 
 ## 📦 Tech Stack
 
-| Category | Technology |
-|----------|-----------|
-| Framework | Next.js 16 (App Router) |
-| Styling | TailwindCSS v4 |
-| Animations | Motion (Framer Motion) |
-| Database | PostgreSQL + Drizzle ORM |
-| Auth | Auth.js v5 (beta) |
-| Validation | Zod |
-| Icons | Lucide React |
-| Language | TypeScript |
+| Category | Technology | Version | Purpose |
+|----------|-----------|---------|---------|
+| Framework | Next.js | 16+ | App Router, Server Components, RSC |
+| Styling | TailwindCSS | v4+ | Utility-first CSS framework |
+| UI Components | ShadCN UI | Latest | Accessible, customizable components |
+| Forms | TanStack Form | Latest | High-performance form management |
+| Animations | Motion | 12+ | Smooth animations (Framer Motion) |
+| Database | PostgreSQL | 18+ | Relational database |
+| ORM | Drizzle ORM | Latest | Type-safe database queries |
+| Auth | Auth.js | v5 beta | Authentication & authorization |
+| Validation | Zod | Latest | TypeScript-first schema validation |
+| Data Fetching | useSWR | Latest | React Hooks for data fetching |
+| Icons | Lucide React | Latest | Beautiful, consistent icons |
+| Language | TypeScript | 5+ | Type safety & developer experience |
 
 ## 🚀 Quick Start
 

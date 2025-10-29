@@ -5,13 +5,16 @@ inclusion: always
 # Project Standards
 
 ## Tech Stack
-- Next.js 16+ (App Router)
-- TailwindCSS v4+
-- ShadCN UI components
-- PostgreSQL with Drizzle ORM
-- Auth.js (beta) for authentication
-- useSWR for data fetching
-- Resend for emails
+- Next.js 16+ (App Router with Server Components)
+- TailwindCSS v4+ (Utility-first CSS)
+- ShadCN UI components (Accessible, customizable)
+- TanStack Form (High-performance form management)
+- Motion 12+ (Smooth animations)
+- PostgreSQL 18+ with Drizzle ORM (Type-safe queries)
+- Auth.js v5 beta (Authentication & authorization)
+- Zod (TypeScript-first validation)
+- useSWR (React Hooks for data fetching)
+- Resend (Email service)
 
 ## Naming Conventions (Critical)
 - Database fields: `snake_case` (e.g., `full_name`, `created_at`)
@@ -20,12 +23,17 @@ inclusion: always
 - Files: `kebab-case` (except component files which use `PascalCase`)
 
 ## Code Style Rules
-- Use TypeScript strictly - never use `any` type
+- Use TypeScript strictly - never use `any` type (use `unknown` if needed)
 - Prefer server components over client components
+- Use TanStack Form for all forms (with Zod validation)
 - Use useSWR for client-side data fetching
-- Validate all inputs on both client and server
+- Validate all inputs on both client and server with Zod schemas
 - Follow WCAG AA accessibility standards
 - Create reusable components and utilities (DRY principle)
+- Keep components small and focused (Single Responsibility)
+- Use composition over inheritance
+- Implement proper error boundaries
+- Always handle loading and error states
 
 ## Project Structure
 ```
