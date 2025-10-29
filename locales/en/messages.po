@@ -1,0 +1,122 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. placeholder {0}: feature.description
+#. placeholder {0}: feature.title
+#: components/landing-page.tsx:372
+#: components/landing-page.tsx:375
+msgid "{0}"
+msgstr ""
+
+#~ msgid "Active Students"
+#~ msgstr "Active Students"
+
+#: components/landing-page.tsx:346
+msgid "Comprehensive learning experience designed for your success"
+msgstr "Comprehensive learning experience designed for your success"
+
+#~ msgid "CUBIS Academy"
+#~ msgstr "CUBIS Academy"
+
+#~ msgid "Earn certificates that boost your career prospects"
+#~ msgstr "Earn certificates that boost your career prospects"
+
+#: components/landing-page.tsx:446
+msgid "Empowering learners with professional skills for the digital age"
+msgstr "Empowering learners with professional skills for the digital age"
+
+#~ msgid "Engage with teachers and peers in live sessions"
+#~ msgstr "Engage with teachers and peers in live sessions"
+
+#: components/landing-page.tsx:343
+msgid "Everything You Need to Succeed"
+msgstr "Everything You Need to Succeed"
+
+#~ msgid "Expert Courses"
+#~ msgstr "Expert Courses"
+
+#~ msgid "Expert Teachers"
+#~ msgstr "Expert Teachers"
+
+#~ msgid "Expert-Led Courses"
+#~ msgstr "Expert-Led Courses"
+
+#~ msgid "Fast-Track Skills"
+#~ msgstr "Fast-Track Skills"
+
+#~ msgid "Featured"
+#~ msgstr "Featured"
+
+#: components/landing-page.tsx:113
+#: components/landing-page.tsx:417
+msgid "Get Started Free"
+msgstr "Get Started Free"
+
+#~ msgid "Interactive Learning"
+#~ msgstr "Interactive Learning"
+
+#~ msgid "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
+#~ msgstr "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
+
+#~ msgid "Learn from industry professionals with real-world experience"
+#~ msgstr "Learn from industry professionals with real-world experience"
+
+#~ msgid "Learn Skills That Matter"
+#~ msgstr "Learn Skills That Matter"
+
+#: components/landing-page.tsx:107
+msgid "Login"
+msgstr "Login"
+
+#~ msgid "Master technology skills with expert-led courses. From Web Development to DevOps, accelerate your career with hands-on learning and real-world projects."
+#~ msgstr "Master technology skills with expert-led courses. From Web Development to DevOps, accelerate your career with hands-on learning and real-world projects."
+
+#~ msgid "Ready to Transform Your Career?"
+#~ msgstr "Ready to Transform Your Career?"
+
+#~ msgid "Recognized Certificates"
+#~ msgstr "Recognized Certificates"
+
+#~ msgid "Short-term courses designed for quick skill acquisition"
+#~ msgstr "Short-term courses designed for quick skill acquisition"
+
+#: components/landing-page.tsx:424
+msgid "Sign In"
+msgstr "Sign In"
+
+#: components/landing-page.tsx:175
+msgid "Start Learning Free"
+msgstr "Start Learning Free"
+
+#~ msgid "students"
+#~ msgstr "students"
+
+#~ msgid "Success Rate"
+#~ msgstr "Success Rate"
+
+#~ msgid "Transform Your Career Today"
+#~ msgstr "Transform Your Career Today"
+
+#: components/landing-page.tsx:314
+msgid "View Details"
+msgstr "View Details"
+
+#: components/landing-page.tsx:183
+msgid "Watch Demo"
+msgstr "Watch Demo"
+
+#: components/landing-page.tsx:339
+msgid "Why Choose Us"
+msgstr "Why Choose Us"

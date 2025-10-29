@@ -16,11 +16,15 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useState } from "react";
+import { useLocale } from "@/lib/hooks/useLocale";
+import { Trans } from "@lingui/react/macro";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function LandingPage() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
+  const locale = useLocale();
 
   const features = [
     {
@@ -95,17 +99,18 @@ export default function LandingPage() {
             </Link>
 
             <div className="flex items-center gap-4">
+              <LanguageSwitcher />
               <Link
-                href="/login"
+                href={`/${locale}/login`}
                 className="px-5 py-2.5 text-[#363942] hover:text-[#007FFF] transition-colors font-semibold"
               >
-                Login
+                <Trans>Login</Trans>
               </Link>
               <Link
-                href="/register"
+                href={`/${locale}/register`}
                 className="px-6 py-2.5 bg-gradient-to-r from-[#007FFF] to-[#17224D] text-white rounded-xl hover:shadow-xl hover:shadow-[#007FFF]/20 transition-all duration-300 font-semibold"
               >
-                Get Started Free
+                <Trans>Get Started Free</Trans>
               </Link>
             </div>
           </div>
@@ -164,10 +169,10 @@ export default function LandingPage() {
                 className="flex flex-col sm:flex-row gap-4 mb-12"
               >
                 <Link
-                  href="/register"
+                  href={`/${locale}/register`}
                   className="group px-8 py-4 bg-gradient-to-r from-[#007FFF] to-[#17224D] text-white rounded-xl hover:shadow-2xl hover:shadow-[#007FFF]/30 transition-all duration-300 font-semibold flex items-center justify-center gap-2"
                 >
-                  Start Learning Free
+                  <Trans>Start Learning Free</Trans>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
@@ -175,7 +180,7 @@ export default function LandingPage() {
                   className="group px-8 py-4 bg-white text-[#363942] rounded-xl border-2 border-gray-200 hover:border-[#007FFF] transition-all duration-300 font-semibold flex items-center justify-center gap-2"
                 >
                   <Play className="w-5 h-5" />
-                  Watch Demo
+                  <Trans>Watch Demo</Trans>
                 </Link>
               </motion.div>
 
@@ -306,7 +311,7 @@ export default function LandingPage() {
                             href="#courses"
                             className="w-full px-4 py-2.5 bg-white text-[#17224D] rounded-lg font-semibold text-sm hover:bg-gray-50 transition-colors text-center"
                           >
-                            View Details
+                            <Trans>View Details</Trans>
                           </Link>
                         </div>
                       </div>
@@ -330,13 +335,15 @@ export default function LandingPage() {
             className="text-center mb-20"
           >
             <div className="inline-block px-4 py-2 bg-[#E5F2FF] border border-[#007FFF]/20 rounded-full text-sm font-semibold mb-6">
-              <span className="text-[#007FFF]">Why Choose Us</span>
+              <span className="text-[#007FFF]">
+                <Trans>Why Choose Us</Trans>
+              </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-[#17224D] mb-6">
-              Everything You Need to Succeed
+              <Trans>Everything You Need to Succeed</Trans>
             </h2>
             <p className="text-xl text-[#363942]/70 max-w-2xl mx-auto">
-              Comprehensive learning experience designed for your success
+              <Trans>Comprehensive learning experience designed for your success</Trans>
             </p>
           </motion.div>
 
@@ -362,10 +369,10 @@ export default function LandingPage() {
                     <feature.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-[#17224D] mb-3">
-                    {feature.title}
+                    <Trans>{feature.title}</Trans>
                   </h3>
                   <p className="text-[#363942]/70 leading-relaxed">
-                    {feature.description}
+                    <Trans>{feature.description}</Trans>
                   </p>
                 </motion.div>
               </motion.div>
@@ -404,17 +411,17 @@ export default function LandingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  href="/register"
+                  href={`/${locale}/register`}
                   className="px-10 py-4 bg-white text-[#007FFF] rounded-xl hover:bg-gray-50 transition-all duration-300 font-bold text-lg flex items-center justify-center gap-2 shadow-lg"
                 >
-                  Get Started Free
+                  <Trans>Get Started Free</Trans>
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
-                  href="/login"
+                  href={`/${locale}/login`}
                   className="px-10 py-4 bg-transparent text-white border-2 border-white rounded-xl hover:bg-white hover:text-[#007FFF] transition-all duration-300 font-bold text-lg"
                 >
-                  Sign In
+                  <Trans>Sign In</Trans>
                 </Link>
               </div>
             </div>
@@ -436,7 +443,7 @@ export default function LandingPage() {
             </div>
 
             <p className="text-[#99CCFF] mb-8 text-lg">
-              Empowering learners with professional skills for the digital age
+              <Trans>Empowering learners with professional skills for the digital age</Trans>
             </p>
 
             <div className="border-t border-white/10 pt-8">

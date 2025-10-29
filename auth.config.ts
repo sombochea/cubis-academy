@@ -8,27 +8,32 @@ export const authConfig = {
       const userRole = auth?.user?.role;
       const { pathname } = nextUrl;
 
+      // Extract locale from pathname
+      const localeMatch = pathname.match(/^\/(km|en)(\/|$)/);
+      const locale = localeMatch ? localeMatch[1] : 'km';
+      const pathWithoutLocale = localeMatch ? pathname.slice(3) : pathname;
+
       // Public routes
       const isPublicRoute =
-        pathname === "/" || pathname === "/login" || pathname === "/register";
+        pathWithoutLocale === "/" || pathWithoutLocale === "/login" || pathWithoutLocale === "/register" || pathWithoutLocale === "";
 
       // Auth routes
-      const isAuthRoute = pathname === "/login" || pathname === "/register";
+      const isAuthRoute = pathWithoutLocale === "/login" || pathWithoutLocale === "/register";
 
       // Role-based routes
-      const isStudentRoute = pathname.startsWith("/student");
-      const isTeacherRoute = pathname.startsWith("/teacher");
-      const isAdminRoute = pathname.startsWith("/admin");
+      const isStudentRoute = pathWithoutLocale.startsWith("/student");
+      const isTeacherRoute = pathWithoutLocale.startsWith("/teacher");
+      const isAdminRoute = pathWithoutLocale.startsWith("/admin");
 
       // Redirect logged-in users away from auth pages
       if (isAuthRoute && isLoggedIn) {
         return Response.redirect(
           new URL(
-            userRole === "admin"
+            `/${locale}${userRole === "admin"
               ? "/admin"
               : userRole === "teacher"
               ? "/teacher"
-              : "/student",
+              : "/student"}`,
             nextUrl
           )
         );
@@ -42,13 +47,13 @@ export const authConfig = {
       // Protect routes based on role
       if (isLoggedIn) {
         if (isStudentRoute && userRole !== "student") {
-          return Response.redirect(new URL("/unauthorized", nextUrl));
+          return Response.redirect(new URL(`/${locale}/unauthorized`, nextUrl));
         }
         if (isTeacherRoute && userRole !== "teacher" && userRole !== "admin") {
-          return Response.redirect(new URL("/unauthorized", nextUrl));
+          return Response.redirect(new URL(`/${locale}/unauthorized`, nextUrl));
         }
         if (isAdminRoute && userRole !== "admin") {
-          return Response.redirect(new URL("/unauthorized", nextUrl));
+          return Response.redirect(new URL(`/${locale}/unauthorized`, nextUrl));
         }
       }
 
@@ -70,7 +75,7 @@ export const authConfig = {
     },
   },
   pages: {
-    signIn: "/login",
+    signIn: "/km/login",
   },
 } satisfies NextAuthConfig;
 

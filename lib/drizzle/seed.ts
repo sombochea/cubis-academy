@@ -28,7 +28,7 @@ async function seed() {
       .values({
         name: "Admin User",
         email: "admin@cubisacademy.com",
-        phone: "+1234567890",
+        phone: "012345678",
         role: "admin",
         passHash: password,
         isActive: true,

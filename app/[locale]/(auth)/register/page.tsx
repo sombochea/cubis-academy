@@ -231,7 +231,7 @@ export default function RegisterPage() {
                           <Input
                             id={field.name}
                             type="text"
-                            placeholder="John Doe"
+                            placeholder="Sirika Ly"
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
@@ -253,7 +253,7 @@ export default function RegisterPage() {
                     name="email"
                     validators={{
                       onBlur: ({ value }) => {
-                        const result = z.string().email('Invalid email address').safeParse(value);
+                        const result = z.email('Invalid email address').safeParse(value);
                         return result.success ? undefined : result.error.issues[0].message;
                       },
                     }}
@@ -268,7 +268,7 @@ export default function RegisterPage() {
                           <Input
                             id={field.name}
                             type="email"
-                            placeholder="you@example.com"
+                            placeholder="you@cubis.academy"
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}
@@ -305,7 +305,7 @@ export default function RegisterPage() {
                           <Input
                             id={field.name}
                             type="tel"
-                            placeholder="+1234567890"
+                            placeholder="012345678"
                             value={field.state.value}
                             onBlur={field.handleBlur}
                             onChange={(e) => field.handleChange(e.target.value)}

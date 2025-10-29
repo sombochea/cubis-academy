@@ -1,0 +1,122 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: km\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#. placeholder {0}: feature.description
+#. placeholder {0}: feature.title
+#: components/landing-page.tsx:372
+#: components/landing-page.tsx:375
+msgid "{0}"
+msgstr "{0}"
+
+#~ msgid "Active Students"
+#~ msgstr "សិស្សសកម្ម"
+
+#: components/landing-page.tsx:346
+msgid "Comprehensive learning experience designed for your success"
+msgstr "បទពិសោធន៍សិក្សាទូលំទូលាយដែលរចនាឡើងសម្រាប់ជោគជ័យរបស់អ្នក"
+
+#~ msgid "CUBIS Academy"
+#~ msgstr "CUBIS Academy"
+
+#~ msgid "Earn certificates that boost your career prospects"
+#~ msgstr "ទទួលបានវិញ្ញាបនប័ត្រដែលបង្កើនសក្តានុពលអាជីពរបស់អ្នក"
+
+#: components/landing-page.tsx:446
+msgid "Empowering learners with professional skills for the digital age"
+msgstr "ផ្តល់សិទ្ធិអំណាចដល់អ្នករៀនជាមួយជំនាញវិជ្ជាជីវៈសម្រាប់យុគសម័យឌីជីថល"
+
+#~ msgid "Engage with teachers and peers in live sessions"
+#~ msgstr "ចូលរួមជាមួយគ្រូបង្រៀននិងមិត្តភក្តិក្នុងវគ្គផ្ទាល់"
+
+#: components/landing-page.tsx:343
+msgid "Everything You Need to Succeed"
+msgstr "អ្វីគ្រប់យ៉ាងដែលអ្នកត្រូវការដើម្បីជោគជ័យ"
+
+#~ msgid "Expert Courses"
+#~ msgstr "វគ្គសិក្សាជំនាញ"
+
+#~ msgid "Expert Teachers"
+#~ msgstr "គ្រូបង្រៀនជំនាញ"
+
+#~ msgid "Expert-Led Courses"
+#~ msgstr "វគ្គសិក្សាដឹកនាំដោយអ្នកជំនាញ"
+
+#~ msgid "Fast-Track Skills"
+#~ msgstr "ជំនាញរហ័ស"
+
+#~ msgid "Featured"
+#~ msgstr "លេចធ្លោ"
+
+#: components/landing-page.tsx:113
+#: components/landing-page.tsx:417
+msgid "Get Started Free"
+msgstr "ចាប់ផ្តើមដោយឥតគិតថ្លៃ"
+
+#~ msgid "Interactive Learning"
+#~ msgstr "ការរៀនអន្តរកម្ម"
+
+#~ msgid "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
+#~ msgstr "ចូលរួមជាមួយសិស្សរាប់ពាន់នាក់ដែលកំពុងស្ទាត់ជំនាញបច្ចេកវិទ្យាជាមួយ CUBIS Academy។ ចាប់ផ្តើមដំណើររបស់អ្នកថ្ងៃនេះ!"
+
+#~ msgid "Learn from industry professionals with real-world experience"
+#~ msgstr "រៀនពីអ្នកជំនាញឧស្សាហកម្មដែលមានបទពិសោធន៍ពិតប្រាកដ"
+
+#~ msgid "Learn Skills That Matter"
+#~ msgstr "រៀនជំនាញដែលសំខាន់"
+
+#: components/landing-page.tsx:107
+msgid "Login"
+msgstr "ចូលប្រើប្រាស់"
+
+#~ msgid "Master technology skills with expert-led courses. From Web Development to DevOps, accelerate your career with hands-on learning and real-world projects."
+#~ msgstr "ស្ទាត់ជំនាញបច្ចេកវិទ្យាជាមួយវគ្គសិក្សាដឹកនាំដោយអ្នកជំនាញ។ ពីការអភិវឌ្ឍន៍គេហទំព័រទៅ DevOps បង្កើនល្បឿនអាជីពរបស់អ្នកជាមួយការរៀនដោយដៃនិងគម្រោងពិតប្រាកដ។"
+
+#~ msgid "Ready to Transform Your Career?"
+#~ msgstr "តើអ្នករួចរាល់ក្នុងការផ្លាស់ប្តូរអាជីពរបស់អ្នកទេ?"
+
+#~ msgid "Recognized Certificates"
+#~ msgstr "វិញ្ញាបនប័ត្រទទួលស្គាល់"
+
+#~ msgid "Short-term courses designed for quick skill acquisition"
+#~ msgstr "វគ្គសិក្សារយៈពេលខ្លីដែលរចនាឡើងសម្រាប់ការទទួលបានជំនាញរហ័ស"
+
+#: components/landing-page.tsx:424
+msgid "Sign In"
+msgstr "ចូលប្រើប្រាស់"
+
+#: components/landing-page.tsx:175
+msgid "Start Learning Free"
+msgstr "ចាប់ផ្តើមរៀនដោយឥតគិតថ្លៃ"
+
+#~ msgid "students"
+#~ msgstr "សិស្ស"
+
+#~ msgid "Success Rate"
+#~ msgstr "អត្រាជោគជ័យ"
+
+#~ msgid "Transform Your Career Today"
+#~ msgstr "ផ្លាស់ប្តូរអាជីពរបស់អ្នកថ្ងៃនេះ"
+
+#: components/landing-page.tsx:314
+msgid "View Details"
+msgstr "មើលព័ត៌មានលម្អិត"
+
+#: components/landing-page.tsx:183
+msgid "Watch Demo"
+msgstr "មើលការបង្ហាញ"
+
+#: components/landing-page.tsx:339
+msgid "Why Choose Us"
+msgstr "ហេតុអ្វីជ្រើសរើសយើង"
