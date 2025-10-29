@@ -191,7 +191,7 @@ export function DataTable<TData, TValue>({
 
       {/* Table */}
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm flex-1 flex flex-col min-h-0 mt-2">
-        <div className="overflow-x-auto flex-shrink-0">
+        <div className="overflow-auto flex-1">
           <Table>
             <TableHeader className="sticky top-0 z-10 bg-white">
               {table.getHeaderGroups().map((headerGroup) => (
@@ -211,10 +211,6 @@ export function DataTable<TData, TValue>({
                 </TableRow>
               ))}
             </TableHeader>
-          </Table>
-        </div>
-        <div className="overflow-y-auto flex-1">
-          <Table>
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (

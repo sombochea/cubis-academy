@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 import { Trans } from '@lingui/react/macro';
 
 // Helper to extract error message
@@ -25,6 +26,7 @@ const teacherSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
   bio: z.string(),
   spec: z.string(),
+  photo: z.string(),
 });
 
 type TeacherFormData = z.infer<typeof teacherSchema>;
@@ -48,6 +50,7 @@ export function TeacherForm({ locale, initialData, teacherId }: TeacherFormProps
       password: '',
       bio: initialData?.bio || '',
       spec: initialData?.spec || '',
+      photo: initialData?.photo || '',
     },
     validators: {
       onChange: teacherSchema,
@@ -218,6 +221,21 @@ export function TeacherForm({ locale, initialData, teacherId }: TeacherFormProps
               onChange={(e) => field.handleChange(e.target.value)}
               rows={4}
               placeholder="Brief description about the teacher..."
+            />
+          </div>
+        )}
+      </form.Field>
+
+      <form.Field name="photo">
+        {(field) => (
+          <div className="space-y-2">
+            <Label>
+              <Trans>Profile Photo</Trans>
+            </Label>
+            <ImageUpload
+              currentImage={field.state.value}
+              onUploadComplete={(fileUrl) => field.handleChange(fileUrl)}
+              category="profile"
             />
           </div>
         )}

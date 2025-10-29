@@ -340,3 +340,108 @@ const displayValue = filterValue === undefined ? 'all' : filterValue;
 // ❌ Wrong - uses prop directly
 value={(table.getColumn('status')?.getFilterValue() as string) ?? 'all'}
 ```
+
+## File Upload System
+
+Use the upload system for handling file uploads with metadata tracking.
+
+### Basic Usage
+
+```typescript
+import { ImageUpload } from "@/components/admin/ImageUpload";
+
+<ImageUpload
+  currentImage={currentPhotoUrl}
+  onUploadComplete={(fileUrl) => {
+    // Handle the uploaded file URL
+    setPhotoUrl(fileUrl);
+  }}
+  category="profile"
+/>;
+```
+
+### Upload Categories
+
+- `profile` - User profile photos (auto-resized to 400x400px)
+- `document` - PDF, Word documents, etc.
+- `course_material` - Course-related files
+- `general` - Other files
+
+### Features
+
+- **Metadata Tracking** - All uploads stored with metadata in database
+- **Storage Usage** - Track total storage per user
+- **Image Processing** - Auto-resize and optimize images with Sharp
+- **Multiple Storage** - Support for local, S3, R2 (configured via storageType)
+- **File Validation** - Type and size validation
+- **Public/Private** - Control file visibility
+
+### API Endpoint
+
+```typescript
+POST /api/upload
+FormData:
+  - file: File (required)
+  - category: string (required)
+  - isPublic: boolean (optional)
+
+Response:
+{
+  id: string,
+  fileName: string,
+  fileUrl: string,
+  fileSize: number,
+  mimeType: string
+}
+```
+
+### Database Schema
+
+```sql
+uploads table:
+- id: UUID
+- user_id: UUID (who uploaded)
+- file_name: string
+- original_name: string
+- mime_type: string
+- file_size: integer (bytes)
+- file_path: string
+- file_url: string
+- storage_type: 'local' | 's3' | 'r2'
+- category: string
+- is_public: boolean
+- metadata: JSON
+- created: timestamp
+- updated: timestamp
+```
+
+### Storage Functions
+
+```typescript
+import { uploadFile, getUserStorageUsage, deleteFile } from "@/lib/upload";
+
+// Upload file
+const result = await uploadFile(file, {
+  userId: "user-id",
+  category: "profile",
+  isPublic: true,
+  maxSize: 5 * 1024 * 1024, // 5MB
+  resize: { width: 400, height: 400, fit: "cover" },
+});
+
+// Get user storage usage
+const totalBytes = await getUserStorageUsage("user-id");
+
+// Delete file
+await deleteFile("file-id", "user-id");
+```
+
+### Configuration
+
+Files are stored in `public/uploads/{category}/` by default.
+
+To switch to S3/R2:
+
+1. Update `storageType` in upload options
+2. Implement S3/R2 upload logic in `lib/upload.ts`
+3. Update `fileUrl` to return CDN URL

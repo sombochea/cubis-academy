@@ -3,6 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
 import { Button } from '@/components/ui/button';
+import { StudentFilters } from '@/components/admin/StudentFilters';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,28 +14,37 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Edit, Trash2, BookOpen, ArrowUpDown, MoreHorizontal, Eye } from 'lucide-react';
+import { Edit, Trash2, ArrowUpDown, MoreHorizontal, Eye, BookOpen } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import * as React from 'react';
 
-type Teacher = {
+type Student = {
   userId: string;
+  suid: string;
   name: string;
   email: string;
   phone: string | null;
-  bio: string | null;
-  spec: string | null;
+  gender: string | null;
   photo: string | null;
+  enrolled: Date;
   isActive: boolean;
+  enrollmentCount: number;
 };
 
-interface TeachersDataTableProps {
-  data: Teacher[];
+interface StudentsDataTableProps {
+  data: Student[];
   locale: string;
 }
 
-export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
-  const columns: ColumnDef<Teacher>[] = [
+export function StudentsDataTable({ data, locale }: StudentsDataTableProps) {
+  const columns: ColumnDef<Student>[] = [
+    {
+      accessorKey: 'suid',
+      header: () => <Trans>Student ID</Trans>,
+      cell: ({ row }) => (
+        <div className="font-mono text-[#007FFF] font-medium">{row.getValue('suid')}</div>
+      ),
+    },
     {
       accessorKey: 'name',
       header: ({ column }) => {
@@ -50,24 +60,24 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
         );
       },
       cell: ({ row }) => {
-        const teacher = row.original;
+        const student = row.original;
         return (
           <div className="flex items-center gap-3">
             <div className="relative w-10 h-10 rounded-full overflow-hidden bg-[#F4F5F7] flex-shrink-0">
-              {teacher.photo ? (
+              {student.photo ? (
                 <Image
-                  src={teacher.photo}
-                  alt={teacher.name}
+                  src={student.photo}
+                  alt={student.name}
                   fill
                   className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#007FFF] to-[#17224D] text-white font-semibold text-sm">
-                  {teacher.name.charAt(0).toUpperCase()}
+                  {student.name.charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
-            <div className="font-medium text-[#17224D]">{teacher.name}</div>
+            <div className="font-medium text-[#17224D]">{student.name}</div>
           </div>
         );
       },
@@ -88,11 +98,23 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
       },
     },
     {
-      accessorKey: 'spec',
-      header: () => <Trans>Specialization</Trans>,
+      accessorKey: 'gender',
+      header: () => <Trans>Gender</Trans>,
       cell: ({ row }) => {
-        const spec = row.getValue('spec') as string | null;
-        return <div className="text-[#363942]">{spec || '-'}</div>;
+        const gender = row.getValue('gender') as string | null;
+        return <div className="text-[#363942] capitalize">{gender || '-'}</div>;
+      },
+    },
+    {
+      accessorKey: 'enrollmentCount',
+      header: () => <Trans>Enrollments</Trans>,
+      cell: ({ row }) => {
+        const count = row.getValue('enrollmentCount') as number;
+        return (
+          <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-[#007FFF]/10 text-[#007FFF]">
+            {count}
+          </span>
+        );
       },
     },
     {
@@ -115,7 +137,7 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        const teacher = row.original;
+        const student = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -128,31 +150,31 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
               <DropdownMenuLabel><Trans>Actions</Trans></DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href={`/${locale}/admin/teachers/${teacher.userId}`} className="cursor-pointer">
+                <Link href={`/${locale}/admin/students/${student.userId}`} className="cursor-pointer">
                   <Eye className="mr-2 h-4 w-4" />
                   <Trans>View details</Trans>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/${locale}/admin/teachers/${teacher.userId}/edit`} className="cursor-pointer">
+                <Link href={`/${locale}/admin/students/${student.userId}/edit`} className="cursor-pointer">
                   <Edit className="mr-2 h-4 w-4" />
-                  <Trans>Edit teacher</Trans>
+                  <Trans>Edit student</Trans>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={`/${locale}/admin/teachers/${teacher.userId}/courses`} className="cursor-pointer">
+                <Link href={`/${locale}/admin/students/${student.userId}/enrollments`} className="cursor-pointer">
                   <BookOpen className="mr-2 h-4 w-4" />
-                  <Trans>Assign courses</Trans>
+                  <Trans>View enrollments</Trans>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link 
-                  href={`/${locale}/admin/teachers/${teacher.userId}/delete`} 
+                  href={`/${locale}/admin/students/${student.userId}/delete`} 
                   className="cursor-pointer text-red-600 focus:text-red-600"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  <Trans>Delete teacher</Trans>
+                  <Trans>Delete student</Trans>
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -167,7 +189,8 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
       columns={columns} 
       data={data}
       searchKey="name"
-      searchPlaceholder="Search teachers by name..."
+      searchPlaceholder="Search students by name..."
+      filterComponent={(table) => <StudentFilters table={table} />}
       showRowNumber={true}
     />
   );

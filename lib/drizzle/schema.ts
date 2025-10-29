@@ -39,6 +39,25 @@ export const teachers = pgTable('teachers', {
   bio: text('bio'),
   spec: varchar('spec', { length: 255 }),
   schedule: text('schedule'),
+  photo: varchar('photo', { length: 500 }),
+});
+
+// File uploads table with metadata
+export const uploads = pgTable('uploads', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  fileName: varchar('file_name', { length: 255 }).notNull(),
+  originalName: varchar('original_name', { length: 255 }).notNull(),
+  mimeType: varchar('mime_type', { length: 100 }).notNull(),
+  fileSize: integer('file_size').notNull(),
+  filePath: varchar('file_path', { length: 500 }).notNull(),
+  fileUrl: varchar('file_url', { length: 500 }).notNull(),
+  storageType: varchar('storage_type', { length: 50 }).notNull().default('local'),
+  category: varchar('category', { length: 50 }).notNull(),
+  isPublic: boolean('is_public').notNull().default(false),
+  metadata: text('metadata'),
+  created: timestamp('created').notNull().defaultNow(),
+  updated: timestamp('updated').notNull().defaultNow(),
 });
 
 // Courses table
@@ -148,4 +167,8 @@ export const scoresRelations = relations(scores, ({ one }) => ({
 
 export const attendancesRelations = relations(attendances, ({ one }) => ({
   enrollment: one(enrollments, { fields: [attendances.enrollmentId], references: [enrollments.id] }),
+}));
+
+export const uploadsRelations = relations(uploads, ({ one }) => ({
+  user: one(users, { fields: [uploads.userId], references: [users.id] }),
 }));

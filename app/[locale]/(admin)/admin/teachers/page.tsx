@@ -30,6 +30,7 @@ export default async function TeachersPage({ params }: { params: Promise<{ local
       phone: users.phone,
       bio: teachers.bio,
       spec: teachers.spec,
+      photo: teachers.photo,
       isActive: users.isActive,
     })
     .from(teachers)
