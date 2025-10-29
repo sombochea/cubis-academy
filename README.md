@@ -72,7 +72,7 @@ root/
 - PostgreSQL (18+)
 - pnpm (recommended)
 
-### Installation
+### Quick Start
 
 ```bash
 # Install dependencies
@@ -80,15 +80,24 @@ pnpm install
 
 # Set up environment variables
 cp .env.example .env.local
+# Edit .env.local with your database credentials
 
-# Run database migrations
-pnpm db:migrate
+# Push database schema
+pnpm db:push
+
+# Seed with sample data (optional but recommended)
+pnpm db:seed
 
 # Start development server
 pnpm dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Sample Login Credentials (after seeding)
+- **Admin**: `admin@cubisacademy.com` / `123456`
+- **Teacher**: `john@cubisacademy.com` / `123456`
+- **Student**: `alice@example.com` / `123456`
 
 ## Environment Variables
 
