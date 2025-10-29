@@ -1,5 +1,5 @@
-import { pgTable, uuid, varchar, text, timestamp, pgEnum, boolean, decimal, integer, date, unique } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { pgTable, uuid, varchar, text, timestamp, pgEnum, boolean, decimal, integer, date, unique, index } from 'drizzle-orm/pg-core';
+import { relations, sql } from 'drizzle-orm';
 
 // Enums
 export const roleEnum = pgEnum('role', ['student', 'teacher', 'admin']);
@@ -10,7 +10,7 @@ export const courseLevelEnum = pgEnum('course_level', ['beginner', 'intermediate
 
 // Users table
 export const users = pgTable('users', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().$defaultFn(() => sql`gen_random_uuid()`),
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   phone: varchar('phone', { length: 50 }),
@@ -20,7 +20,11 @@ export const users = pgTable('users', {
   isActive: boolean('is_active').notNull().default(true),
   created: timestamp('created').notNull().defaultNow(),
   updated: timestamp('updated').notNull().defaultNow(),
-});
+}, (table) => ({
+  roleIdx: index('users_role_idx').on(table.role),
+  isActiveIdx: index('users_is_active_idx').on(table.isActive),
+  createdIdx: index('users_created_idx').on(table.created),
+}));
 
 // Students table
 export const students = pgTable('students', {
@@ -31,7 +35,10 @@ export const students = pgTable('students', {
   address: text('address'),
   photo: varchar('photo', { length: 500 }),
   enrolled: timestamp('enrolled').notNull().defaultNow(),
-});
+}, (table) => ({
+  genderIdx: index('students_gender_idx').on(table.gender),
+  enrolledIdx: index('students_enrolled_idx').on(table.enrolled),
+}));
 
 // Teachers table
 export const teachers = pgTable('teachers', {
@@ -40,11 +47,13 @@ export const teachers = pgTable('teachers', {
   spec: varchar('spec', { length: 255 }),
   schedule: text('schedule'),
   photo: varchar('photo', { length: 500 }),
-});
+}, (table) => ({
+  specIdx: index('teachers_spec_idx').on(table.spec),
+}));
 
 // File uploads table with metadata
 export const uploads = pgTable('uploads', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().$defaultFn(() => sql`gen_random_uuid()`),
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   fileName: varchar('file_name', { length: 255 }).notNull(),
   originalName: varchar('original_name', { length: 255 }).notNull(),
@@ -58,11 +67,14 @@ export const uploads = pgTable('uploads', {
   metadata: text('metadata'),
   created: timestamp('created').notNull().defaultNow(),
   updated: timestamp('updated').notNull().defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index('uploads_user_id_idx').on(table.userId),
+  categoryIdx: index('uploads_category_idx').on(table.category),
+}));
 
 // Courses table
 export const courses = pgTable('courses', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().$defaultFn(() => sql`gen_random_uuid()`),
   title: varchar('title', { length: 255 }).notNull(),
   desc: text('desc'),
   category: varchar('category', { length: 100 }),
@@ -75,11 +87,18 @@ export const courses = pgTable('courses', {
   zoomUrl: varchar('zoom_url', { length: 500 }),
   created: timestamp('created').notNull().defaultNow(),
   updated: timestamp('updated').notNull().defaultNow(),
-});
+}, (table) => ({
+  titleIdx: index('courses_title_idx').on(table.title),
+  categoryIdx: index('courses_category_idx').on(table.category),
+  teacherIdIdx: index('courses_teacher_id_idx').on(table.teacherId),
+  levelIdx: index('courses_level_idx').on(table.level),
+  isActiveIdx: index('courses_is_active_idx').on(table.isActive),
+  createdIdx: index('courses_created_idx').on(table.created),
+}));
 
 // Enrollments table
 export const enrollments = pgTable('enrollments', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().$defaultFn(() => sql`gen_random_uuid()`),
   studentId: uuid('student_id').notNull().references(() => students.userId, { onDelete: 'cascade' }),
   courseId: uuid('course_id').notNull().references(() => courses.id, { onDelete: 'cascade' }),
   status: enrollmentStatusEnum('status').notNull().default('active'),
@@ -88,11 +107,16 @@ export const enrollments = pgTable('enrollments', {
   completed: timestamp('completed'),
 }, (table) => ({
   uniqueEnrollment: unique().on(table.studentId, table.courseId),
+  studentIdIdx: index('enrollments_student_id_idx').on(table.studentId),
+  courseIdIdx: index('enrollments_course_id_idx').on(table.courseId),
+  statusIdx: index('enrollments_status_idx').on(table.status),
+  enrolledIdx: index('enrollments_enrolled_idx').on(table.enrolled),
+  completedIdx: index('enrollments_completed_idx').on(table.completed),
 }));
 
 // Payments table
 export const payments = pgTable('payments', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().$defaultFn(() => sql`gen_random_uuid()`),
   studentId: uuid('student_id').notNull().references(() => students.userId, { onDelete: 'cascade' }),
   courseId: uuid('course_id').references(() => courses.id, { onDelete: 'set null' }),
   amount: decimal('amount', { precision: 10, scale: 2 }).notNull(),
@@ -101,22 +125,33 @@ export const payments = pgTable('payments', {
   txnId: varchar('txn_id', { length: 255 }).unique(),
   notes: text('notes'),
   created: timestamp('created').notNull().defaultNow(),
-});
+}, (table) => ({
+  studentIdIdx: index('payments_student_id_idx').on(table.studentId),
+  courseIdIdx: index('payments_course_id_idx').on(table.courseId),
+  methodIdx: index('payments_method_idx').on(table.method),
+  statusIdx: index('payments_status_idx').on(table.status),
+  createdIdx: index('payments_created_idx').on(table.created),
+  studentCreatedIdx: index('payments_student_created_idx').on(table.studentId, table.created),
+}));
 
 // Scores table
 export const scores = pgTable('scores', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().$defaultFn(() => sql`gen_random_uuid()`),
   enrollmentId: uuid('enrollment_id').notNull().references(() => enrollments.id, { onDelete: 'cascade' }),
   title: varchar('title', { length: 255 }).notNull(),
   score: decimal('score', { precision: 5, scale: 2 }).notNull(),
   maxScore: decimal('max_score', { precision: 5, scale: 2 }).notNull().default('100'),
   remarks: text('remarks'),
   created: timestamp('created').notNull().defaultNow(),
-});
+}, (table) => ({
+  enrollmentIdIdx: index('scores_enrollment_id_idx').on(table.enrollmentId),
+  createdIdx: index('scores_created_idx').on(table.created),
+  enrollmentCreatedIdx: index('scores_enrollment_created_idx').on(table.enrollmentId, table.created),
+}));
 
 // Attendances table
 export const attendances = pgTable('attendances', {
-  id: uuid('id').primaryKey().defaultRandom(),
+  id: uuid('id').primaryKey().$defaultFn(() => sql`gen_random_uuid()`),
   enrollmentId: uuid('enrollment_id').notNull().references(() => enrollments.id, { onDelete: 'cascade' }),
   date: date('date').notNull(),
   status: attendanceStatusEnum('status').notNull().default('present'),
@@ -124,6 +159,9 @@ export const attendances = pgTable('attendances', {
   created: timestamp('created').notNull().defaultNow(),
 }, (table) => ({
   uniqueAttendance: unique().on(table.enrollmentId, table.date),
+  enrollmentIdIdx: index('attendances_enrollment_id_idx').on(table.enrollmentId),
+  dateIdx: index('attendances_date_idx').on(table.date),
+  statusIdx: index('attendances_status_idx').on(table.status),
 }));
 
 // Relations

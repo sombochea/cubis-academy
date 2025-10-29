@@ -8,6 +8,13 @@
       "when": 1761668346025,
       "tag": "0000_strange_husk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1761749535050,
+      "tag": "0001_furry_sunfire",
+      "breakpoints": true
     }
   ]
 }

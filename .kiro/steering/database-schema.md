@@ -13,18 +13,18 @@ All fields use `snake_case` naming.
 
 Core user authentication and profile table.
 
-| Field     | Type    | Description                          | Index |
-| --------- | ------- | ------------------------------------ | ----- |
-| id        | UUID v7 | Primary key                          | PK    |
-| name      | String  | User's full name                     | -     |
-| email     | String  | Unique email address                 | UQ    |
-| phone     | String  | Contact number                       | -     |
-| role      | Enum    | 'student', 'teacher', 'admin'        | IDX   |
-| pass_hash | String  | Hashed password (nullable for OAuth) | -     |
-| google_id | String  | Google OAuth ID (nullable)           | UQ    |
-| is_active | Boolean | Account active status (default true) | IDX   |
-| created   | Timestamp | Account creation time              | IDX   |
-| updated   | Timestamp | Last update time                   | -     |
+| Field     | Type      | Description                          | Index |
+| --------- | --------- | ------------------------------------ | ----- |
+| id        | UUID v7   | Primary key                          | PK    |
+| name      | String    | User's full name                     | -     |
+| email     | String    | Unique email address                 | UQ    |
+| phone     | String    | Contact number                       | -     |
+| role      | Enum      | 'student', 'teacher', 'admin'        | IDX   |
+| pass_hash | String    | Hashed password (nullable for OAuth) | -     |
+| google_id | String    | Google OAuth ID (nullable)           | UQ    |
+| is_active | Boolean   | Account active status (default true) | IDX   |
+| created   | Timestamp | Account creation time                | IDX   |
+| updated   | Timestamp | Last update time                     | -     |
 
 ### students
 
@@ -58,35 +58,35 @@ Extended profile for teacher users.
 
 Course catalog and information.
 
-| Field       | Type      | Description                            | Index |
-| ----------- | --------- | -------------------------------------- | ----- |
-| id          | UUID v7   | Primary key                            | PK    |
-| title       | String    | Course title                           | IDX   |
-| desc        | Text      | Course description                     | -     |
-| category    | String    | Course category (Web Dev, UX/UI, etc.) | IDX   |
+| Field       | Type      | Description                            | Index  |
+| ----------- | --------- | -------------------------------------- | ------ |
+| id          | UUID v7   | Primary key                            | PK     |
+| title       | String    | Course title                           | IDX    |
+| desc        | Text      | Course description                     | -      |
+| category    | String    | Course category (Web Dev, UX/UI, etc.) | IDX    |
 | teacher_id  | UUID v7   | Foreign key to teachers.user_id        | FK/IDX |
-| price       | Decimal   | Course price                           | -     |
-| duration    | Integer   | Duration in hours                      | -     |
-| level       | Enum      | 'beginner', 'intermediate', 'advanced' | IDX   |
-| is_active   | Boolean   | Course availability (default true)     | IDX   |
-| youtube_url | String    | Course video link (nullable)           | -     |
-| zoom_url    | String    | Online meeting link (nullable)         | -     |
-| created     | Timestamp | Course creation time                   | IDX   |
-| updated     | Timestamp | Last update time                       | -     |
+| price       | Decimal   | Course price                           | -      |
+| duration    | Integer   | Duration in hours                      | -      |
+| level       | Enum      | 'beginner', 'intermediate', 'advanced' | IDX    |
+| is_active   | Boolean   | Course availability (default true)     | IDX    |
+| youtube_url | String    | Course video link (nullable)           | -      |
+| zoom_url    | String    | Online meeting link (nullable)         | -      |
+| created     | Timestamp | Course creation time                   | IDX    |
+| updated     | Timestamp | Last update time                       | -      |
 
 ### enrollments
 
 Student course enrollments.
 
-| Field      | Type      | Description                      | Index      |
-| ---------- | --------- | -------------------------------- | ---------- |
-| id         | UUID v7   | Primary key                      | PK         |
-| student_id | UUID v7   | Foreign key to students.user_id  | FK/IDX     |
-| course_id  | UUID v7   | Foreign key to courses.id        | FK/IDX     |
-| status     | Enum      | 'active', 'completed', 'dropped' | IDX        |
-| progress   | Integer   | Completion percentage (0-100)    | -          |
-| enrolled   | Timestamp | Enrollment time                  | IDX        |
-| completed  | Timestamp | Completion time (nullable)       | IDX        |
+| Field      | Type      | Description                      | Index  |
+| ---------- | --------- | -------------------------------- | ------ |
+| id         | UUID v7   | Primary key                      | PK     |
+| student_id | UUID v7   | Foreign key to students.user_id  | FK/IDX |
+| course_id  | UUID v7   | Foreign key to courses.id        | FK/IDX |
+| status     | Enum      | 'active', 'completed', 'dropped' | IDX    |
+| progress   | Integer   | Completion percentage (0-100)    | -      |
+| enrolled   | Timestamp | Enrollment time                  | IDX    |
+| completed  | Timestamp | Completion time (nullable)       | IDX    |
 
 **Composite Index:** `(student_id, course_id)` - Unique constraint and fast lookup
 
@@ -128,14 +128,14 @@ Student course scores.
 
 Class attendance records.
 
-| Field         | Type      | Description                   | Index      |
-| ------------- | --------- | ----------------------------- | ---------- |
-| id            | UUID v7   | Primary key                   | PK         |
-| enrollment_id | UUID v7   | Foreign key to enrollments.id | FK/IDX     |
-| date          | Date      | Attendance date               | IDX        |
-| status        | Enum      | 'present', 'absent', 'late'   | IDX        |
-| notes         | Text      | Additional notes (nullable)   | -          |
-| created       | Timestamp | Record creation time          | -          |
+| Field         | Type      | Description                   | Index  |
+| ------------- | --------- | ----------------------------- | ------ |
+| id            | UUID v7   | Primary key                   | PK     |
+| enrollment_id | UUID v7   | Foreign key to enrollments.id | FK/IDX |
+| date          | Date      | Attendance date               | IDX    |
+| status        | Enum      | 'present', 'absent', 'late'   | IDX    |
+| notes         | Text      | Additional notes (nullable)   | -      |
+| created       | Timestamp | Record creation time          | -      |
 
 **Composite Index:** `(enrollment_id, date)` - Unique constraint and fast date-based lookup
 
@@ -174,7 +174,7 @@ Class attendance records.
 
 1. Always use indexed columns in WHERE clauses
 2. Use composite indexes for multi-column queries
-3. Avoid SELECT * - specify needed columns
+3. Avoid SELECT \* - specify needed columns
 4. Use LIMIT for pagination
 5. Consider covering indexes for frequently accessed columns
 6. Monitor slow queries and add indexes as needed
@@ -189,6 +189,7 @@ Class attendance records.
 ## Critical Indexes for Performance
 
 ### Unique Indexes
+
 - `users.email` - Login and user lookup
 - `users.google_id` - OAuth authentication
 - `students.suid` - Student ID lookup
@@ -197,6 +198,7 @@ Class attendance records.
 - `attendances(enrollment_id, date)` - Prevent duplicate attendance records
 
 ### Regular Indexes
+
 - `users.role` - Role-based queries
 - `users.is_active` - Active user filtering
 - `users.created` - User registration reports
@@ -225,6 +227,7 @@ Class attendance records.
 - `attendances.status` - Attendance status filtering
 
 ### Composite Indexes
+
 - `(student_id, course_id)` on enrollments - Fast enrollment lookup
 - `(enrollment_id, date)` on attendances - Fast attendance lookup
 - `(student_id, created)` on payments - Student payment history
