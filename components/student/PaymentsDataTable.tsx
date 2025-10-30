@@ -89,7 +89,7 @@ export function PaymentsDataTable({ payments, locale }: PaymentsDataTableProps) 
         header: () => <Trans>Course</Trans>,
         cell: ({ row }) => (
           <div className="font-medium text-[#17224D]">
-            {row.original.courseTitle || <Trans>General Payment</Trans>}
+            {row.original.courseTitle}
           </div>
         ),
       },
@@ -358,7 +358,7 @@ export function PaymentsDataTable({ payments, locale }: PaymentsDataTableProps) 
               {filteredData.map((payment) => (
                 <tr key={payment.id} className="border-b border-gray-200">
                   <td className="p-2">{new Date(payment.created).toLocaleDateString()}</td>
-                  <td className="p-2">{payment.courseTitle || 'General Payment'}</td>
+                  <td className="p-2">{payment.courseTitle}</td>
                   <td className="p-2 text-right">${Number(payment.amount).toFixed(2)}</td>
                   <td className="p-2 capitalize">{payment.method || '-'}</td>
                   <td className="p-2 capitalize">{payment.status}</td>

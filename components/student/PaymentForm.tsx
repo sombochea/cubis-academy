@@ -47,7 +47,6 @@ export function PaymentForm({ locale }: PaymentFormProps) {
 
   // Get URL parameters
   const enrollmentId = searchParams.get('enrollmentId');
-  const courseId = searchParams.get('courseId');
   const urlAmount = searchParams.get('amount');
   const courseName = searchParams.get('courseName');
 
@@ -75,7 +74,6 @@ export function PaymentForm({ locale }: PaymentFormProps) {
 
   const [formData, setFormData] = useState({
     enrollmentId: enrollmentId || '',
-    courseId: courseId || '',
     amount: urlAmount || '',
     method: '',
     notes: '',
@@ -102,14 +100,14 @@ export function PaymentForm({ locale }: PaymentFormProps) {
         throw new Error('Amount must be greater than 0');
       }
 
+      // Validate enrollmentId is present
+      if (!formData.enrollmentId) {
+        throw new Error('Enrollment ID is required. Please access this page from your enrollment details.');
+      }
+
       // Create FormData for file upload
       const submitData = new FormData();
-      if (formData.enrollmentId) {
-        submitData.append('enrollmentId', formData.enrollmentId);
-      }
-      if (formData.courseId) {
-        submitData.append('courseId', formData.courseId);
-      }
+      submitData.append('enrollmentId', formData.enrollmentId);
       submitData.append('amount', formData.amount);
       submitData.append('method', formData.method);
       submitData.append('notes', formData.notes);

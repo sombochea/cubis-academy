@@ -17,8 +17,7 @@ export async function POST(req: Request) {
 
     // Parse FormData
     const formData = await req.formData();
-    const enrollmentId = formData.get('enrollmentId') as string | null;
-    const courseId = formData.get('courseId') as string | null;
+    const enrollmentId = formData.get('enrollmentId') as string;
     const amount = formData.get('amount') as string;
     const method = formData.get('method') as string;
     const notes = formData.get('notes') as string | null;
@@ -32,28 +31,26 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validate that either enrollmentId or courseId is provided
-    if (!enrollmentId && !courseId) {
+    // Validate enrollmentId is required
+    if (!enrollmentId) {
       return NextResponse.json(
-        { error: 'Either enrollmentId or courseId is required' },
+        { error: 'Enrollment ID is required. All payments must be linked to an enrollment.' },
         { status: 400 }
       );
     }
 
-    // Validate enrollment if provided
-    if (enrollmentId) {
-      const [enrollment] = await db
-        .select()
-        .from(enrollments)
-        .where(eq(enrollments.id, enrollmentId));
+    // Validate enrollment exists and belongs to student
+    const [enrollment] = await db
+      .select()
+      .from(enrollments)
+      .where(eq(enrollments.id, enrollmentId));
 
-      if (!enrollment) {
-        return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 });
-      }
+    if (!enrollment) {
+      return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 });
+    }
 
-      if (enrollment.studentId !== session.user.id) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
-      }
+    if (enrollment.studentId !== session.user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
     // Handle file upload if provided
@@ -89,8 +86,7 @@ export async function POST(req: Request) {
       .insert(payments)
       .values({
         studentId: session.user.id,
-        enrollmentId: enrollmentId || null,
-        courseId: courseId || null,
+        enrollmentId: enrollmentId,
         amount: amount,
         method: method,
         status: 'pending',

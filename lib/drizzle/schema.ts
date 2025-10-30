@@ -239,6 +239,7 @@ export const enrollments = pgTable(
 );
 
 // Payments table
+// All payments MUST be linked to an enrollment (single source of truth)
 export const payments = pgTable(
   "payments",
   {
@@ -246,12 +247,9 @@ export const payments = pgTable(
     studentId: uuid("student_id")
       .notNull()
       .references(() => students.userId, { onDelete: "cascade" }),
-    enrollmentId: uuid("enrollment_id").references(() => enrollments.id, {
-      onDelete: "set null",
-    }),
-    courseId: uuid("course_id").references(() => courses.id, {
-      onDelete: "set null",
-    }),
+    enrollmentId: uuid("enrollment_id")
+      .notNull() // ✅ Required - every payment must have an enrollment
+      .references(() => enrollments.id, { onDelete: "cascade" }),
     amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
     method: varchar("method", { length: 100 }),
     status: paymentStatusEnum("status").notNull().default("pending"),
@@ -263,7 +261,6 @@ export const payments = pgTable(
   (table) => [
     index("payments_student_id_idx").on(table.studentId),
     index("payments_enrollment_id_idx").on(table.enrollmentId),
-    index("payments_course_id_idx").on(table.courseId),
     index("payments_method_idx").on(table.method),
     index("payments_status_idx").on(table.status),
     index("payments_created_idx").on(table.created),
@@ -464,10 +461,7 @@ export const paymentsRelations = relations(payments, ({ one }) => ({
     fields: [payments.enrollmentId],
     references: [enrollments.id],
   }),
-  course: one(courses, {
-    fields: [payments.courseId],
-    references: [courses.id],
-  }),
+  // Course relation removed - access via enrollment.course instead
 }));
 
 export const scoresRelations = relations(scores, ({ one }) => ({

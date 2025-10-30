@@ -34,11 +34,12 @@ export default async function PaymentsPage({
   }
 
   // Get all payments with course and enrollment details
+  // All payments are now linked to enrollments (single source of truth)
   const paymentsList = await db
     .select({
       id: payments.id,
       enrollmentId: payments.enrollmentId,
-      courseId: courses.id,
+      courseId: enrollments.courseId,
       courseTitle: courses.title,
       amount: payments.amount,
       method: payments.method,
@@ -51,8 +52,8 @@ export default async function PaymentsPage({
       paidAmount: enrollments.paidAmount,
     })
     .from(payments)
-    .leftJoin(courses, eq(payments.courseId, courses.id))
-    .leftJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
+    .innerJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
+    .innerJoin(courses, eq(enrollments.courseId, courses.id))
     .where(eq(payments.studentId, session.user.id))
     .orderBy(desc(payments.created));
 

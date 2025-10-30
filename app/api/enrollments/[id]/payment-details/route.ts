@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { db } from '@/lib/drizzle/db';
 import { enrollments, courses } from '@/lib/drizzle/schema';
 import { eq, and } from 'drizzle-orm';
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -21,6 +21,7 @@ export async function GET(
       .select({
         id: enrollments.id,
         studentId: enrollments.studentId,
+        courseId: enrollments.courseId,
         totalAmount: enrollments.totalAmount,
         paidAmount: enrollments.paidAmount,
         courseTitle: courses.title,
@@ -28,10 +29,15 @@ export async function GET(
       })
       .from(enrollments)
       .innerJoin(courses, eq(enrollments.courseId, courses.id))
-      .where(and(eq(enrollments.id, id), eq(enrollments.studentId, session.user.id)));
+      .where(eq(enrollments.id, id));
 
     if (!enrollment) {
       return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 });
+    }
+
+    // Verify the enrollment belongs to the current user (students only see their own)
+    if (session.user.role === 'student' && enrollment.studentId !== session.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     return NextResponse.json({
