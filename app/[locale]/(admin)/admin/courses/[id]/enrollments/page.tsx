@@ -11,6 +11,7 @@ import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { formatDate } from '@/lib/utils/date';
 
 export default async function CourseEnrollmentsPage({ 
   params 
@@ -214,7 +215,7 @@ export default async function CourseEnrollmentsPage({
                             <div className="flex items-center gap-2 text-sm text-[#363942]/70">
                               <Calendar className="w-4 h-4" />
                               <span>
-                                <Trans>Enrolled</Trans>: {new Date(enrollment.enrolledAt).toLocaleDateString()}
+                                <Trans>Enrolled</Trans>: {formatDate(enrollment.enrolledAt, locale) || '-'}
                               </span>
                             </div>
 
@@ -243,7 +244,7 @@ export default async function CourseEnrollmentsPage({
                               <div className="flex items-center gap-2 text-sm text-[#363942]/70">
                                 <CheckCircle className="w-4 h-4 text-blue-600" />
                                 <span>
-                                  <Trans>Completed</Trans>: {new Date(enrollment.completed).toLocaleDateString()}
+                                  <Trans>Completed</Trans>: {formatDate(enrollment.completed, locale) || '-'}
                                 </span>
                               </div>
                             )}

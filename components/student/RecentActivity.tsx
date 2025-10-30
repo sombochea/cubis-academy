@@ -2,6 +2,7 @@
 
 import { Trans } from '@lingui/react/macro';
 import { Activity, Award, DollarSign, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { formatDate } from '@/lib/utils/date';
 
 type ActivityItem = {
   type: string;
@@ -61,7 +62,7 @@ export function RecentActivity({ activities, locale }: RecentActivityProps) {
     } else if (diffDays < 7) {
       return `${diffDays}d ago`;
     } else {
-      return new Date(date).toLocaleDateString();
+      return formatDate(date, locale) || '-';
     }
   };
 

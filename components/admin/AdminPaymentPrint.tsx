@@ -5,6 +5,7 @@ import { Trans } from "@lingui/react/macro";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
 import { Printer } from "lucide-react";
+import { formatDateLong, formatDateTimeLong } from "@/lib/utils/date";
 
 type Payment = {
   id: string;
@@ -127,11 +128,7 @@ export function AdminPaymentPrint({ payment, locale }: AdminPaymentPrintProps) {
                       </p>
                       <p className="text-sm text-[#363942]/70">
                         <Trans>Payment Date:</Trans>{" "}
-                        {new Date(payment.created).toLocaleDateString(locale, {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
+                        {formatDateLong(payment.created, locale) || "-"}
                       </p>
                     </td>
                     <td className="px-4 py-3 text-right">
@@ -187,13 +184,7 @@ export function AdminPaymentPrint({ payment, locale }: AdminPaymentPrintProps) {
             </p>
             <p className="text-xs text-[#363942]/70 text-center">
               <Trans>Generated on:</Trans>{" "}
-              {new Date().toLocaleString(locale, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              {formatDateTimeLong(new Date(), locale)}
             </p>
           </div>
         </div>

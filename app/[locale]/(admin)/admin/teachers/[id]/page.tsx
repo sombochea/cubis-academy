@@ -13,6 +13,7 @@ import { ChangeEmailDialog } from '@/components/admin/ChangeEmailDialog';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
+import { formatDate } from '@/lib/utils/date';
 
 export default async function TeacherViewPage({ 
   params 
@@ -205,11 +206,11 @@ export default async function TeacherViewPage({
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-[#363942]/70"><Trans>Created</Trans></p>
-                    <p className="text-[#17224D] font-medium">{new Date(teacher.created).toLocaleDateString()}</p>
+                    <p className="text-[#17224D] font-medium">{formatDate(teacher.created, locale) || '-'}</p>
                   </div>
                   <div>
                     <p className="text-[#363942]/70"><Trans>Last Updated</Trans></p>
-                    <p className="text-[#17224D] font-medium">{new Date(teacher.updated).toLocaleDateString()}</p>
+                    <p className="text-[#17224D] font-medium">{formatDate(teacher.updated, locale) || '-'}</p>
                   </div>
                 </div>
               </div>

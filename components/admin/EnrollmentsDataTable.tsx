@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { Eye, ArrowUpDown, MoreHorizontal, UserCheck, BookOpen, Trash2 } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import * as React from 'react';
+import { formatDate } from '@/lib/utils/date';
 
 type Enrollment = {
   id: string;
@@ -143,7 +144,7 @@ export function EnrollmentsDataTable({ data, locale }: EnrollmentsDataTableProps
         const date = row.getValue('enrolled') as Date;
         return (
           <div className="text-[#363942] text-sm">
-            {new Date(date).toLocaleDateString()}
+            {formatDate(date, locale) || '-'}
           </div>
         );
       },
@@ -155,7 +156,7 @@ export function EnrollmentsDataTable({ data, locale }: EnrollmentsDataTableProps
         const date = row.getValue('completed') as Date | null;
         return (
           <div className="text-[#363942] text-sm">
-            {date ? new Date(date).toLocaleDateString() : '-'}
+            {formatDate(date, locale) || '-'}
           </div>
         );
       },

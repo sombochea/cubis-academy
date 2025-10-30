@@ -13,6 +13,7 @@ import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { formatDate } from '@/lib/utils/date';
 
 export default async function StudentViewPage({ 
   params 
@@ -162,7 +163,7 @@ export default async function StudentViewPage({
                   </div>
                   <div>
                     <p className="text-sm text-[#363942]/70"><Trans>Enrolled</Trans></p>
-                    <p className="text-sm font-medium text-[#17224D]">{new Date(student.enrolled).toLocaleDateString()}</p>
+                    <p className="text-sm font-medium text-[#17224D]">{formatDate(student.enrolled, locale) || '-'}</p>
                   </div>
                 </div>
               </div>
@@ -206,7 +207,7 @@ export default async function StudentViewPage({
                   <div>
                     <p className="text-sm text-[#363942]/70 mb-1"><Trans>Date of Birth</Trans></p>
                     <p className="text-[#363942]">
-                      {student.dob ? new Date(student.dob).toLocaleDateString() : 
+                      {formatDate(student.dob, locale) || 
                         <span className="text-[#363942]/50"><Trans>Not provided</Trans></span>
                       }
                     </p>
@@ -231,11 +232,11 @@ export default async function StudentViewPage({
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-[#363942]/70"><Trans>Created</Trans></p>
-                    <p className="text-[#17224D] font-medium">{new Date(student.created).toLocaleDateString()}</p>
+                    <p className="text-[#17224D] font-medium">{formatDate(student.created, locale) || '-'}</p>
                   </div>
                   <div>
                     <p className="text-[#363942]/70"><Trans>Last Updated</Trans></p>
-                    <p className="text-[#17224D] font-medium">{new Date(student.updated).toLocaleDateString()}</p>
+                    <p className="text-[#17224D] font-medium">{formatDate(student.updated, locale) || '-'}</p>
                   </div>
                 </div>
               </div>

@@ -13,6 +13,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
+import { formatDate, formatDateTime } from '@/lib/utils/date';
 import {
   Table,
   TableBody,
@@ -80,7 +81,7 @@ export function PaymentsDataTable({ payments, locale }: PaymentsDataTableProps) 
         header: () => <Trans>Date</Trans>,
         cell: ({ row }) => (
           <div className="text-sm">
-            {new Date(row.original.created).toLocaleDateString()}
+            {formatDate(row.original.created, locale) || '-'}
           </div>
         ),
       },
@@ -151,7 +152,7 @@ export function PaymentsDataTable({ payments, locale }: PaymentsDataTableProps) 
         ),
       },
     ],
-    []
+    [locale]
   );
 
   const filteredData = useMemo(() => {
@@ -339,7 +340,7 @@ export function PaymentsDataTable({ payments, locale }: PaymentsDataTableProps) 
             <h1 className="text-2xl font-bold mb-2">CUBIS Academy</h1>
             <h2 className="text-xl mb-4">Payment History</h2>
             <p className="text-sm text-gray-600">
-              Generated on {new Date().toLocaleDateString()}
+              Generated on {formatDate(new Date(), locale)}
             </p>
           </div>
 
@@ -357,7 +358,7 @@ export function PaymentsDataTable({ payments, locale }: PaymentsDataTableProps) 
             <tbody>
               {filteredData.map((payment) => (
                 <tr key={payment.id} className="border-b border-gray-200">
-                  <td className="p-2">{new Date(payment.created).toLocaleDateString()}</td>
+                  <td className="p-2">{formatDate(payment.created, locale)}</td>
                   <td className="p-2">{payment.courseTitle}</td>
                   <td className="p-2 text-right">${Number(payment.amount).toFixed(2)}</td>
                   <td className="p-2 capitalize">{payment.method || '-'}</td>

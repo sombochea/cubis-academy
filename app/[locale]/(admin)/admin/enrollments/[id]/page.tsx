@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, User, BookOpen, Calendar, TrendingUp, Award, CheckCircle2 } from 'lucide-react';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
+import { formatDate } from '@/lib/utils/date';
 
 export default async function EnrollmentDetailsPage({ 
   params 
@@ -152,7 +153,7 @@ export default async function EnrollmentDetailsPage({
                     <Trans>Enrolled Date</Trans>
                   </div>
                   <p className="font-medium text-[#17224D]">
-                    {new Date(enrollment.enrolled).toLocaleDateString()}
+                    {formatDate(enrollment.enrolled, locale) || '-'}
                   </p>
                 </div>
 
@@ -163,7 +164,7 @@ export default async function EnrollmentDetailsPage({
                       <Trans>Completed Date</Trans>
                     </div>
                     <p className="font-medium text-[#17224D]">
-                      {new Date(enrollment.completed).toLocaleDateString()}
+                      {formatDate(enrollment.completed, locale) || '-'}
                     </p>
                   </div>
                 )}
@@ -183,7 +184,7 @@ export default async function EnrollmentDetailsPage({
                       <div>
                         <p className="font-medium text-[#17224D]">{score.title}</p>
                         <p className="text-sm text-[#363942]/70">
-                          {new Date(score.created).toLocaleDateString()}
+                          {formatDate(score.created, locale) || '-'}
                         </p>
                       </div>
                       <div className="text-right">
@@ -213,7 +214,7 @@ export default async function EnrollmentDetailsPage({
                   {attendanceRecords.slice(0, 10).map((record) => (
                     <div key={record.id} className="flex items-center justify-between p-3 bg-[#F4F5F7] rounded-lg">
                       <p className="text-sm text-[#363942]">
-                        {new Date(record.date).toLocaleDateString()}
+                        {formatDate(record.date, locale) || '-'}
                       </p>
                       <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
                         record.status === 'present'

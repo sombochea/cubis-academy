@@ -11,6 +11,7 @@ import { ArrowLeft, User, BookOpen, Calendar, DollarSign, CreditCard, FileText, 
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 import { AdminPaymentPrint } from '@/components/admin/AdminPaymentPrint';
+import { formatDate, formatDateTime } from '@/lib/utils/date';
 
 export default async function PaymentDetailsPage({ 
   params 
@@ -137,7 +138,7 @@ export default async function PaymentDetailsPage({
                     <Trans>Payment Date</Trans>
                   </div>
                   <p className="font-medium text-[#17224D]">
-                    {new Date(payment.created).toLocaleDateString()}
+                    {formatDate(payment.created, locale) || '-'}
                   </p>
                 </div>
               </div>
@@ -308,13 +309,7 @@ export default async function PaymentDetailsPage({
                       <Trans>Payment Created</Trans>
                     </p>
                     <p className="text-xs text-[#363942]/70">
-                      {new Date(payment.created).toLocaleString(locale, {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
+                      {formatDateTime(payment.created, locale) || '-'}
                     </p>
                   </div>
                 </div>
@@ -328,13 +323,7 @@ export default async function PaymentDetailsPage({
                         <Trans>Payment Approved</Trans>
                       </p>
                       <p className="text-xs text-[#363942]/70">
-                        {new Date(payment.approvedAt).toLocaleString(locale, {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                        {formatDateTime(payment.approvedAt, locale) || '-'}
                       </p>
                     </div>
                   </div>
@@ -349,13 +338,7 @@ export default async function PaymentDetailsPage({
                         <Trans>Payment Rejected</Trans>
                       </p>
                       <p className="text-xs text-[#363942]/70">
-                        {new Date(payment.rejectedAt).toLocaleString(locale, {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                        {formatDateTime(payment.rejectedAt, locale) || '-'}
                       </p>
                     </div>
                   </div>

@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { Eye, ArrowUpDown, MoreHorizontal, UserCheck, BookOpen, CheckCircle, XCircle } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import * as React from 'react';
+import { formatDate } from '@/lib/utils/date';
 
 type Payment = {
   id: string;
@@ -156,7 +157,7 @@ export function PaymentsDataTable({ data, locale }: PaymentsDataTableProps) {
         const date = row.getValue('created') as Date;
         return (
           <div className="text-[#363942] text-sm">
-            {new Date(date).toLocaleDateString()}
+            {formatDate(date, locale) || '-'}
           </div>
         );
       },

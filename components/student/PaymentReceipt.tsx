@@ -18,6 +18,7 @@ import {
   Copy,
   Check,
 } from 'lucide-react';
+import { formatDate, formatDateTime, formatDateTimeLong, formatTime } from '@/lib/utils/date';
 
 type Payment = {
   id: string;
@@ -162,8 +163,7 @@ export function PaymentReceipt({ payment, locale }: PaymentReceiptProps) {
                   ${Number(payment.amount).toFixed(2)}
                 </p>
                 <p className="text-xs text-[#363942]/70">
-                  {new Date(payment.created).toLocaleDateString()} •{' '}
-                  {new Date(payment.created).toLocaleTimeString()}
+                  {formatDate(payment.created, locale)} • {formatTime(payment.created, locale)}
                 </p>
               </div>
             </div>
@@ -196,10 +196,10 @@ export function PaymentReceipt({ payment, locale }: PaymentReceiptProps) {
                       <Trans>Payment Date</Trans>
                     </p>
                     <p className="font-semibold text-[#17224D] text-sm">
-                      {new Date(payment.created).toLocaleDateString()}
+                      {formatDate(payment.created, locale)}
                     </p>
                     <p className="text-xs text-[#363942]/70">
-                      {new Date(payment.created).toLocaleTimeString()}
+                      {formatTime(payment.created, locale)}
                     </p>
                   </div>
                 </div>
@@ -374,7 +374,7 @@ export function PaymentReceipt({ payment, locale }: PaymentReceiptProps) {
                 </p>
               )}
               <p className="text-xs text-[#363942]/70 text-center mt-1">
-                <Trans>Generated on</Trans> {new Date().toLocaleString()}
+                <Trans>Generated on</Trans> {formatDateTime(new Date(), locale)}
               </p>
             </div>
           </div>
@@ -424,8 +424,8 @@ export function PaymentReceipt({ payment, locale }: PaymentReceiptProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-gray-500 uppercase mb-1">Date</p>
-                <p className="text-sm font-medium">{new Date(payment.created).toLocaleDateString()}</p>
-                <p className="text-xs text-gray-600">{new Date(payment.created).toLocaleTimeString()}</p>
+                <p className="text-sm font-medium">{formatDate(payment.created, locale)}</p>
+                <p className="text-xs text-gray-600">{formatTime(payment.created, locale)}</p>
               </div>
               {payment.method && (
                 <div>
@@ -502,7 +502,7 @@ export function PaymentReceipt({ payment, locale }: PaymentReceiptProps) {
               </p>
             )}
             <p className="text-xs text-gray-500 text-center mt-1">
-              Generated: {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
+              Generated: {formatDateTime(new Date(), locale)}
             </p>
             <p className="text-xs text-gray-500 text-center mt-1">
               For inquiries: support@cubisacademy.com

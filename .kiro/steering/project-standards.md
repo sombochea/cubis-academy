@@ -139,6 +139,71 @@ locales/
 proxy.ts             # Route protection & locale routing (Next.js 16)
 ```
 
+## Date Handling
+
+**CRITICAL:** Always use date utility functions from `lib/utils/date.ts` - NEVER use native Date methods directly.
+
+### Date Utility Functions
+
+```typescript
+import {
+  formatDate,
+  formatDateTime,
+  formatDateLong,
+  formatDateTimeLong,
+} from "@/lib/utils/date";
+
+// Format date without time (e.g., "Jan 15, 2025")
+formatDate(value, locale);
+
+// Format date with time (e.g., "Jan 15, 2025, 10:30 AM")
+formatDateTime(value, locale);
+
+// Format date with full month (e.g., "January 15, 2025")
+formatDateLong(value, locale);
+
+// Format date with full month and time (e.g., "January 15, 2025, 10:30 AM")
+formatDateTimeLong(value, locale);
+
+// Format time only (e.g., "10:30 AM")
+formatTime(value, locale);
+
+// Format for tables (e.g., "01/15/2025")
+formatDateShort(value);
+
+// Format for ISO (e.g., "2025-01-15")
+formatDateISO(value);
+```
+
+### Input Types Supported
+
+All date functions accept:
+
+- `Date` object
+- ISO string (e.g., "2025-01-15T10:30:00Z")
+- Timestamp number (e.g., 1705315800000)
+- `null` or `undefined` (returns null)
+
+### Benefits
+
+- ✅ Consistent formatting across the app
+- ✅ Handles null/undefined safely
+- ✅ Locale-aware (supports 'en' and 'km')
+- ✅ Uses date-fns for reliability
+- ✅ Single source of truth for date logic
+
+### Examples
+
+```typescript
+// ❌ WRONG - Don't use native methods
+new Date(payment.created).toLocaleDateString();
+new Date(payment.created).toLocaleString(locale, { ... });
+
+// ✅ CORRECT - Use utility functions
+formatDate(payment.created, locale);
+formatDateTime(payment.created, locale);
+```
+
 ## Performance
 
 - Target <300ms response time for dashboard pages
