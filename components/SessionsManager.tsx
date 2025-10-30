@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Trans } from '@lingui/react/macro';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { useEnsureSession } from '@/lib/hooks/useEnsureSession';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +24,8 @@ import {
   Clock,
   Shield,
   X,
+  Chrome,
+  CheckCircle2,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -36,6 +39,8 @@ interface Session {
   lastActivity: string;
   created: string;
   isActive: boolean;
+  isCurrent?: boolean;
+  isOAuth?: boolean;
 }
 
 export function SessionsManager() {
@@ -44,6 +49,9 @@ export function SessionsManager() {
   const [revoking, setRevoking] = useState<string | null>(null);
   const [showRevokeAll, setShowRevokeAll] = useState(false);
   const [revokingAll, setRevokingAll] = useState(false);
+
+  // Ensure session is created in our store
+  useEnsureSession();
 
   useEffect(() => {
     fetchSessions();
@@ -148,13 +156,27 @@ export function SessionsManager() {
                     {getDeviceIcon(session.device)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h4 className="font-medium text-[#17224D]">
                         {session.browser || 'Unknown Browser'}
                       </h4>
-                      <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
-                        <Trans>Active</Trans>
-                      </span>
+                      {session.isCurrent && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <Trans>Current Session</Trans>
+                        </span>
+                      )}
+                      {session.isOAuth && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
+                          <Chrome className="w-3 h-3" />
+                          <Trans>Google</Trans>
+                        </span>
+                      )}
+                      {!session.isCurrent && (
+                        <span className="px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
+                          <Trans>Active</Trans>
+                        </span>
+                      )}
                     </div>
                     <div className="mt-1 space-y-1 text-sm text-gray-600">
                       {session.os && (
@@ -188,19 +210,21 @@ export function SessionsManager() {
                     </div>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => revokeSession(session.id)}
-                  disabled={revoking === session.id}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                >
-                  {revoking === session.id ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <X className="w-4 h-4" />
-                  )}
-                </Button>
+                {!session.isCurrent && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => revokeSession(session.id)}
+                    disabled={revoking === session.id}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    {revoking === session.id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <X className="w-4 h-4" />
+                    )}
+                  </Button>
+                )}
               </div>
             </Card>
           ))}

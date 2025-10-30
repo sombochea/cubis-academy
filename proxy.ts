@@ -53,6 +53,59 @@ export default auth((req) => {
     return NextResponse.redirect(newUrl);
   }
 
+  // Session validation for authenticated users
+  const session = req.auth;
+  const localeMatch = pathname.match(/^\/(km|en)/);
+  const locale = localeMatch ? localeMatch[1] : defaultLocale;
+  const pathWithoutLocale = localeMatch ? pathname.slice(3) : pathname;
+
+  // Skip validation for public routes
+  const isPublicRoute =
+    pathWithoutLocale === "/" ||
+    pathWithoutLocale === "/login" ||
+    pathWithoutLocale === "/register" ||
+    pathWithoutLocale === "/logout" ||
+    pathWithoutLocale === "";
+
+  // Handle callback URL for protected routes
+  if (!isPublicRoute && !session?.user) {
+    // Save the original URL as callback
+    const callbackUrl = new URL(`/${locale}/login`, req.url);
+    callbackUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(callbackUrl);
+  }
+
+  if (isPublicRoute) {
+    return NextResponse.next();
+  }
+
+  // If user is logged in, validate session token
+  if (session?.user?.id) {
+    const token = session.user as any;
+    const sessionToken = token.sessionToken;
+
+    // If no session token, this is an old JWT - redirect to logout page
+    if (!sessionToken) {
+      console.log("🔒 No session token, redirecting to logout page");
+
+      // Redirect to logout page which will handle signOut
+      const logoutUrl = new URL(`/${locale}/logout`, req.url);
+      logoutUrl.searchParams.set("reason", "no_token");
+      return NextResponse.redirect(logoutUrl);
+    }
+
+    // Add session token to request headers for server components to validate
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set("x-session-token", sessionToken);
+    requestHeaders.set("x-user-id", session.user.id);
+
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
+  }
+
   return NextResponse.next();
 });
 

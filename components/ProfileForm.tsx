@@ -4,6 +4,7 @@ import { useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ import {
 import { Trans } from '@lingui/react/macro';
 import { Loader2, Upload, User, AlertTriangle, Mail } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getAvatarGradient, getInitials } from '@/lib/avatar-utils';
 
 const profileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -44,10 +46,11 @@ const getErrorMessage = (error: any): string => {
 
 export function ProfileForm({ user, roleData }: ProfileFormProps) {
   const router = useRouter();
+  const { update: updateSession } = useSession();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(roleData?.photo || null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(user.photo || roleData?.photo || null);
   const [showEmailConfirm, setShowEmailConfirm] = useState(false);
   const [showVerifyCode, setShowVerifyCode] = useState(false);
   const [pendingValues, setPendingValues] = useState<ProfileFormData | null>(null);
@@ -60,7 +63,7 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
       name: user.name || '',
       email: user.email || '',
       phone: user.phone || '',
-      photo: roleData?.photo || '',
+      photo: user.photo || roleData?.photo || '',
     },
     validators: {
       onChange: profileSchema as any,
@@ -108,6 +111,8 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
 
   const submitProfile = async (value: ProfileFormData) => {
     try {
+      console.log('📤 Submitting profile with data:', value);
+      
       const response = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -120,12 +125,24 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
         throw new Error(data.error || 'Failed to update profile');
       }
 
+      console.log('✅ Profile updated successfully');
+      
+      // Update session with new data
+      await updateSession({
+        name: value.name,
+        email: value.email,
+        picture: value.photo,
+      });
+      
+      console.log('✅ Session updated');
+      
       setSuccess(true);
       setTimeout(() => {
         router.refresh();
         setSuccess(false);
       }, 2000);
     } catch (err) {
+      console.error('❌ Profile update error:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
@@ -197,15 +214,6 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
     } finally {
       setIsVerifying(false);
     }
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
   };
 
   return (
@@ -345,9 +353,9 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
             <Trans>Profile Photo</Trans>
           </Label>
           <div className="flex items-center gap-4">
-            <Avatar className="h-20 w-20 border-2 border-gray-200">
+            <Avatar className="h-20 w-20 border-2 border-gray-200 shadow-md">
               <AvatarImage src={photoPreview || undefined} />
-              <AvatarFallback className="bg-gradient-to-br from-[#007FFF] to-[#17224D] text-white font-semibold text-lg">
+              <AvatarFallback className={`bg-gradient-to-br ${getAvatarGradient(user.id)} text-white font-semibold text-lg`}>
                 {getInitials(form.state.values.name)}
               </AvatarFallback>
             </Avatar>

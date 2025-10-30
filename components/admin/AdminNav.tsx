@@ -25,9 +25,7 @@ export async function AdminNav({ locale }: { locale: string }) {
             <AdminNavClient locale={locale} />
           </div>
           
-          {session?.user && (
-            <UserNav user={session.user} locale={locale} />
-          )}
+          <UserNav locale={locale} />
         </div>
       </div>
     </nav>

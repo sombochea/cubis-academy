@@ -25,9 +25,9 @@ msgstr "(Check server logs for the code during development)"
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:97
 #: app/[locale]/(admin)/admin/page.tsx:123
 #: app/[locale]/(admin)/admin/payments/page.tsx:110
-#: app/[locale]/(admin)/admin/profile/page.tsx:95
-#: app/[locale]/(student)/student/profile/page.tsx:95
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:95
+#: app/[locale]/(admin)/admin/profile/page.tsx:96
+#: app/[locale]/(student)/student/profile/page.tsx:96
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:96
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
 #: components/landing-page.tsx:375
@@ -68,8 +68,13 @@ msgstr "Actions"
 #: components/admin/StudentsDataTable.tsx:156
 #: components/admin/TeacherFilters.tsx:46
 #: components/admin/TeachersDataTable.tsx:164
+#: components/SessionsManager.tsx:156
 msgid "Active"
 msgstr "Active"
+
+#: components/SessionsManager.tsx:118
+msgid "Active Sessions"
+msgstr "Active Sessions"
 
 #~ msgid "Active Students"
 #~ msgstr "សិស្សសកម្ម"
@@ -281,6 +286,7 @@ msgstr "browse"
 #: components/admin/TeacherForm.tsx:273
 #: components/ProfileForm.tsx:244
 #: components/ProfileForm.tsx:303
+#: components/SessionsManager.tsx:226
 #: components/student/EmailVerificationBanner.tsx:193
 msgid "Cancel"
 msgstr "Cancel"
@@ -320,9 +326,9 @@ msgstr "Change Email Address"
 msgid "Change Image"
 msgstr "Change Image"
 
-#: app/[locale]/(admin)/admin/profile/page.tsx:124
-#: app/[locale]/(student)/student/profile/page.tsx:124
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:124
+#: app/[locale]/(admin)/admin/profile/page.tsx:125
+#: app/[locale]/(student)/student/profile/page.tsx:125
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:125
 #: components/PasswordChangeForm.tsx:205
 msgid "Change Password"
 msgstr "Change Password"
@@ -855,6 +861,10 @@ msgstr "JPG, PNG or WebP • Max 5MB • 400x400px recommended"
 #~ msgid "JPG, PNG or WebP. Max 5MB. Recommended 400x400px."
 #~ msgstr "JPG, PNG or WebP. Max 5MB. Recommended 400x400px."
 
+#: components/SessionsManager.tsx:182
+msgid "Last active"
+msgstr "Last active"
+
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:225
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:237
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:211
@@ -913,11 +923,15 @@ msgstr "Manage course categories and organization"
 msgid "Manage teachers and assign courses"
 msgstr "Manage teachers and assign courses"
 
-#: app/[locale]/(admin)/admin/profile/page.tsx:76
-#: app/[locale]/(student)/student/profile/page.tsx:76
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:76
+#: app/[locale]/(admin)/admin/profile/page.tsx:77
+#: app/[locale]/(student)/student/profile/page.tsx:77
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:77
 msgid "Manage your account settings and preferences"
 msgstr "Manage your account settings and preferences"
+
+#: components/SessionsManager.tsx:121
+msgid "Manage your active login sessions across devices"
+msgstr "Manage your active login sessions across devices"
 
 #: app/[locale]/(admin)/admin/page.tsx:99
 msgid "Manage your learning management system"
@@ -951,9 +965,9 @@ msgstr "Minimum 6 characters"
 msgid "My Courses"
 msgstr "My Courses"
 
-#: app/[locale]/(admin)/admin/profile/page.tsx:73
-#: app/[locale]/(student)/student/profile/page.tsx:73
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:73
+#: app/[locale]/(admin)/admin/profile/page.tsx:74
+#: app/[locale]/(student)/student/profile/page.tsx:74
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:74
 #: components/UserNav.tsx:100
 msgid "My Profile"
 msgstr "My Profile"
@@ -980,6 +994,10 @@ msgstr "New Password"
 #: components/admin/CreateCourseWizard.tsx:690
 msgid "Next"
 msgstr "Next"
+
+#: components/SessionsManager.tsx:139
+msgid "No active sessions found"
+msgstr "No active sessions found"
 
 #: components/admin/CreateCourseWizard.tsx:354
 msgid "No categories available. Please create one first."
@@ -1136,9 +1154,9 @@ msgstr "Price ($)"
 msgid "Pricing & Duration"
 msgstr "Pricing & Duration"
 
-#: app/[locale]/(admin)/admin/profile/page.tsx:112
-#: app/[locale]/(student)/student/profile/page.tsx:112
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:112
+#: app/[locale]/(admin)/admin/profile/page.tsx:113
+#: app/[locale]/(student)/student/profile/page.tsx:113
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:113
 msgid "Profile Information"
 msgstr "Profile Information"
 
@@ -1199,6 +1217,14 @@ msgstr "Resend Code"
 msgid "Reset Password"
 msgstr "Reset Password"
 
+#: components/SessionsManager.tsx:132
+msgid "Revoke All Sessions"
+msgstr "Revoke All Sessions"
+
+#: components/SessionsManager.tsx:215
+msgid "Revoke All Sessions?"
+msgstr "Revoke All Sessions?"
+
 #: components/admin/ManualVerifyButton.tsx:93
 msgid "Revoke Email Verification?"
 msgstr "Revoke Email Verification?"
@@ -1207,6 +1233,10 @@ msgstr "Revoke Email Verification?"
 #: components/admin/ManualVerifyButton.tsx:109
 msgid "Revoke Verification"
 msgstr "Revoke Verification"
+
+#: components/SessionsManager.tsx:236
+msgid "Revoking..."
+msgstr "Revoking..."
 
 #: components/ui/data-table.tsx:228
 #~ msgid "Rows per page"
@@ -1406,6 +1436,10 @@ msgstr "This action cannot be undone"
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:263
 msgid "This student hasn't enrolled in any courses"
 msgstr "This student hasn't enrolled in any courses"
+
+#: components/SessionsManager.tsx:218
+msgid "This will log you out from all devices and browsers. You will need to log in again on this device."
+msgstr "This will log you out from all devices and browsers. You will need to log in again on this device."
 
 #: components/admin/CreateCourseWizard.tsx:545
 msgid "Tip:"
@@ -1667,6 +1701,10 @@ msgstr "ហេតុអ្វីជ្រើសរើសយើង"
 #: components/admin/DeleteStudentForm.tsx:74
 msgid "Yes, Delete Student"
 msgstr "Yes, Delete Student"
+
+#: components/SessionsManager.tsx:239
+msgid "Yes, Revoke All"
+msgstr "Yes, Revoke All"
 
 #: app/[locale]/(auth)/logout/page.tsx:48
 msgid "Yes, Sign Out"

@@ -43,9 +43,7 @@ export async function TeacherNav({ locale }: { locale: string }) {
             </div>
           </div>
           
-          {session?.user && (
-            <UserNav user={session.user} locale={locale} />
-          )}
+          <UserNav locale={locale} />
         </div>
       </div>
     </nav>

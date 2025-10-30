@@ -65,35 +65,47 @@ export const authConfig = {
 
       return true;
     },
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.role = user.role;
         token.id = user.id;
-      }
-
-      // Validate session on every request (check if user still exists and is active)
-      if (token.id && trigger !== 'signIn') {
-        try {
-          const { validateSession } = await import('./lib/session-store');
-          const { getUserById } = await import('./lib/drizzle/queries');
-          
-          // Check if user still exists and is active
-          const dbUser = await getUserById(token.id as string);
-          
-          if (!dbUser || !dbUser.isActive) {
-            // User deleted or deactivated - invalidate token
-            return null as any;
-          }
-
-          // Update token with latest user data
-          token.role = dbUser.role;
-        } catch (error) {
-          console.error('Session validation error:', error);
-          // On error, invalidate session to be safe
-          return null as any;
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
+        
+        console.log('🎫 JWT token created:', {
+          id: token.id,
+          name: token.name,
+          email: token.email,
+          picture: token.picture,
+          role: token.role,
+        });
+        
+        // Generate session token on sign in (using Web Crypto API for edge compatibility)
+        if (typeof globalThis.crypto !== 'undefined' && globalThis.crypto.randomUUID) {
+          token.sessionToken = globalThis.crypto.randomUUID();
+        } else {
+          // Fallback for environments without crypto.randomUUID
+          token.sessionToken = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
         }
       }
 
+      // Handle session update trigger (when user updates profile)
+      if (trigger === "update" && session) {
+        token.name = session.name || token.name;
+        token.email = session.email || token.email;
+        token.picture = session.picture || token.picture;
+        
+        console.log('🔄 JWT token updated:', {
+          name: token.name,
+          email: token.email,
+          picture: token.picture,
+        });
+      }
+
+      // Note: Session validation is done in middleware.ts
+      // We can't validate here because edge runtime doesn't support Node.js modules
+      
       return token;
     },
     async session({ session, token }) {
@@ -104,6 +116,11 @@ export const authConfig = {
       if (session.user) {
         session.user.role = token.role as string;
         session.user.id = token.id as string;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.image = token.picture as string;
+        // Pass sessionToken to session so proxy.ts can access it
+        (session.user as any).sessionToken = token.sessionToken;
       }
       return session;
     },

@@ -2,8 +2,8 @@ import Keyv from "keyv";
 import KeyvRedis from "@keyv/redis";
 import KeyvPostgres from "@keyv/postgres";
 import { db } from "./drizzle/db";
-import { userSessions } from "./drizzle/schema";
-import { eq, and, gt } from "drizzle-orm";
+import { userSessions, users } from "./drizzle/schema";
+import { eq, and, gt, ne, lt } from "drizzle-orm";
 import { UAParser } from "ua-parser-js";
 
 // Keyv cache instance with multiple storage options
@@ -47,12 +47,13 @@ interface SessionData {
   id: string;
   userId: string;
   sessionToken: string;
-  ipAddress?: string;
-  userAgent?: string;
-  device?: string;
-  browser?: string;
-  os?: string;
-  location?: string;
+  deviceId: string | null;
+  ipAddress: string | null;
+  userAgent: string | null;
+  device: string | null;
+  browser: string | null;
+  os: string | null;
+  location: string | null;
   isActive: boolean;
   lastActivity: Date;
   expiresAt: Date;
@@ -62,6 +63,7 @@ interface SessionData {
 interface CreateSessionOptions {
   userId: string;
   sessionToken: string;
+  deviceId?: string;
   ipAddress?: string;
   userAgent?: string;
   location?: string;
@@ -98,12 +100,49 @@ export async function createSession(
 ): Promise<SessionData> {
   const { device, browser, os } = parseUserAgent(options.userAgent);
 
-  // Create session in database
+  // Check if session already exists
+  const existingSession = await db.query.userSessions.findFirst({
+    where: eq(userSessions.sessionToken, options.sessionToken),
+  });
+
+  if (existingSession) {
+    console.log("⚠️ Session already exists, updating instead:", {
+      sessionToken: options.sessionToken.substring(0, 10) + "...",
+    });
+
+    // Update existing session
+    const [session] = await db
+      .update(userSessions)
+      .set({
+        deviceId: options.deviceId,
+        ipAddress: options.ipAddress,
+        userAgent: options.userAgent,
+        device,
+        browser,
+        os,
+        location: options.location,
+        isActive: true,
+        lastActivity: new Date(),
+        expiresAt: options.expiresAt,
+      })
+      .where(eq(userSessions.sessionToken, options.sessionToken))
+      .returning();
+
+    // Update cache
+    const keyv = getCache();
+    const ttl = options.expiresAt.getTime() - Date.now();
+    await keyv.set(options.sessionToken, session, ttl);
+
+    return session;
+  }
+
+  // Create new session in database
   const [session] = await db
     .insert(userSessions)
     .values({
       userId: options.userId,
       sessionToken: options.sessionToken,
+      deviceId: options.deviceId,
       ipAddress: options.ipAddress,
       userAgent: options.userAgent,
       device,
@@ -243,6 +282,47 @@ export async function revokeAllUserSessions(userId: string): Promise<void> {
 }
 
 /**
+ * Revoke all sessions for a user except the current session
+ * Used when user changes password - keep current session active
+ */
+export async function revokeAllUserSessionsExceptCurrent(
+  userId: string,
+  currentSessionToken: string
+): Promise<number> {
+  // Get all active sessions except current
+  const sessions = await db.query.userSessions.findMany({
+    where: and(
+      eq(userSessions.userId, userId),
+      eq(userSessions.isActive, true),
+      ne(userSessions.sessionToken, currentSessionToken)
+    ),
+  });
+
+  if (sessions.length === 0) {
+    console.log('🔒 No other sessions to revoke');
+    return 0;
+  }
+
+  // Update database - revoke all except current
+  await db
+    .update(userSessions)
+    .set({ isActive: false })
+    .where(
+      and(
+        eq(userSessions.userId, userId),
+        ne(userSessions.sessionToken, currentSessionToken)
+      )
+    );
+
+  // Remove from cache
+  const keyv = getCache();
+  await Promise.all(sessions.map((s) => keyv.delete(s.sessionToken)));
+
+  console.log(`🔒 ${sessions.length} sessions revoked for user: ${userId} (kept current session)`);
+  return sessions.length;
+}
+
+/**
  * Get all active sessions for a user
  */
 export async function getUserSessions(userId: string): Promise<SessionData[]> {
@@ -264,11 +344,11 @@ export async function getUserSessions(userId: string): Promise<SessionData[]> {
 export async function cleanupExpiredSessions(): Promise<number> {
   const now = new Date();
 
-  // Get expired sessions
+  // Get expired sessions (expiresAt < now)
   const expiredSessions = await db.query.userSessions.findMany({
     where: and(
       eq(userSessions.isActive, true),
-      gt(now, userSessions.expiresAt)
+      lt(userSessions.expiresAt, now)
     ),
   });
 
@@ -281,7 +361,7 @@ export async function cleanupExpiredSessions(): Promise<number> {
     .update(userSessions)
     .set({ isActive: false })
     .where(
-      and(eq(userSessions.isActive, true), gt(now, userSessions.expiresAt))
+      and(eq(userSessions.isActive, true), lt(userSessions.expiresAt, now))
     );
 
   // Remove from cache

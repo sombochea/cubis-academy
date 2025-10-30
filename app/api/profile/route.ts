@@ -35,6 +35,16 @@ export async function PUT(req: Request) {
 
     const { name, email, phone, photo } = validation.data;
 
+    console.log('📥 Profile update request:', {
+      userId: session.user.id,
+      role: session.user.role,
+      name,
+      email,
+      phone,
+      photo: photo ? 'provided' : 'not provided',
+      photoValue: photo,
+    });
+
     // Check if email is already taken by another user
     if (email !== session.user.email) {
       const existingUser = await db
@@ -56,6 +66,7 @@ export async function PUT(req: Request) {
       name,
       email,
       phone,
+      photo: photo || null, // Save photo to users table
       updated: new Date(),
     };
 
@@ -69,24 +80,26 @@ export async function PUT(req: Request) {
       .set(updateData)
       .where(eq(users.id, session.user.id));
 
-    // Update role-specific table if photo is provided
-    if (photo) {
-      if (session.user.role === 'student') {
-        await db
-          .update(students)
-          .set({ photo })
-          .where(eq(students.userId, session.user.id));
-      } else if (session.user.role === 'teacher') {
-        await db
-          .update(teachers)
-          .set({ photo })
-          .where(eq(teachers.userId, session.user.id));
-      }
+    console.log('✅ Updated user photo in users table:', photo || 'null');
+
+    // Also update role-specific table with photo (for backward compatibility)
+    if (session.user.role === 'student') {
+      await db
+        .update(students)
+        .set({ photo: photo || null })
+        .where(eq(students.userId, session.user.id));
+      console.log('✅ Updated student photo:', photo || 'null');
+    } else if (session.user.role === 'teacher') {
+      await db
+        .update(teachers)
+        .set({ photo: photo || null })
+        .where(eq(teachers.userId, session.user.id));
+      console.log('✅ Updated teacher photo:', photo || 'null');
     }
 
     return NextResponse.json({ 
       message: 'Profile updated successfully',
-      user: { name, email, phone }
+      user: { name, email, phone, photo }
     });
   } catch (error) {
     console.error('Update profile error:', error);

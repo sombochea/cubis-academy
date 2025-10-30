@@ -50,6 +50,7 @@ export const users = pgTable(
     email: varchar("email", { length: 255 }).notNull().unique(),
     emailVerifiedAt: timestamp("email_verified_at"),
     phone: varchar("phone", { length: 50 }),
+    photo: varchar("photo", { length: 500 }), // Profile photo URL
     role: roleEnum("role").notNull().default("student"),
     passHash: varchar("pass_hash", { length: 255 }),
     googleId: varchar("google_id", { length: 255 }).unique(),
@@ -426,6 +427,7 @@ export const userSessions = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     sessionToken: varchar("session_token", { length: 255 }).notNull().unique(),
+    deviceId: varchar("device_id", { length: 255 }), // Persistent browser fingerprint
     ipAddress: varchar("ip_address", { length: 45 }),
     userAgent: text("user_agent"),
     device: varchar("device", { length: 100 }),
@@ -440,6 +442,7 @@ export const userSessions = pgTable(
   (table) => [
     index("user_sessions_user_id_idx").on(table.userId),
     index("user_sessions_session_token_idx").on(table.sessionToken),
+    index("user_sessions_device_id_idx").on(table.deviceId),
     index("user_sessions_is_active_idx").on(table.isActive),
     index("user_sessions_expires_at_idx").on(table.expiresAt),
   ]

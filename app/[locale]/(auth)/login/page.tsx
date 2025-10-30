@@ -2,7 +2,7 @@
 
 import { useForm } from "@tanstack/react-form";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,11 @@ const loginSchema = z.object({
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState("");
+  
+  // Get callback URL from query params
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
 
   const form = useForm({
     defaultValues: {
@@ -44,7 +48,8 @@ export default function LoginPage() {
         if (signInResult?.error) {
           setError("Invalid email or password");
         } else {
-          router.push("/");
+          // Redirect to callback URL or home
+          router.push(callbackUrl);
           router.refresh();
         }
       } catch (err) {
@@ -54,7 +59,7 @@ export default function LoginPage() {
   });
 
   const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
+    signIn("google", { callbackUrl });
   };
 
   return (
