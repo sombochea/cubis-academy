@@ -434,6 +434,7 @@ export const userSessions = pgTable(
     browser: varchar("browser", { length: 100 }),
     os: varchar("os", { length: 100 }),
     location: varchar("location", { length: 255 }),
+    loginMethod: varchar("login_method", { length: 50 }), // 'credentials', 'google', 'oauth'
     isActive: boolean("is_active").notNull().default(true),
     lastActivity: timestamp("last_activity").notNull().defaultNow(),
     expiresAt: timestamp("expires_at").notNull(),

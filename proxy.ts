@@ -94,10 +94,13 @@ export default auth((req) => {
       return NextResponse.redirect(logoutUrl);
     }
 
-    // Add session token to request headers for server components to validate
+    // Validate session is still active on server
+    // We'll do this via an API call since Edge runtime has limitations
+    // For now, add headers and let server components validate
     const requestHeaders = new Headers(req.headers);
     requestHeaders.set("x-session-token", sessionToken);
     requestHeaders.set("x-user-id", session.user.id);
+    requestHeaders.set("x-validate-session", "true");
 
     return NextResponse.next({
       request: {

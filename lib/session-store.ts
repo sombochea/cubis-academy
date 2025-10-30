@@ -68,6 +68,7 @@ interface CreateSessionOptions {
   userAgent?: string;
   location?: string;
   expiresAt: Date;
+  loginMethod?: 'credentials' | 'google' | 'oauth'; // Track how user logged in
 }
 
 /**
@@ -121,6 +122,7 @@ export async function createSession(
         browser,
         os,
         location: options.location,
+        loginMethod: options.loginMethod,
         isActive: true,
         lastActivity: new Date(),
         expiresAt: options.expiresAt,
@@ -149,6 +151,7 @@ export async function createSession(
       browser,
       os,
       location: options.location,
+      loginMethod: options.loginMethod,
       isActive: true,
       lastActivity: new Date(),
       expiresAt: options.expiresAt,
@@ -181,6 +184,18 @@ export async function getSession(
   const cached = await keyv.get<SessionData>(sessionToken);
 
   if (cached) {
+    // Verify cached session is still active in database
+    const dbSession = await db.query.userSessions.findFirst({
+      where: eq(userSessions.sessionToken, sessionToken),
+      columns: { isActive: true, expiresAt: true },
+    });
+
+    // If session is inactive or expired, remove from cache and return null
+    if (!dbSession || !dbSession.isActive || dbSession.expiresAt < new Date()) {
+      await keyv.delete(sessionToken);
+      return null;
+    }
+
     // Convert date strings back to Date objects (Keyv serializes them)
     if (typeof cached.lastActivity === "string") {
       cached.lastActivity = new Date(cached.lastActivity);

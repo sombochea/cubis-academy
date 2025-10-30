@@ -1,0 +1,1 @@
+ALTER TABLE "user_sessions" ADD COLUMN "login_method" varchar(50);

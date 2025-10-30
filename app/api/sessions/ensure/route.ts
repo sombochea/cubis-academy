@@ -32,20 +32,42 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Get request body for deviceId
+    // Get request body for deviceId and login method
     const body = await req.json().catch(() => ({}));
     const deviceId = body.deviceId;
+    const loginMethod = body.loginMethod; // 'credentials' or 'google'
 
-    // Check if session exists
+    // Check if session exists (active sessions only)
     const existingSession = await getSession(sessionToken);
 
     if (!existingSession) {
-      // Create session
+      // Check if this session already exists in database (active or inactive)
+      const { userSessions } = await import('@/lib/drizzle/schema');
+      const dbSession = await db.query.userSessions.findFirst({
+        where: eq(userSessions.sessionToken, sessionToken),
+      });
+
+      // If session exists but is inactive (revoked), don't recreate it
+      if (dbSession && !dbSession.isActive) {
+        console.log('🚫 Session was revoked, not recreating:', sessionToken.substring(0, 10) + '...');
+        return NextResponse.json({ error: 'Session revoked' }, { status: 403 });
+      }
+
+      // If session exists and is active, it's in DB but not in cache - just return success
+      if (dbSession && dbSession.isActive) {
+        console.log('✅ Session exists in DB, returning success:', sessionToken.substring(0, 10) + '...');
+        return NextResponse.json({ exists: true });
+      }
+
+      // Session doesn't exist at all - create it
       const userAgent = req.headers.get('user-agent') || undefined;
       const ipAddress =
         req.headers.get('x-forwarded-for')?.split(',')[0] ||
         req.headers.get('x-real-ip') ||
         undefined;
+
+      // Use provided login method (from JWT token)
+      const finalLoginMethod: 'credentials' | 'google' | 'oauth' = loginMethod || 'credentials';
 
       await createSession({
         userId: session.user.id,
@@ -54,9 +76,10 @@ export async function POST(req: Request) {
         ipAddress,
         userAgent,
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        loginMethod: finalLoginMethod,
       });
 
-      console.log('✅ Session created for user:', session.user.id, 'deviceId:', deviceId);
+      console.log('✅ Session created for user:', session.user.id, 'deviceId:', deviceId, 'method:', finalLoginMethod);
       return NextResponse.json({ created: true });
     }
 

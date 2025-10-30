@@ -4,6 +4,7 @@ import '../globals.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
 import { SessionProvider } from '@/components/SessionProvider';
 import { SessionInitializer } from '@/components/SessionInitializer';
+import { SessionValidator } from '@/components/SessionValidator';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -39,6 +40,7 @@ export default async function LocaleLayout({
       <body className={`${manrope.variable} ${kantumruyPro.variable} ${locale === 'km' ? 'font-kantumruy' : 'font-sans'} antialiased`}>
         <SessionProvider>
           <SessionInitializer />
+          <SessionValidator />
           <LanguageProvider locale={locale}>
             {children}
           </LanguageProvider>

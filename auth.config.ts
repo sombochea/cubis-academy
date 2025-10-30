@@ -37,8 +37,8 @@ export const authConfig = {
               userRole === "admin"
                 ? "/admin"
                 : userRole === "teacher"
-                ? "/teacher"
-                : "/student"
+                  ? "/teacher"
+                  : "/student"
             }`,
             nextUrl
           )
@@ -69,16 +69,16 @@ export const authConfig = {
       if (user) {
         // For OAuth users, we need to fetch the user from DB to ensure it exists
         // For credentials users, role comes from authorize function
-        if (account?.provider && account.provider !== 'credentials') {
+        if (account?.provider && account.provider !== "credentials") {
           // OAuth login - fetch user from database to get the actual user ID
-          const { db } = await import('@/lib/drizzle/db');
-          const { users } = await import('@/lib/drizzle/schema');
-          const { eq } = await import('drizzle-orm');
-          
+          const { db } = await import("@/lib/drizzle/db");
+          const { users } = await import("@/lib/drizzle/schema");
+          const { eq } = await import("drizzle-orm");
+
           const dbUser = await db.query.users.findFirst({
             where: eq(users.email, user.email!),
           });
-          
+
           if (dbUser) {
             token.id = dbUser.id;
             token.role = dbUser.role;
@@ -86,42 +86,48 @@ export const authConfig = {
             token.email = dbUser.email;
             // Prioritize Google image over stored photo for OAuth users
             token.picture = user.image || dbUser.photo;
-            
-            console.log('🎫 JWT token created for OAuth user:', {
+            // Track login method
+            token.loginMethod = account.provider === 'google' ? 'google' : 'oauth';
+
+            console.log("🎫 JWT token created for OAuth user:", {
               id: token.id,
               email: token.email,
               role: token.role,
-              picture: token.picture,
-              googleImage: user.image,
-              dbPhoto: dbUser.photo,
+              loginMethod: token.loginMethod,
             });
           } else {
-            console.error('❌ OAuth user not found in database:', user.email);
+            console.error("❌ OAuth user not found in database:", user.email);
             // User should have been created in signIn event
             // Fallback to user object values
-            token.role = user.role || 'student';
+            token.role = user.role || "student";
             token.id = user.id;
             token.name = user.name;
             token.email = user.email;
             token.picture = user.image;
+            token.loginMethod = account.provider === 'google' ? 'google' : 'oauth';
           }
         } else {
           // Credentials login
-          token.role = user.role || 'student';
+          token.role = user.role || "student";
           token.id = user.id;
           token.name = user.name;
           token.email = user.email;
           token.picture = user.image;
-          
-          console.log('🎫 JWT token created for credentials user:', {
+          token.loginMethod = 'credentials';
+
+          console.log("🎫 JWT token created for credentials user:", {
             id: token.id,
             email: token.email,
             role: token.role,
+            loginMethod: token.loginMethod,
           });
         }
-        
+
         // Generate session token on sign in (using Web Crypto API for edge compatibility)
-        if (typeof globalThis.crypto !== 'undefined' && globalThis.crypto.randomUUID) {
+        if (
+          typeof globalThis.crypto !== "undefined" &&
+          globalThis.crypto.randomUUID
+        ) {
           token.sessionToken = globalThis.crypto.randomUUID();
         } else {
           // Fallback for environments without crypto.randomUUID
@@ -134,8 +140,8 @@ export const authConfig = {
         token.name = session.name || token.name;
         token.email = session.email || token.email;
         token.picture = session.picture || token.picture;
-        
-        console.log('🔄 JWT token updated:', {
+
+        console.log("🔄 JWT token updated:", {
           name: token.name,
           email: token.email,
           picture: token.picture,
@@ -144,7 +150,7 @@ export const authConfig = {
 
       // Note: Session validation is done in middleware.ts
       // We can't validate here because edge runtime doesn't support Node.js modules
-      
+
       return token;
     },
     async session({ session, token }) {
@@ -158,8 +164,9 @@ export const authConfig = {
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.image = token.picture as string;
-        // Pass sessionToken to session so proxy.ts can access it
+        // Pass sessionToken and loginMethod to session so they can be accessed
         (session.user as any).sessionToken = token.sessionToken;
+        (session.user as any).loginMethod = token.loginMethod;
       }
       return session;
     },
@@ -168,6 +175,7 @@ export const authConfig = {
     signIn: "/km/login",
     signOut: "/km/logout",
   },
+  debug: process.env.NODE_ENV !== "production",
 } satisfies NextAuthConfig;
 
 export default authConfig;

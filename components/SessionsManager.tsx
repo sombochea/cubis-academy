@@ -36,6 +36,7 @@ interface Session {
   os?: string;
   ipAddress?: string;
   location?: string;
+  deviceId?: string;
   lastActivity: string;
   created: string;
   isActive: boolean;
@@ -195,6 +196,13 @@ export function SessionsManager() {
                         <div className="flex items-center gap-1">
                           <span className="text-xs text-gray-500">
                             IP: {session.ipAddress}
+                          </span>
+                        </div>
+                      )}
+                      {session.deviceId && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-gray-500 font-mono">
+                            Device: {session.deviceId.substring(0, 8)}...
                           </span>
                         </div>
                       )}

@@ -9,8 +9,19 @@ import { revokeAllUserSessionsExceptCurrent } from '@/lib/session-store';
 import { sendPasswordChangeNotification } from '@/lib/email-notifications';
 import { cookies } from 'next/headers';
 
+// Schema for users with existing password
 const passwordChangeSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required'),
+  newPassword: z.string().min(6, 'New password must be at least 6 characters'),
+  confirmPassword: z.string().min(1, 'Password confirmation is required'),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ['confirmPassword'],
+});
+
+// Schema for OAuth users setting password for first time
+const passwordSetSchema = z.object({
+  currentPassword: z.string().optional(),
   newPassword: z.string().min(6, 'New password must be at least 6 characters'),
   confirmPassword: z.string().min(1, 'Password confirmation is required'),
 }).refine((data) => data.newPassword === data.confirmPassword, {
@@ -41,20 +52,7 @@ export async function PUT(req: Request) {
       );
     }
 
-    // Parse and validate request body
-    const body = await req.json();
-    const validation = passwordChangeSchema.safeParse(body);
-
-    if (!validation.success) {
-      return NextResponse.json(
-        { error: validation.error.errors[0].message },
-        { status: 400 }
-      );
-    }
-
-    const { currentPassword, newPassword } = validation.data;
-
-    // Get user from database
+    // Get user from database first to check if they have a password
     const user = await db.query.users.findFirst({
       where: eq(users.id, session.user.id),
     });
@@ -68,6 +66,22 @@ export async function PUT(req: Request) {
 
     // Check if user has a password (not OAuth-only account)
     const hasPassword = !!user.passHash;
+
+    // Parse and validate request body with appropriate schema
+    const body = await req.json();
+    const validation = hasPassword 
+      ? passwordChangeSchema.safeParse(body)
+      : passwordSetSchema.safeParse(body);
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      return NextResponse.json(
+        { error: firstError?.message || 'Validation failed' },
+        { status: 400 }
+      );
+    }
+
+    const { currentPassword, newPassword } = validation.data;
 
     if (hasPassword) {
       // User has existing password - verify it

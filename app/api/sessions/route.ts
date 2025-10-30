@@ -19,18 +19,16 @@ export async function GET() {
     const currentSessionToken = cookieStore.get('authjs.session-token')?.value || 
                                 cookieStore.get('__Secure-authjs.session-token')?.value;
 
-    // Get user to check OAuth
-    const [user] = await db.select().from(users).where(eq(users.id, session.user.id));
-    const hasOAuth = !!user?.googleId;
-
     // Get all sessions
     const sessions = await getUserSessions(session.user.id);
 
-    // Mark current session and add OAuth info
+    // Mark current session and check each session's login method
     const sessionsWithInfo = sessions.map(s => ({
       ...s,
       isCurrent: s.sessionToken === currentSessionToken,
-      isOAuth: hasOAuth,
+      // Check if this specific session was created via OAuth
+      // loginMethod is stored in the session data
+      isOAuth: (s as any).loginMethod === 'google' || (s as any).loginMethod === 'oauth',
     }));
 
     return NextResponse.json({ sessions: sessionsWithInfo });

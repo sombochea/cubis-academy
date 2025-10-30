@@ -20,6 +20,7 @@ export function SessionInitializer() {
       if (token.sessionToken) {
         // Get persistent device ID from browser
         const deviceId = getDeviceId();
+        const loginMethod = token.loginMethod || 'credentials';
         
         // Call API to ensure session exists in database/cache
         fetch('/api/sessions/ensure', {
@@ -27,7 +28,7 @@ export function SessionInitializer() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ deviceId }),
+          body: JSON.stringify({ deviceId, loginMethod }),
         })
           .then((res) => {
             if (res.ok) {
