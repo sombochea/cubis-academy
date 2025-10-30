@@ -1,18 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProfileForm } from "@/components/ProfileForm";
 import { PasswordChangeForm } from "@/components/PasswordChangeForm";
 import { SessionsManager } from "@/components/SessionsManager";
 import { Trans } from "@lingui/react/macro";
-import {
-  Shield,
-  User,
-  Lock,
-  Monitor,
-  Link as LinkIcon,
-  Chrome,
-} from "lucide-react";
+import { Shield, User, Lock, Monitor, Link as LinkIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Icons } from "./icons";
 
@@ -27,6 +20,27 @@ type SettingsSection = "account" | "security" | "linked-accounts" | "sessions";
 export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
   const [activeSection, setActiveSection] =
     useState<SettingsSection>("account");
+
+  // Initialize active section from URL hash on mount
+  useEffect(() => {
+    const hash = window.location.hash.slice(1); // Remove the '#'
+    const validSections: SettingsSection[] = [
+      "account",
+      "security",
+      "linked-accounts",
+      "sessions",
+    ];
+
+    if (hash && validSections.includes(hash as SettingsSection)) {
+      setActiveSection(hash as SettingsSection);
+    }
+  }, []);
+
+  // Handle tab change with URL hash update
+  const handleSectionChange = (section: SettingsSection) => {
+    setActiveSection(section);
+    window.history.pushState(null, "", `#${section}`);
+  };
 
   const sections = [
     {
@@ -87,7 +101,7 @@ export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
                 return (
                   <button
                     key={section.id}
-                    onClick={() => setActiveSection(section.id)}
+                    onClick={() => handleSectionChange(section.id)}
                     className={cn(
                       "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors",
                       isActive

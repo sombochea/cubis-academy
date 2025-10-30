@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Trans } from "@lingui/react/macro";
 import {
   User,
@@ -12,10 +10,8 @@ import {
   MapPin,
   Shield,
   BookOpen,
-  Edit,
-  X,
+  Edit2,
 } from "lucide-react";
-import { ProfileForm } from "@/components/ProfileForm";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import {
   getProfileBackground,
@@ -26,6 +22,7 @@ import {
   getRoleIcon,
 } from "@/lib/avatar-utils";
 import { formatDate } from "@/lib/utils/date";
+import Link from "next/link";
 
 interface ProfileViewProps {
   user: any;
@@ -34,13 +31,15 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
-  const [isEditing, setIsEditing] = useState(false);
   
   // Get consistent gradient based on user ID
   const profileBg = getProfileBackground(user.id);
   const avatarGradient = getAvatarGradient(user.id);
   const roleGradient = getRoleGradient(user.role);
   const roleIcon = getRoleIcon(user.role);
+
+  // Generate settings URL based on user role
+  const settingsUrl = `/${locale}/${user.role}/settings#account`;
 
   const getRoleLabel = (role: string) => {
     switch (role) {
@@ -78,27 +77,14 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
 
         {/* Profile Info - Clean white section */}
         <div className="relative px-6 pt-20 pb-8 bg-white">
-          {/* Edit Button */}
-          <div className="absolute top-4 right-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsEditing(!isEditing)}
-              className="gap-2"
-            >
-              {isEditing ? (
-                <>
-                  <X className="w-4 h-4" />
-                  <Trans>Cancel</Trans>
-                </>
-              ) : (
-                <>
-                  <Edit className="w-4 h-4" />
-                  <Trans>Edit Profile</Trans>
-                </>
-              )}
-            </Button>
-          </div>
+          {/* Edit Icon Button */}
+          <Link
+            href={settingsUrl}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white border border-gray-200 hover:border-[#007FFF] hover:bg-[#007FFF]/5 flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md group"
+            title="Edit Profile"
+          >
+            <Edit2 className="w-4 h-4 text-gray-600 group-hover:text-[#007FFF] transition-colors" />
+          </Link>
           
           {/* Avatar positioned to overlap background */}
           <div className="absolute -top-12 left-6">
@@ -242,27 +228,6 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
           </div>
         </div>
       </div>
-
-      {/* Edit Profile Section - Only show when editing */}
-      {isEditing && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <User className="w-5 h-5 text-[#007FFF]" />
-            <h2 className="text-xl font-semibold text-[#17224D]">
-              <Trans>Edit Profile</Trans>
-            </h2>
-          </div>
-          <p className="text-sm text-gray-600 mb-6">
-            <Trans>Update your basic information</Trans>
-          </p>
-          <ProfileForm 
-            user={user} 
-            roleData={roleData} 
-            locale={locale}
-            onSuccess={() => setIsEditing(false)}
-          />
-        </div>
-      )}
     </div>
   );
 }

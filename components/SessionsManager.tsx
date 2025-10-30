@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Trans } from '@lingui/react/macro';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { useEnsureSession } from '@/lib/hooks/useEnsureSession';
+import { useState, useEffect } from "react";
+import { Trans } from "@lingui/react/macro";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useEnsureSession } from "@/lib/hooks/useEnsureSession";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,7 +14,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   Monitor,
   Smartphone,
@@ -24,10 +24,10 @@ import {
   Clock,
   Shield,
   X,
-  Chrome,
   CheckCircle2,
-} from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+} from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { Icons } from "./icons";
 
 interface Session {
   id: string;
@@ -60,11 +60,11 @@ export function SessionsManager() {
 
   const fetchSessions = async () => {
     try {
-      const response = await fetch('/api/sessions');
+      const response = await fetch("/api/sessions");
       const data = await response.json();
       setSessions(data.sessions || []);
     } catch (error) {
-      console.error('Failed to fetch sessions:', error);
+      console.error("Failed to fetch sessions:", error);
     } finally {
       setLoading(false);
     }
@@ -74,14 +74,14 @@ export function SessionsManager() {
     setRevoking(sessionId);
     try {
       const response = await fetch(`/api/sessions/${sessionId}/revoke`, {
-        method: 'POST',
+        method: "POST",
       });
 
       if (response.ok) {
         setSessions(sessions.filter((s) => s.id !== sessionId));
       }
     } catch (error) {
-      console.error('Failed to revoke session:', error);
+      console.error("Failed to revoke session:", error);
     } finally {
       setRevoking(null);
     }
@@ -90,8 +90,8 @@ export function SessionsManager() {
   const revokeAllSessions = async () => {
     setRevokingAll(true);
     try {
-      const response = await fetch('/api/sessions/revoke-all', {
-        method: 'POST',
+      const response = await fetch("/api/sessions/revoke-all", {
+        method: "POST",
       });
 
       if (response.ok) {
@@ -99,15 +99,17 @@ export function SessionsManager() {
         window.location.reload();
       }
     } catch (error) {
-      console.error('Failed to revoke all sessions:', error);
+      console.error("Failed to revoke all sessions:", error);
       setRevokingAll(false);
     }
   };
 
   const getDeviceIcon = (device?: string) => {
     if (!device) return <Monitor className="w-5 h-5" />;
-    if (device.toLowerCase().includes('mobile')) return <Smartphone className="w-5 h-5" />;
-    if (device.toLowerCase().includes('tablet')) return <Tablet className="w-5 h-5" />;
+    if (device.toLowerCase().includes("mobile"))
+      return <Smartphone className="w-5 h-5" />;
+    if (device.toLowerCase().includes("tablet"))
+      return <Tablet className="w-5 h-5" />;
     return <Monitor className="w-5 h-5" />;
   };
 
@@ -130,7 +132,7 @@ export function SessionsManager() {
             <Trans>Manage your active login sessions across devices</Trans>
           </p>
         </div>
-        {sessions.length > 1 && (
+        {sessions.filter((s) => !s.isCurrent).length > 0 && (
           <Button
             variant="outline"
             size="sm"
@@ -159,7 +161,7 @@ export function SessionsManager() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h4 className="font-medium text-[#17224D]">
-                        {session.browser || 'Unknown Browser'}
+                        {session.browser || "Unknown Browser"}
                       </h4>
                       {session.isCurrent && (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">
@@ -169,7 +171,7 @@ export function SessionsManager() {
                       )}
                       {session.isOAuth && (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-700 rounded-full">
-                          <Chrome className="w-3 h-3" />
+                          <Icons.Google className="w-3 h-3" />
                           <Trans>Google</Trans>
                         </span>
                       )}
@@ -209,7 +211,7 @@ export function SessionsManager() {
                       <div className="flex items-center gap-1 text-xs text-gray-500">
                         <Clock className="w-3 h-3" />
                         <span>
-                          <Trans>Last active</Trans>{' '}
+                          <Trans>Last active</Trans>{" "}
                           {formatDistanceToNow(new Date(session.lastActivity), {
                             addSuffix: true,
                           })}
@@ -248,8 +250,8 @@ export function SessionsManager() {
             </AlertDialogTitle>
             <AlertDialogDescription>
               <Trans>
-                This will log you out from all devices and browsers. You will need to log in
-                again on this device.
+                This will log you out from all devices and browsers. You will
+                need to log in again on this device.
               </Trans>
             </AlertDialogDescription>
           </AlertDialogHeader>
