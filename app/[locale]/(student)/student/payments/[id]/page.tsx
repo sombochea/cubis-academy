@@ -62,7 +62,7 @@ export default async function PaymentDetailsPage({
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <Link
             href={`/${locale}/student/payments`}
             className="inline-flex items-center gap-2 text-[#007FFF] hover:underline mb-4"
@@ -70,16 +70,6 @@ export default async function PaymentDetailsPage({
             <ArrowLeft className="w-4 h-4" />
             <Trans>Back to Payments</Trans>
           </Link>
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-bold text-[#17224D]">
-                <Trans>Payment Details</Trans>
-              </h2>
-              <p className="text-[#363942]/70 mt-2">
-                <Trans>Transaction ID:</Trans> {paymentData.txnId || paymentData.id}
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Payment Receipt */}
