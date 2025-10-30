@@ -66,7 +66,7 @@ export function UserNav({ locale }: UserNavProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#007FFF] focus:ring-offset-2">
+        <button className="flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-50 transition-colors focus:outline-none">
           <div className="text-right hidden sm:block">
             <p className="text-sm font-semibold text-[#17224D]">{user.name}</p>
             <p className="text-xs text-gray-500 capitalize">{user.role}</p>
