@@ -10,15 +10,19 @@ export const authConfig = {
 
       // Extract locale from pathname
       const localeMatch = pathname.match(/^\/(km|en)(\/|$)/);
-      const locale = localeMatch ? localeMatch[1] : 'km';
+      const locale = localeMatch ? localeMatch[1] : "km";
       const pathWithoutLocale = localeMatch ? pathname.slice(3) : pathname;
 
       // Public routes
       const isPublicRoute =
-        pathWithoutLocale === "/" || pathWithoutLocale === "/login" || pathWithoutLocale === "/register" || pathWithoutLocale === "";
+        pathWithoutLocale === "/" ||
+        pathWithoutLocale === "/login" ||
+        pathWithoutLocale === "/register" ||
+        pathWithoutLocale === "";
 
       // Auth routes
-      const isAuthRoute = pathWithoutLocale === "/login" || pathWithoutLocale === "/register";
+      const isAuthRoute =
+        pathWithoutLocale === "/login" || pathWithoutLocale === "/register";
 
       // Role-based routes
       const isStudentRoute = pathWithoutLocale.startsWith("/student");
@@ -29,11 +33,13 @@ export const authConfig = {
       if (isAuthRoute && isLoggedIn) {
         return Response.redirect(
           new URL(
-            `/${locale}${userRole === "admin"
-              ? "/admin"
-              : userRole === "teacher"
-              ? "/teacher"
-              : "/student"}`,
+            `/${locale}${
+              userRole === "admin"
+                ? "/admin"
+                : userRole === "teacher"
+                ? "/teacher"
+                : "/student"
+            }`,
             nextUrl
           )
         );
@@ -76,6 +82,7 @@ export const authConfig = {
   },
   pages: {
     signIn: "/km/login",
+    signOut: "/km/logout",
   },
 } satisfies NextAuthConfig;
 

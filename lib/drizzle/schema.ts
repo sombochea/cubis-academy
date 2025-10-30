@@ -12,7 +12,11 @@ import {
   unique,
   index,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
+
+// UUID v7 generation function (requires uuid-ossp and pgcrypto extensions)
+// Run: pnpm db:init
+const uuidv7 = sql`uuid_generate_v7()`;
 
 // Enums
 export const roleEnum = pgEnum("role", ["student", "teacher", "admin"]);
@@ -41,7 +45,7 @@ export const courseLevelEnum = pgEnum("course_level", [
 export const users = pgTable(
   "users",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     name: varchar("name", { length: 255 }).notNull(),
     email: varchar("email", { length: 255 }).notNull().unique(),
     emailVerifiedAt: timestamp("email_verified_at"),
@@ -100,7 +104,7 @@ export const teachers = pgTable(
 export const uploads = pgTable(
   "uploads",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     userId: uuid("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
@@ -129,7 +133,7 @@ export const uploads = pgTable(
 export const courseCategories = pgTable(
   "course_categories",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     name: varchar("name", { length: 100 }).notNull().unique(),
     slug: varchar("slug", { length: 100 }).notNull().unique(),
     description: text("description"),
@@ -150,7 +154,7 @@ export const courseCategories = pgTable(
 export const courses = pgTable(
   "courses",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     title: varchar("title", { length: 255 }).notNull(),
     desc: text("desc"),
     category: varchar("category", { length: 100 }), // Keep for backward compatibility
@@ -185,7 +189,7 @@ export const courses = pgTable(
 export const enrollments = pgTable(
   "enrollments",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     studentId: uuid("student_id")
       .notNull()
       .references(() => students.userId, { onDelete: "cascade" }),
@@ -211,7 +215,7 @@ export const enrollments = pgTable(
 export const payments = pgTable(
   "payments",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     studentId: uuid("student_id")
       .notNull()
       .references(() => students.userId, { onDelete: "cascade" }),
@@ -239,7 +243,7 @@ export const payments = pgTable(
 export const scores = pgTable(
   "scores",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     enrollmentId: uuid("enrollment_id")
       .notNull()
       .references(() => enrollments.id, { onDelete: "cascade" }),
@@ -265,7 +269,7 @@ export const scores = pgTable(
 export const attendances = pgTable(
   "attendances",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     enrollmentId: uuid("enrollment_id")
       .notNull()
       .references(() => enrollments.id, { onDelete: "cascade" }),
@@ -286,7 +290,7 @@ export const attendances = pgTable(
 export const teacherCourses = pgTable(
   "teacher_courses",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid("id").primaryKey().default(uuidv7),
     teacherId: uuid("teacher_id")
       .notNull()
       .references(() => teachers.userId, { onDelete: "cascade" }),
@@ -299,6 +303,28 @@ export const teacherCourses = pgTable(
     unique().on(table.teacherId, table.courseId),
     index("teacher_courses_teacher_id_idx").on(table.teacherId),
     index("teacher_courses_course_id_idx").on(table.courseId),
+  ]
+);
+
+// Email verification codes table
+export const emailVerificationCodes = pgTable(
+  "email_verification_codes",
+  {
+    id: uuid("id").primaryKey().default(uuidv7),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    email: varchar("email", { length: 255 }).notNull(),
+    code: varchar("code", { length: 6 }).notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    verified: boolean("verified").notNull().default(false),
+    created: timestamp("created").notNull().defaultNow(),
+  },
+  (table) => [
+    index("email_verification_codes_user_id_idx").on(table.userId),
+    index("email_verification_codes_email_idx").on(table.email),
+    index("email_verification_codes_code_idx").on(table.code),
+    index("email_verification_codes_expires_at_idx").on(table.expiresAt),
   ]
 );
 
@@ -380,3 +406,13 @@ export const teacherCoursesRelations = relations(teacherCourses, ({ one }) => ({
     references: [courses.id],
   }),
 }));
+
+export const emailVerificationCodesRelations = relations(
+  emailVerificationCodes,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [emailVerificationCodes.userId],
+      references: [users.id],
+    }),
+  })
+);

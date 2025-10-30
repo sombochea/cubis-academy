@@ -1,9 +1,12 @@
 import Link from 'next/link';
-import { BookOpen, Users, GraduationCap, DollarSign, UserCheck, LayoutDashboard } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { AdminNavClient } from './AdminNavClient';
+import { UserNav } from '@/components/UserNav';
+import { auth } from '@/auth';
 
-export function AdminNav({ locale }: { locale: string }) {
+export async function AdminNav({ locale }: { locale: string }) {
+  const session = await auth();
   
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -22,15 +25,9 @@ export function AdminNav({ locale }: { locale: string }) {
             <AdminNavClient locale={locale} />
           </div>
           
-          <form action={async () => {
-            'use server';
-            const { signOut } = await import('@/auth');
-            await signOut({ redirectTo: `/${locale}` });
-          }}>
-            <button className="text-sm text-red-600 hover:text-red-700 font-semibold">
-              <Trans>Logout</Trans>
-            </button>
-          </form>
+          {session?.user && (
+            <UserNav user={session.user} locale={locale} />
+          )}
         </div>
       </div>
     </nav>

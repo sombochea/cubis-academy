@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: components/ProfileForm.tsx:282
+msgid "(Check server logs for the code during development)"
+msgstr "(Check server logs for the code during development)"
+
 #. placeholder {0}: course.level
 #. placeholder {0}: enrollment.status
 #. placeholder {0}: feature.description
@@ -21,6 +25,9 @@ msgstr ""
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:97
 #: app/[locale]/(admin)/admin/page.tsx:123
 #: app/[locale]/(admin)/admin/payments/page.tsx:110
+#: app/[locale]/(admin)/admin/profile/page.tsx:95
+#: app/[locale]/(student)/student/profile/page.tsx:95
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:95
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
 #: components/landing-page.tsx:375
@@ -113,6 +120,10 @@ msgstr "Add Teacher"
 msgid "Address"
 msgstr "Address"
 
+#: components/UserNav.tsx:58
+msgid "Admin"
+msgstr "Admin"
+
 #: app/[locale]/(admin)/admin/page.tsx:96
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
@@ -183,6 +194,10 @@ msgstr "Are you sure you want to manually verify the email"
 msgid "Are you sure you want to revoke email verification for"
 msgstr "Are you sure you want to revoke email verification for"
 
+#: app/[locale]/(auth)/logout/page.tsx:32
+msgid "Are you sure you want to sign out?"
+msgstr "Are you sure you want to sign out?"
+
 #: components/admin/TeachersDataTable.tsx:200
 msgid "Assign courses"
 msgstr "Assign courses"
@@ -252,6 +267,7 @@ msgstr "Biography"
 msgid "browse"
 msgstr "browse"
 
+#: app/[locale]/(auth)/logout/page.tsx:58
 #: components/admin/AssignCoursesForm.tsx:231
 #: components/admin/CategoryForm.tsx:257
 #: components/admin/ChangeEmailDialog.tsx:200
@@ -263,6 +279,8 @@ msgstr "browse"
 #: components/admin/ManualVerifyButton.tsx:147
 #: components/admin/StudentForm.tsx:287
 #: components/admin/TeacherForm.tsx:273
+#: components/ProfileForm.tsx:244
+#: components/ProfileForm.tsx:303
 #: components/student/EmailVerificationBanner.tsx:193
 msgid "Cancel"
 msgstr "Cancel"
@@ -302,7 +320,19 @@ msgstr "Change Email Address"
 msgid "Change Image"
 msgstr "Change Image"
 
+#: app/[locale]/(admin)/admin/profile/page.tsx:124
+#: app/[locale]/(student)/student/profile/page.tsx:124
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:124
+#: components/PasswordChangeForm.tsx:205
+msgid "Change Password"
+msgstr "Change Password"
+
+#: components/ProfileForm.tsx:377
+msgid "Change Photo"
+msgstr "Change Photo"
+
 #: components/admin/ChangeEmailDialog.tsx:210
+#: components/PasswordChangeForm.tsx:200
 msgid "Changing..."
 msgstr "Changing..."
 
@@ -340,9 +370,17 @@ msgstr "Completed"
 msgid "Comprehensive learning experience designed for your success"
 msgstr "បទពិសោធន៍សិក្សាទូលំទូលាយដែលរចនាឡើងសម្រាប់ជោគជ័យរបស់អ្នក"
 
+#: components/ProfileForm.tsx:219
+msgid "Confirm Email Change"
+msgstr "Confirm Email Change"
+
 #: components/admin/ChangeEmailDialog.tsx:168
 msgid "Confirm New Email"
 msgstr "Confirm New Email"
+
+#: components/PasswordChangeForm.tsx:164
+msgid "Confirm New Password"
+msgstr "Confirm New Password"
 
 #: components/admin/CreateCourseWizard.tsx:545
 msgid "Consider market rates and course value when setting the price."
@@ -415,6 +453,7 @@ msgstr "Course Title"
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:146
 #: components/admin/CourseManagementMenu.tsx:31
 #: components/admin/TeachersDataTable.tsx:143
+#: components/student/StudentNav.tsx:35
 msgid "Courses"
 msgstr "Courses"
 
@@ -468,13 +507,24 @@ msgstr "Created"
 #~ msgid "Creating..."
 #~ msgstr "Creating..."
 
-#: components/admin/AdminNav.tsx:18
+#: components/admin/AdminNav.tsx:21
+#: components/student/StudentNav.tsx:20
+#: components/teacher/TeacherNav.tsx:20
 msgid "CUBIS Academy"
 msgstr "CUBIS Academy"
 
 #: components/admin/ChangeEmailDialog.tsx:147
 msgid "Current Email"
 msgstr "Current Email"
+
+#: components/PasswordChangeForm.tsx:101
+msgid "Current Password"
+msgstr "Current Password"
+
+#: components/student/StudentNav.tsx:29
+#: components/teacher/TeacherNav.tsx:29
+msgid "Dashboard"
+msgstr "Dashboard"
 
 #: app/[locale]/(admin)/admin/payments/page.tsx:77
 msgid "Date"
@@ -611,6 +661,7 @@ msgid "Email"
 msgstr "Email"
 
 #: components/admin/ResetPasswordDialog.tsx:142
+#: components/ProfileForm.tsx:411
 msgid "Email Address"
 msgstr "Email Address"
 
@@ -677,6 +728,10 @@ msgstr "Enter the 6-digit code from your email"
 msgid "Enter the 6-digit code sent to"
 msgstr "Enter the 6-digit code sent to"
 
+#: components/ProfileForm.tsx:273
+msgid "Enter Verification Code"
+msgstr "Enter Verification Code"
+
 #: components/ui/data-table.tsx:281
 #~ msgid "entries"
 #~ msgstr "entries"
@@ -732,6 +787,7 @@ msgstr "Fill in all required fields to create your course. You can always edit i
 
 #: components/admin/StudentForm.tsx:130
 #: components/admin/TeacherForm.tsx:126
+#: components/ProfileForm.tsx:390
 msgid "Full Name"
 msgstr "Full Name"
 
@@ -829,8 +885,8 @@ msgid "Login"
 msgstr "ចូលប្រើប្រាស់"
 
 #: components/admin/AdminNav.tsx:31
-msgid "Logout"
-msgstr "Logout"
+#~ msgid "Logout"
+#~ msgstr "Logout"
 
 #: components/admin/StudentFilters.tsx:76
 #: components/admin/StudentForm.tsx:237
@@ -857,6 +913,12 @@ msgstr "Manage course categories and organization"
 msgid "Manage teachers and assign courses"
 msgstr "Manage teachers and assign courses"
 
+#: app/[locale]/(admin)/admin/profile/page.tsx:76
+#: app/[locale]/(student)/student/profile/page.tsx:76
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:76
+msgid "Manage your account settings and preferences"
+msgstr "Manage your account settings and preferences"
+
 #: app/[locale]/(admin)/admin/page.tsx:99
 msgid "Manage your learning management system"
 msgstr "Manage your learning management system"
@@ -880,6 +942,22 @@ msgstr "Media & Resources"
 msgid "Method"
 msgstr "Method"
 
+#: components/PasswordChangeForm.tsx:154
+msgid "Minimum 6 characters"
+msgstr "Minimum 6 characters"
+
+#: components/student/StudentNav.tsx:41
+#: components/teacher/TeacherNav.tsx:35
+msgid "My Courses"
+msgstr "My Courses"
+
+#: app/[locale]/(admin)/admin/profile/page.tsx:73
+#: app/[locale]/(student)/student/profile/page.tsx:73
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:73
+#: components/UserNav.tsx:100
+msgid "My Profile"
+msgstr "My Profile"
+
 #: components/admin/CategoriesDataTable.tsx:46
 #: components/admin/StudentsDataTable.tsx:58
 #: components/admin/TeachersDataTable.tsx:66
@@ -895,6 +973,7 @@ msgid "New Email Address"
 msgstr "New Email Address"
 
 #: components/admin/ResetPasswordDialog.tsx:167
+#: components/PasswordChangeForm.tsx:131
 msgid "New Password"
 msgstr "New Password"
 
@@ -998,9 +1077,17 @@ msgstr "page"
 msgid "Password"
 msgstr "Password"
 
+#: components/PasswordChangeForm.tsx:93
+msgid "Password changed successfully!"
+msgstr "Password changed successfully!"
+
 #: components/admin/ResetPasswordDialog.tsx:136
 msgid "Password sent to email successfully!"
 msgstr "Password sent to email successfully!"
+
+#: components/student/StudentNav.tsx:47
+msgid "Payments"
+msgstr "Payments"
 
 #: app/[locale]/(admin)/admin/payments/page.tsx:46
 msgid "Payments Tracking"
@@ -1023,6 +1110,7 @@ msgid "Phone"
 msgstr "Phone"
 
 #: components/admin/StudentForm.tsx:173
+#: components/ProfileForm.tsx:433
 msgid "Phone Number"
 msgstr "Phone Number"
 
@@ -1048,10 +1136,21 @@ msgstr "Price ($)"
 msgid "Pricing & Duration"
 msgstr "Pricing & Duration"
 
+#: app/[locale]/(admin)/admin/profile/page.tsx:112
+#: app/[locale]/(student)/student/profile/page.tsx:112
+#: app/[locale]/(teacher)/teacher/profile/page.tsx:112
+msgid "Profile Information"
+msgstr "Profile Information"
+
 #: components/admin/StudentForm.tsx:117
 #: components/admin/TeacherForm.tsx:243
+#: components/ProfileForm.tsx:345
 msgid "Profile Photo"
 msgstr "Profile Photo"
+
+#: components/ProfileForm.tsx:338
+msgid "Profile updated successfully!"
+msgstr "Profile updated successfully!"
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:208
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:70
@@ -1136,6 +1235,7 @@ msgstr "Save Teacher"
 #: components/admin/CreateCourseWizard.tsx:707
 #: components/admin/StudentForm.tsx:274
 #: components/admin/TeacherForm.tsx:262
+#: components/ProfileForm.tsx:457
 msgid "Saving..."
 msgstr "Saving..."
 
@@ -1143,11 +1243,16 @@ msgstr "Saving..."
 msgid "Select a category"
 msgstr "Select a category"
 
+#: components/ProfileForm.tsx:259
+msgid "Send Verification Code"
+msgstr "Send Verification Code"
+
 #: components/admin/ResetPasswordDialog.tsx:211
 msgid "Send via Email"
 msgstr "Send via Email"
 
 #: components/admin/ResetPasswordDialog.tsx:201
+#: components/ProfileForm.tsx:254
 #: components/student/EmailVerificationBanner.tsx:111
 #: components/student/EmailVerificationBanner.tsx:218
 msgid "Sending..."
@@ -1160,6 +1265,10 @@ msgstr "Sent"
 #: components/admin/CreateCourseWizard.tsx:490
 msgid "Set the course price and estimated duration"
 msgstr "Set the course price and estimated duration"
+
+#: components/UserNav.tsx:107
+msgid "Settings"
+msgstr "Settings"
 
 #~ msgid "Short-term courses designed for quick skill acquisition"
 #~ msgstr "វគ្គសិក្សារយៈពេលខ្លីដែលរចនាឡើងសម្រាប់ការទទួលបានជំនាញរហ័ស"
@@ -1175,6 +1284,11 @@ msgstr "Set the course price and estimated duration"
 #: components/landing-page.tsx:424
 msgid "Sign In"
 msgstr "ចូលប្រើប្រាស់"
+
+#: app/[locale]/(auth)/logout/page.tsx:29
+#: components/UserNav.tsx:119
+msgid "Sign Out"
+msgstr "Sign Out"
 
 #: components/admin/CategoryForm.tsx:197
 msgid "Single emoji character"
@@ -1215,6 +1329,7 @@ msgstr "Status"
 
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:58
 #: app/[locale]/(admin)/admin/payments/page.tsx:62
+#: components/UserNav.tsx:62
 msgid "Student"
 msgstr "Student"
 
@@ -1228,6 +1343,7 @@ msgstr "Student ID"
 
 #: components/admin/ExportUnverifiedButton.tsx:60
 #: components/admin/ExportUsersButton.tsx:87
+#: components/teacher/TeacherNav.tsx:41
 msgid "Students"
 msgstr "Students"
 
@@ -1244,6 +1360,7 @@ msgstr "Students Management"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:182
 #: components/admin/CoursesDataTable.tsx:66
+#: components/UserNav.tsx:60
 msgid "Teacher"
 msgstr "Teacher"
 
@@ -1301,6 +1418,10 @@ msgstr "Title"
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:88
 msgid "Title:"
 msgstr "Title:"
+
+#: components/ProfileForm.tsx:226
+msgid "to"
+msgstr "to"
 
 #: components/student/EmailVerificationBanner.tsx:100
 msgid "to enroll in courses and access all features."
@@ -1372,6 +1493,10 @@ msgstr "Unverified"
 msgid "Update email address for"
 msgstr "Update email address for"
 
+#: components/ProfileForm.tsx:462
+msgid "Update Profile"
+msgstr "Update Profile"
+
 #: components/admin/StudentForm.tsx:277
 msgid "Update Student"
 msgstr "Update Student"
@@ -1390,6 +1515,7 @@ msgstr "Uploaded!"
 
 #: components/admin/CreateCourseWizard.tsx:613
 #: components/admin/ImageUpload.tsx:232
+#: components/ProfileForm.tsx:370
 msgid "Uploading..."
 msgstr "Uploading..."
 
@@ -1420,6 +1546,10 @@ msgstr "Verification Rate"
 msgid "Verified"
 msgstr "Verified"
 
+#: components/ProfileForm.tsx:316
+msgid "Verify & Change Email"
+msgstr "Verify & Change Email"
+
 #: components/admin/ManualVerifyButton.tsx:131
 #: components/admin/ManualVerifyButton.tsx:153
 #: components/student/EmailVerificationBanner.tsx:116
@@ -1431,6 +1561,7 @@ msgstr "Verify Email"
 msgid "Verify Your Email"
 msgstr "Verify Your Email"
 
+#: components/ProfileForm.tsx:313
 #: components/student/EmailVerificationBanner.tsx:203
 msgid "Verifying..."
 msgstr "Verifying..."
@@ -1516,17 +1647,46 @@ msgstr "Warning: This teacher has {0} assigned course(s). Deleting will unassign
 msgid "Watch Demo"
 msgstr "មើលការបង្ហាញ"
 
+#. placeholder {0}: pendingValues?.email
+#: components/ProfileForm.tsx:276
+msgid "We sent a 6-digit code to <0>{0}</0>. Please check your email and enter the code below."
+msgstr "We sent a 6-digit code to <0>{0}</0>. Please check your email and enter the code below."
+
+#: components/ProfileForm.tsx:231
+msgid "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
+msgstr "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
+
 #: components/landing-page.tsx:339
 msgid "Why Choose Us"
 msgstr "ហេតុអ្វីជ្រើសរើសយើង"
+
+#: components/ProfileForm.tsx:175
+#~ msgid "Yes, Change Email"
+#~ msgstr "Yes, Change Email"
 
 #: components/admin/DeleteStudentForm.tsx:74
 msgid "Yes, Delete Student"
 msgstr "Yes, Delete Student"
 
+#: app/[locale]/(auth)/logout/page.tsx:48
+msgid "Yes, Sign Out"
+msgstr "Yes, Sign Out"
+
+#: components/ProfileForm.tsx:222
+msgid "You are about to change your email from"
+msgstr "You are about to change your email from"
+
 #: app/[locale]/(admin)/admin/students/[id]/delete/page.tsx:60
 msgid "You are about to delete:"
 msgstr "You are about to delete:"
+
+#: app/[locale]/(auth)/logout/page.tsx:65
+msgid "You will be redirected to the login page after signing out."
+msgstr "You will be redirected to the login page after signing out."
+
+#: components/ProfileForm.tsx:164
+#~ msgid "You will need to verify your new email address. Are you sure you want to continue?"
+#~ msgstr "You will need to verify your new email address. Are you sure you want to continue?"
 
 #: components/admin/CourseForm.tsx:278
 #: components/admin/CreateCourseWizard.tsx:631
