@@ -18,17 +18,31 @@ export async function POST(req: Request) {
     }
 
     // Verify user exists in database before creating session
+    // For OAuth users, there might be a slight delay, so retry a few times
     const { db } = await import('@/lib/drizzle/db');
     const { users } = await import('@/lib/drizzle/schema');
     const { eq } = await import('drizzle-orm');
     
-    const userExists = await db.query.users.findFirst({
-      where: eq(users.id, session.user.id),
-      columns: { id: true },
-    });
+    let userExists = null;
+    let retries = 3;
+    
+    while (!userExists && retries > 0) {
+      userExists = await db.query.users.findFirst({
+        where: eq(users.id, session.user.id),
+        columns: { id: true, role: true },
+      });
+      
+      if (!userExists && retries > 1) {
+        // Wait a bit before retrying (for OAuth race condition)
+        await new Promise(resolve => setTimeout(resolve, 100));
+        retries--;
+      } else {
+        break;
+      }
+    }
 
     if (!userExists) {
-      console.error('❌ User not found in database:', session.user.id);
+      console.error('❌ User not found in database after retries:', session.user.id);
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 

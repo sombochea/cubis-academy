@@ -8,6 +8,14 @@ import { useSession } from 'next-auth/react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +36,10 @@ const profileSchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().optional(),
   photo: z.string().optional(),
+  // Student-specific fields
+  dob: z.string().optional(),
+  gender: z.string().optional(),
+  address: z.string().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -64,6 +76,10 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
       email: user.email || '',
       phone: user.phone || '',
       photo: user.photo || roleData?.photo || '',
+      // Student-specific fields
+      dob: roleData?.dob || '',
+      gender: roleData?.gender || '',
+      address: roleData?.address || '',
     },
     validators: {
       onChange: profileSchema as any,
@@ -451,6 +467,75 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
             </div>
           )}
         </form.Field>
+
+        {/* Student-specific fields */}
+        {user.role === 'student' && (
+          <>
+            <form.Field name="dob">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>
+                    <Trans>Date of Birth</Trans>
+                  </Label>
+                  <Input
+                    id={field.name}
+                    type="date"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                </div>
+              )}
+            </form.Field>
+
+            <form.Field name="gender">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>
+                    <Trans>Gender</Trans>
+                  </Label>
+                  <Select
+                    value={field.state.value}
+                    onValueChange={(value) => field.handleChange(value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">
+                        <Trans>Male</Trans>
+                      </SelectItem>
+                      <SelectItem value="female">
+                        <Trans>Female</Trans>
+                      </SelectItem>
+                      <SelectItem value="other">
+                        <Trans>Other</Trans>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </form.Field>
+
+            <form.Field name="address">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>
+                    <Trans>Address</Trans>
+                  </Label>
+                  <Textarea
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="Enter your full address"
+                    rows={3}
+                  />
+                </div>
+              )}
+            </form.Field>
+          </>
+        )}
 
         <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
           {([canSubmit, isSubmitting]) => (

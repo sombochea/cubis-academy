@@ -10,6 +10,10 @@ const profileSchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().optional(),
   photo: z.string().optional(),
+  // Student-specific fields
+  dob: z.string().optional(),
+  gender: z.string().optional(),
+  address: z.string().optional(),
 });
 
 export async function PUT(req: Request) {
@@ -33,7 +37,7 @@ export async function PUT(req: Request) {
       );
     }
 
-    const { name, email, phone, photo } = validation.data;
+    const { name, email, phone, photo, dob, gender, address } = validation.data;
 
     console.log('📥 Profile update request:', {
       userId: session.user.id,
@@ -43,6 +47,9 @@ export async function PUT(req: Request) {
       phone,
       photo: photo ? 'provided' : 'not provided',
       photoValue: photo,
+      dob,
+      gender,
+      address,
     });
 
     // Check if email is already taken by another user
@@ -82,13 +89,20 @@ export async function PUT(req: Request) {
 
     console.log('✅ Updated user photo in users table:', photo || 'null');
 
-    // Also update role-specific table with photo (for backward compatibility)
+    // Also update role-specific table with photo and additional fields
     if (session.user.role === 'student') {
+      const studentUpdate: any = { photo: photo || null };
+      
+      // Add student-specific fields if provided
+      if (dob !== undefined) studentUpdate.dob = dob || null;
+      if (gender !== undefined) studentUpdate.gender = gender || null;
+      if (address !== undefined) studentUpdate.address = address || null;
+      
       await db
         .update(students)
-        .set({ photo: photo || null })
+        .set(studentUpdate)
         .where(eq(students.userId, session.user.id));
-      console.log('✅ Updated student photo:', photo || 'null');
+      console.log('✅ Updated student profile:', studentUpdate);
     } else if (session.user.role === 'teacher') {
       await db
         .update(teachers)

@@ -204,7 +204,8 @@ export default async function StudentDashboard({
       date: payments.created,
     })
     .from(payments)
-    .innerJoin(courses, eq(payments.courseId, courses.id))
+    .innerJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
+    .innerJoin(courses, eq(enrollments.courseId, courses.id))
     .where(and(eq(payments.studentId, session.user.id), eq(payments.status, 'completed')))
     .orderBy(desc(payments.created))
     .limit(5);

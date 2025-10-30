@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { payments, students, courses, users } from '@/lib/drizzle/schema';
+import { payments, students, courses, users, enrollments } from '@/lib/drizzle/schema';
 import { eq, sql } from 'drizzle-orm';
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
@@ -38,7 +38,8 @@ export default async function PaymentsPage({ params }: { params: Promise<{ local
     .from(payments)
     .innerJoin(students, eq(payments.studentId, students.userId))
     .innerJoin(users, eq(students.userId, users.id))
-    .leftJoin(courses, eq(payments.courseId, courses.id));
+    .innerJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
+    .innerJoin(courses, eq(enrollments.courseId, courses.id));
 
   // Calculate stats
   const [totalRevenue] = await db

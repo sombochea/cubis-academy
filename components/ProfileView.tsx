@@ -153,6 +153,34 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
               </div>
             )}
 
+            {roleData?.dob && (
+              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <Calendar className="w-5 h-5 text-[#007FFF]" />
+                <div>
+                  <p className="text-xs text-gray-500">
+                    <Trans>Date of Birth</Trans>
+                  </p>
+                  <p className="text-sm font-medium text-[#17224D]">
+                    {new Date(roleData.dob).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {roleData?.gender && (
+              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <User className="w-5 h-5 text-[#007FFF]" />
+                <div>
+                  <p className="text-xs text-gray-500">
+                    <Trans>Gender</Trans>
+                  </p>
+                  <p className="text-sm font-medium text-[#17224D] capitalize">
+                    {roleData.gender}
+                  </p>
+                </div>
+              </div>
+            )}
+
             {roleData?.enrolled && (
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                 <Calendar className="w-5 h-5 text-[#007FFF]" />

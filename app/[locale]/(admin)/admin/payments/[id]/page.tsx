@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { payments, students, courses, users } from '@/lib/drizzle/schema';
+import { payments, students, courses, users, enrollments } from '@/lib/drizzle/schema';
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 import { Trans } from '@lingui/react/macro';
@@ -32,7 +32,8 @@ export default async function PaymentDetailsPage({
     .from(payments)
     .innerJoin(students, eq(payments.studentId, students.userId))
     .innerJoin(users, eq(students.userId, users.id))
-    .leftJoin(courses, eq(payments.courseId, courses.id))
+    .innerJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
+    .innerJoin(courses, eq(enrollments.courseId, courses.id))
     .where(eq(payments.id, id))
     .limit(1);
 

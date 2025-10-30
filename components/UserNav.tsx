@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Trans } from "@lingui/react/macro";
-import { User, Settings, LogOut, Shield } from "lucide-react";
+import { User, Settings, LogOut, Shield, Copy, Check } from "lucide-react";
 import {
   getAvatarGradient,
   getInitials,
@@ -29,6 +29,7 @@ interface UserNavProps {
 export function UserNav({ locale }: UserNavProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { data: session } = useSession();
 
   // Get user from session (will update automatically when session updates)
@@ -40,10 +41,19 @@ export function UserNav({ locale }: UserNavProps) {
         email: sessionUser.email,
         image: sessionUser.image,
         role: sessionUser.role,
+        suid: sessionUser.suid,
       }
     : null;
 
   if (!user) return null;
+
+  const handleCopySuid = async () => {
+    if (user.suid) {
+      await navigator.clipboard.writeText(user.suid);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   // Get consistent gradients based on user ID
   const avatarGradient = getAvatarGradient(user.id);
@@ -69,7 +79,11 @@ export function UserNav({ locale }: UserNavProps) {
         <button className="flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-50 transition-colors focus:outline-none">
           <div className="text-right hidden sm:block">
             <p className="text-sm font-semibold text-[#17224D]">{user.name}</p>
-            <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+            {user.role === 'student' && user.suid ? (
+              <p className="text-xs text-blue-600 font-mono font-semibold">{user.suid}</p>
+            ) : (
+              <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+            )}
           </div>
           <div className="relative">
             <Avatar className="h-10 w-10 border-2 border-gray-200 shadow-sm">
@@ -95,12 +109,30 @@ export function UserNav({ locale }: UserNavProps) {
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-semibold text-[#17224D]">{user.name}</p>
             <p className="text-xs text-gray-500">{user.email}</p>
-            <div className="flex items-center gap-1 mt-1">
-              <Shield className="w-3 h-3 text-gray-400" />
-              <span className="text-xs text-gray-500 capitalize">
-                {getRoleLabel(user.role)}
-              </span>
-            </div>
+            {user.role === 'student' && user.suid ? (
+              <button
+                onClick={handleCopySuid}
+                className="flex items-center gap-1.5 mt-1 px-2 py-1 -mx-2 rounded hover:bg-gray-100 transition-colors group"
+                title="Click to copy Student ID"
+              >
+                <Shield className="w-3 h-3 text-blue-500" />
+                <span className="text-xs font-mono text-blue-600 font-semibold">
+                  {user.suid}
+                </span>
+                {copied ? (
+                  <Check className="w-3 h-3 text-green-500 ml-auto" />
+                ) : (
+                  <Copy className="w-3 h-3 text-gray-400 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                )}
+              </button>
+            ) : (
+              <div className="flex items-center gap-1 mt-1">
+                <Shield className="w-3 h-3 text-gray-400" />
+                <span className="text-xs text-gray-500 capitalize">
+                  {getRoleLabel(user.role)}
+                </span>
+              </div>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
