@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { generateSuid, getUserByEmail } from "./lib/drizzle/queries";
 import { loginSchema } from "./lib/validations/auth";
 import bcrypt from "bcryptjs";
+import { createSession, revokeSession } from "./lib/session-store";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
@@ -48,10 +49,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 }, // 30 days
   trustHost: true,
   events: {
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
+      // Create session in our session store
+      if (user.id) {
+        try {
+          // Get request info (this is a workaround since we don't have direct access to request)
+          const sessionToken = crypto.randomUUID();
+          const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+          await createSession({
+            userId: user.id,
+            sessionToken,
+            expiresAt,
+            // Note: IP and user agent will be captured in middleware
+          });
+        } catch (error) {
+          console.error('Failed to create session:', error);
+        }
+      }
+
       // Handle OAuth2 providers (Google, GitHub, etc.)
       if (account?.provider && account.provider !== "credentials") {
         const existingUser = await db.query.users.findFirst({
@@ -92,6 +111,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               updated: new Date(),
             })
             .where(eq(users.id, existingUser.id));
+        }
+      }
+    },
+    async signOut({ token }) {
+      // Revoke session from our session store
+      if (token?.sessionToken) {
+        try {
+          await revokeSession(token.sessionToken as string);
+        } catch (error) {
+          console.error('Failed to revoke session:', error);
         }
       }
     },

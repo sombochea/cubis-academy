@@ -416,3 +416,38 @@ export const emailVerificationCodesRelations = relations(
     }),
   })
 );
+
+// User sessions table for session management
+export const userSessions = pgTable(
+  "user_sessions",
+  {
+    id: uuid("id").primaryKey().default(uuidv7),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    sessionToken: varchar("session_token", { length: 255 }).notNull().unique(),
+    ipAddress: varchar("ip_address", { length: 45 }),
+    userAgent: text("user_agent"),
+    device: varchar("device", { length: 100 }),
+    browser: varchar("browser", { length: 100 }),
+    os: varchar("os", { length: 100 }),
+    location: varchar("location", { length: 255 }),
+    isActive: boolean("is_active").notNull().default(true),
+    lastActivity: timestamp("last_activity").notNull().defaultNow(),
+    expiresAt: timestamp("expires_at").notNull(),
+    created: timestamp("created").notNull().defaultNow(),
+  },
+  (table) => [
+    index("user_sessions_user_id_idx").on(table.userId),
+    index("user_sessions_session_token_idx").on(table.sessionToken),
+    index("user_sessions_is_active_idx").on(table.isActive),
+    index("user_sessions_expires_at_idx").on(table.expiresAt),
+  ]
+);
+
+export const userSessionsRelations = relations(userSessions, ({ one }) => ({
+  user: one(users, {
+    fields: [userSessions.userId],
+    references: [users.id],
+  }),
+}));

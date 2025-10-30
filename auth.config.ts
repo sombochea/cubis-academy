@@ -65,14 +65,42 @@ export const authConfig = {
 
       return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.role = user.role;
         token.id = user.id;
       }
+
+      // Validate session on every request (check if user still exists and is active)
+      if (token.id && trigger !== 'signIn') {
+        try {
+          const { validateSession } = await import('./lib/session-store');
+          const { getUserById } = await import('./lib/drizzle/queries');
+          
+          // Check if user still exists and is active
+          const dbUser = await getUserById(token.id as string);
+          
+          if (!dbUser || !dbUser.isActive) {
+            // User deleted or deactivated - invalidate token
+            return null as any;
+          }
+
+          // Update token with latest user data
+          token.role = dbUser.role;
+        } catch (error) {
+          console.error('Session validation error:', error);
+          // On error, invalidate session to be safe
+          return null as any;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
+      if (!token) {
+        return null as any;
+      }
+
       if (session.user) {
         session.user.role = token.role as string;
         session.user.id = token.id as string;
