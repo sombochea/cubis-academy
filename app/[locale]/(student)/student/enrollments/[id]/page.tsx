@@ -209,123 +209,61 @@ export default async function EnrollmentDetailsPage({
           </Button>
         </Link>
 
-        {/* Course Header */}
-        <div className="bg-white rounded-xl border border-gray-100 p-8 mb-6 shadow-sm">
-          <div className="flex items-start gap-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-xl flex items-center justify-center flex-shrink-0">
-              <BookOpen className="w-10 h-10 text-white" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl font-bold text-[#17224D] mb-2">
-                    {enrollment.courseTitle}
-                  </h1>
-                  {enrollment.courseDesc && (
-                    <p className="text-[#363942]/70 mb-4">
-                      {enrollment.courseDesc}
-                    </p>
-                  )}
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
-                    {enrollment.courseCategory && (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700">
-                        <FileText className="w-4 h-4" />
-                        <span className="capitalize">{enrollment.courseCategory}</span>
-                      </span>
-                    )}
-                    <span className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r ${level.color} text-white`}>
-                      {level.label}
+        {/* Course Header - Compact Design */}
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm mb-6 overflow-hidden">
+          {/* Gradient Header Bar */}
+          <div className="h-2 bg-gradient-to-r from-[#007FFF] via-[#17224D] to-[#007FFF]"></div>
+          
+          <div className="p-6">
+            {/* Title and Badges Row */}
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-2xl font-bold text-[#17224D] mb-2 line-clamp-2">
+                  {enrollment.courseTitle}
+                </h1>
+                <div className="flex flex-wrap items-center gap-2">
+                  {enrollment.courseCategory && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                      <FileText className="w-3 h-3" />
+                      <span className="capitalize">{enrollment.courseCategory}</span>
                     </span>
-                    <span className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold ${
-                      enrollment.status === 'active'
-                        ? 'bg-green-100 text-green-700'
-                        : enrollment.status === 'completed'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-gray-100 text-gray-700'
-                    }`}>
-                      <Trans>{enrollment.status}</Trans>
-                    </span>
-                  </div>
-
-                  {/* Delivery Mode & Location */}
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-[#363942] mb-4">
-                    <div className="flex items-center gap-1.5">
-                      {enrollment.deliveryMode === 'online' ? (
-                        <Monitor className="w-4 h-4" />
-                      ) : enrollment.deliveryMode === 'face_to_face' ? (
-                        <Users className="w-4 h-4" />
-                      ) : (
-                        <Monitor className="w-4 h-4" />
-                      )}
-                      <span className="capitalize">
-                        {enrollment.deliveryMode === 'face_to_face' ? (
-                          <Trans>Face-to-Face</Trans>
-                        ) : enrollment.deliveryMode === 'hybrid' ? (
-                          <Trans>Hybrid</Trans>
-                        ) : (
-                          <Trans>Online</Trans>
-                        )}
-                      </span>
-                    </div>
-                    {enrollment.location && (enrollment.deliveryMode === 'face_to_face' || enrollment.deliveryMode === 'hybrid') && (
-                      <div className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4" />
-                        <span>{enrollment.location}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Instructors */}
-                  {instructors.length > 0 && (
-                    <div className="border-t border-gray-200 pt-4 mt-4">
-                      <p className="text-sm font-semibold text-[#17224D] mb-3">
-                        <Trans>Instructor{instructors.length > 1 ? 's' : ''}</Trans>
-                      </p>
-                      <div className="flex flex-wrap gap-3">
-                        {instructors.map((instructor) => (
-                          <Link
-                            key={instructor.id}
-                            href={`/${locale}/student/instructors/${instructor.id}`}
-                            className="flex items-center gap-3 p-3 bg-[#F4F5F7] rounded-lg hover:bg-gray-200 transition-colors"
-                          >
-                            {instructor.photo ? (
-                              <img
-                                src={instructor.photo}
-                                alt={instructor.name}
-                                className="w-10 h-10 rounded-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-10 h-10 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-full flex items-center justify-center text-white font-semibold">
-                                {instructor.name.charAt(0).toUpperCase()}
-                              </div>
-                            )}
-                            <div>
-                              <p className="font-semibold text-[#17224D] text-sm">
-                                {instructor.name}
-                              </p>
-                              {instructor.spec && (
-                                <p className="text-xs text-[#363942]/70">{instructor.spec}</p>
-                              )}
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
                   )}
+                  <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${level.color} text-white shadow-sm`}>
+                    {level.label}
+                  </span>
+                  <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${
+                    enrollment.status === 'active'
+                      ? 'bg-green-50 text-green-700 border border-green-200'
+                      : enrollment.status === 'completed'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : 'bg-gray-50 text-gray-700 border border-gray-200'
+                  }`}>
+                    <Trans>{enrollment.status}</Trans>
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200">
+                    {enrollment.deliveryMode === 'online' ? (
+                      <><Monitor className="w-3 h-3" /><Trans>Online</Trans></>
+                    ) : enrollment.deliveryMode === 'face_to_face' ? (
+                      <><Users className="w-3 h-3" /><Trans>Face-to-Face</Trans></>
+                    ) : (
+                      <><Monitor className="w-3 h-3" /><Trans>Hybrid</Trans></>
+                    )}
+                  </span>
                 </div>
               </div>
 
-              {/* Quick Actions */}
-              <div className="flex items-center gap-3">
+              {/* Quick Actions - Compact */}
+              <div className="flex items-center gap-2 flex-shrink-0">
                 {enrollment.youtubeUrl && (
                   <a
                     href={enrollment.youtubeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    title="Watch on YouTube"
                   >
-                    <Button className="gap-2 bg-red-600 hover:bg-red-700">
-                      <Play className="w-4 h-4" />
-                      <Trans>Watch on YouTube</Trans>
+                    <Button size="sm" className="gap-1.5 bg-red-600 hover:bg-red-700 h-9">
+                      <Play className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline"><Trans>YouTube</Trans></span>
                     </Button>
                   </a>
                 )}
@@ -334,14 +272,81 @@ export default async function EnrollmentDetailsPage({
                     href={enrollment.zoomUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    title="Join Zoom Class"
                   >
-                    <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
-                      <Video className="w-4 h-4" />
-                      <Trans>Join Zoom Class</Trans>
+                    <Button size="sm" className="gap-1.5 bg-blue-600 hover:bg-blue-700 h-9">
+                      <Video className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline"><Trans>Zoom</Trans></span>
                     </Button>
                   </a>
                 )}
               </div>
+            </div>
+
+            {/* Description - Compact */}
+            {enrollment.courseDesc && (
+              <p className="text-sm text-[#363942]/70 mb-4 line-clamp-2">
+                {enrollment.courseDesc}
+              </p>
+            )}
+
+            {/* Info Grid - Compact */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {/* Location */}
+              {enrollment.location && (enrollment.deliveryMode === 'face_to_face' || enrollment.deliveryMode === 'hybrid') && (
+                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg">
+                  <MapPin className="w-4 h-4 text-[#007FFF] flex-shrink-0" />
+                  <span className="text-sm text-[#363942] truncate">{enrollment.location}</span>
+                </div>
+              )}
+
+              {/* Duration */}
+              {enrollment.courseDuration && (
+                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg">
+                  <Clock className="w-4 h-4 text-[#007FFF] flex-shrink-0" />
+                  <span className="text-sm text-[#363942]">{enrollment.courseDuration}</span>
+                </div>
+              )}
+
+              {/* Instructors - Compact */}
+              {instructors.length > 0 && (
+                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg sm:col-span-2 lg:col-span-1">
+                  <div className="flex -space-x-2">
+                    {instructors.slice(0, 3).map((instructor) => (
+                      <Link
+                        key={instructor.id}
+                        href={`/${locale}/student/instructors/${instructor.id}`}
+                        className="relative group"
+                        title={instructor.name}
+                      >
+                        {instructor.photo ? (
+                          <img
+                            src={instructor.photo}
+                            alt={instructor.name}
+                            className="w-8 h-8 rounded-full object-cover border-2 border-white ring-1 ring-gray-200 hover:ring-[#007FFF] transition-all"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white ring-1 ring-gray-200 hover:ring-[#007FFF] transition-all">
+                            {instructor.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-[#17224D] truncate">
+                      {instructors.length === 1 ? (
+                        instructors[0].name
+                      ) : (
+                        <Trans>{instructors.length} Instructors</Trans>
+                      )}
+                    </p>
+                    {instructors.length === 1 && instructors[0].spec && (
+                      <p className="text-xs text-[#363942]/70 truncate">{instructors[0].spec}</p>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
