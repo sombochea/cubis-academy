@@ -18,18 +18,22 @@ msgid "(Check server logs for the code during development)"
 msgstr ""
 
 #. placeholder {0}: course.level
+#. placeholder {0}: courseData.level
 #. placeholder {0}: enrollment.status
-#. placeholder {0}: feature.description
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:100
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:89
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:225
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:254
 #: app/[locale]/(admin)/admin/page.tsx:123
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:232
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:101
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:232
 #: app/[locale]/(student)/student/page.tsx:213
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
 #: components/landing-page.tsx:375
+#: components/student/CoursesGrid.tsx:234
+#: components/student/CoursesGrid.tsx:319
 msgid "{0}"
 msgstr "{0}"
 
@@ -57,6 +61,10 @@ msgstr ""
 
 #: components/PasswordChangeForm.tsx:127
 msgid "A notification email has been sent to your email address."
+msgstr ""
+
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:135
+msgid "About This Course"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/teachers/[id]/delete/page.tsx:120
@@ -180,8 +188,13 @@ msgstr ""
 #: components/admin/CourseFilters.tsx:79
 #: components/admin/CourseForm.tsx:265
 #: components/admin/CreateCourseWizard.tsx:464
+#: components/student/CoursesGrid.tsx:140
 msgid "Advanced"
 msgstr "Advanced"
+
+#: components/student/CoursesGrid.tsx:114
+msgid "All Categories"
+msgstr ""
 
 #: components/admin/AssignCoursesForm.tsx:161
 msgid "All courses assigned"
@@ -201,11 +214,16 @@ msgid "All Gender"
 msgstr ""
 
 #: components/admin/CourseFilters.tsx:70
+#: components/student/CoursesGrid.tsx:131
 msgid "All Levels"
 msgstr "All Levels"
 
 #: components/admin/PaymentFilters.tsx:66
 msgid "All Methods"
+msgstr ""
+
+#: components/student/CoursesGrid.tsx:152
+msgid "All Prices"
 msgstr ""
 
 #: components/admin/ExportUnverifiedButton.tsx:57
@@ -310,6 +328,7 @@ msgid "Back to Course"
 msgstr "Back to Course"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:71
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:83
 msgid "Back to Courses"
 msgstr "Back to Courses"
 
@@ -352,6 +371,7 @@ msgstr ""
 #: components/admin/CourseFilters.tsx:73
 #: components/admin/CourseForm.tsx:259
 #: components/admin/CreateCourseWizard.tsx:452
+#: components/student/CoursesGrid.tsx:134
 msgid "Beginner"
 msgstr "Beginner"
 
@@ -364,6 +384,7 @@ msgstr "Biography"
 msgid "browse"
 msgstr "browse"
 
+#: app/[locale]/(student)/student/courses/page.tsx:53
 #: app/[locale]/(student)/student/page.tsx:229
 #: app/[locale]/(student)/student/page.tsx:250
 msgid "Browse Courses"
@@ -398,6 +419,7 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:241
 #: components/admin/CourseForm.tsx:159
 #: components/admin/CoursesDataTable.tsx:58
 #: components/admin/CreateCourseWizard.tsx:320
@@ -561,6 +583,10 @@ msgstr "Course Details"
 msgid "Course Enrollments"
 msgstr ""
 
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:211
+msgid "Course Info"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:119
 msgid "Course information and materials"
 msgstr "Course information and materials"
@@ -576,6 +602,10 @@ msgstr "Course Links"
 #: components/admin/CourseManagementMenu.tsx:26
 #~ msgid "Course Management"
 #~ msgstr ""
+
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:147
+msgid "Course Materials"
+msgstr ""
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:263
 msgid "Course Progress"
@@ -766,6 +796,7 @@ msgid "Dropped"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:139
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:219
 #: components/admin/CoursesDataTable.tsx:97
 msgid "Duration"
 msgstr "Duration"
@@ -837,6 +868,7 @@ msgid "Email changed successfully!"
 msgstr ""
 
 #: components/student/EmailVerificationBanner.tsx:97
+#: components/student/EnrollButton.tsx:75
 msgid "Email Verification Required"
 msgstr ""
 
@@ -863,6 +895,15 @@ msgstr "Empowering learners with professional skills for the digital age"
 #~ msgid "Engage with teachers and peers in live sessions"
 #~ msgstr "Engage with teachers and peers in live sessions"
 
+#: components/student/EnrollButton.tsx:112
+msgid "Enroll for Free"
+msgstr ""
+
+#. placeholder {0}: Number(price).toFixed(2)
+#: components/student/EnrollButton.tsx:115
+msgid "Enroll Now - ${0}"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:217
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:206
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:164
@@ -882,8 +923,16 @@ msgstr ""
 msgid "Enrolled Students"
 msgstr ""
 
+#: components/student/EnrollButton.tsx:107
+msgid "Enrolling..."
+msgstr ""
+
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:95
 msgid "Enrollment Details"
+msgstr ""
+
+#: components/student/EnrollButton.tsx:77
+msgid "Enrollment Failed"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:108
@@ -937,6 +986,10 @@ msgstr "Example using TanStack Table with pagination, search, and sorting"
 #~ msgid "Expert-Led Courses"
 #~ msgstr "Expert-Led Courses"
 
+#: app/[locale]/(student)/student/courses/page.tsx:56
+msgid "Explore our course catalog and start learning today"
+msgstr ""
+
 #: components/admin/ExportUsersButton.tsx:113
 msgid "Export"
 msgstr ""
@@ -967,6 +1020,16 @@ msgstr ""
 
 #: components/admin/CreateCourseWizard.tsx:252
 msgid "Fill in all required fields to create your course. You can always edit it later."
+msgstr ""
+
+#: components/student/CoursesGrid.tsx:155
+msgid "Free"
+msgstr ""
+
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:105
+#: components/student/CoursesGrid.tsx:238
+#: components/student/CoursesGrid.tsx:304
+msgid "FREE"
 msgstr ""
 
 #: components/admin/StudentForm.tsx:130
@@ -1006,6 +1069,14 @@ msgstr "Get Started Free"
 msgid "Go Home"
 msgstr ""
 
+#: components/student/EnrollButton.tsx:90
+msgid "Go to Dashboard to Verify Email"
+msgstr ""
+
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:265
+msgid "Go to My Courses"
+msgstr ""
+
 #: components/SessionsManager.tsx:173
 msgid "Google"
 msgstr ""
@@ -1035,14 +1106,23 @@ msgstr ""
 msgid "Inactive"
 msgstr "Inactive"
 
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:186
+msgid "Instructor"
+msgstr ""
+
 #~ msgid "Interactive Learning"
 #~ msgstr "Interactive Learning"
 
 #: components/admin/CourseFilters.tsx:76
 #: components/admin/CourseForm.tsx:262
 #: components/admin/CreateCourseWizard.tsx:458
+#: components/student/CoursesGrid.tsx:137
 msgid "Intermediate"
 msgstr "Intermediate"
+
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:173
+msgid "Join Live Session"
+msgstr ""
 
 #~ msgid "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
 #~ msgstr "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
@@ -1076,6 +1156,7 @@ msgstr "Last Updated"
 msgid "Let's start with the course name and category"
 msgstr ""
 
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:229
 #: components/admin/CourseForm.tsx:248
 #: components/admin/CoursesDataTable.tsx:105
 msgid "Level"
@@ -1243,12 +1324,21 @@ msgid "No courses enrolled yet"
 msgstr ""
 
 #: components/admin/AssignCoursesForm.tsx:161
+#: components/student/CoursesGrid.tsx:193
 msgid "No courses found"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/page.tsx:162
 #~ msgid "No courses found. Add your first course to get started."
 #~ msgstr "No courses found. Add your first course to get started."
+
+#: components/student/CoursesGrid.tsx:250
+msgid "No description available"
+msgstr ""
+
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:138
+msgid "No description available."
+msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:177
 msgid "No description provided"
@@ -1338,9 +1428,9 @@ msgstr "page"
 #~ msgid "Page {0} of {1}"
 #~ msgstr "Page {0} of {1}"
 
-#: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:236
-#~ msgid "Paid"
-#~ msgstr ""
+#: components/student/CoursesGrid.tsx:158
+msgid "Paid"
+msgstr ""
 
 #: components/admin/StudentForm.tsx:190
 #: components/admin/TeacherForm.tsx:186
@@ -1480,6 +1570,10 @@ msgstr ""
 #: components/admin/EnrollmentsDataTable.tsx:108
 msgid "Progress"
 msgstr "Progress"
+
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:126
+msgid "Progress:"
+msgstr ""
 
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:155
 msgid "Proof of Payment"
@@ -1667,6 +1761,12 @@ msgstr ""
 #~ msgid "Show"
 #~ msgstr "Show"
 
+#. placeholder {0}: filteredCourses.length
+#. placeholder {1}: courses.length
+#: components/student/CoursesGrid.tsx:184
+msgid "Showing {0} of {1} courses"
+msgstr ""
+
 #: components/ui/data-table.tsx:
 #~ msgid "Showing {0} to {1} of {2} results"
 #~ msgstr "Showing {0} to {1} of {2} results"
@@ -1699,6 +1799,10 @@ msgstr "Specialization:"
 #: components/landing-page.tsx:175
 msgid "Start Learning Free"
 msgstr "Start Learning Free"
+
+#: components/student/EnrollButton.tsx:121
+msgid "Start learning immediately after enrollment"
+msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:163
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:243
@@ -1899,6 +2003,10 @@ msgstr "Transaction ID"
 #~ msgid "Transform Your Career Today"
 #~ msgstr "Transform Your Career Today"
 
+#: components/student/CoursesGrid.tsx:196
+msgid "Try adjusting your filters to see more results"
+msgstr ""
+
 #: components/ui/data-table.tsx:241
 msgid "Try adjusting your search or filters"
 msgstr "Try adjusting your search or filters"
@@ -2067,6 +2175,7 @@ msgid "View details"
 msgstr "View details"
 
 #: components/landing-page.tsx:314
+#: components/student/CoursesGrid.tsx:275
 msgid "View Details"
 msgstr "View Details"
 
@@ -2126,6 +2235,10 @@ msgstr "Warning: This teacher has {0} assigned course(s). Deleting will unassign
 msgid "Watch Demo"
 msgstr "Watch Demo"
 
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:159
+msgid "Watch on YouTube"
+msgstr ""
+
 #. placeholder {0}: pendingValues?.email
 #: components/ProfileForm.tsx:284
 msgid "We sent a 6-digit code to <0>{0}</0>. Please check your email and enter the code below."
@@ -2184,6 +2297,10 @@ msgstr ""
 msgid "You are about to delete:"
 msgstr ""
 
+#: app/[locale]/(student)/student/courses/[id]/page.tsx:123
+msgid "You are enrolled in this course"
+msgstr ""
+
 #: components/SettingsPage.tsx:179
 msgid "You can sign in with your Google account"
 msgstr ""
@@ -2203,6 +2320,10 @@ msgstr ""
 #: components/ProfileForm.tsx:164
 #~ msgid "You will need to verify your new email address. Are you sure you want to continue?"
 #~ msgstr ""
+
+#: components/student/EnrollButton.tsx:123
+msgid "You'll be redirected to payment after enrollment"
+msgstr ""
 
 #: components/admin/CourseForm.tsx:278
 #: components/admin/CreateCourseWizard.tsx:631

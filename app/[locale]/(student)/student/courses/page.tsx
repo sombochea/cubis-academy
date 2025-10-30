@@ -1,78 +1,63 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { getAllCourses } from '@/lib/drizzle/queries';
-import Link from 'next/link';
+import { db } from '@/lib/drizzle/db';
+import { courses, users, teachers } from '@/lib/drizzle/schema';
+import { eq } from 'drizzle-orm';
+import { Trans } from '@lingui/react/macro';
+import { StudentNav } from '@/components/student/StudentNav';
+import { CoursesGrid } from '@/components/student/CoursesGrid';
+import { setI18n } from '@lingui/react/server';
+import { loadCatalog, i18n } from '@/lib/i18n';
 
-export default async function CoursesPage() {
+export default async function CoursesPage({ 
+  params 
+}: { 
+  params: Promise<{ locale: string }> 
+}) {
+  const { locale } = await params;
+  await loadCatalog(locale);
+  setI18n(i18n);
+  
   const session = await auth();
   
   if (!session?.user) {
-    redirect('/login');
+    redirect(`/${locale}/login`);
   }
 
-  const courses = await getAllCourses();
+  // Get all active courses with teacher info
+  const coursesList = await db
+    .select({
+      id: courses.id,
+      title: courses.title,
+      desc: courses.desc,
+      category: courses.category,
+      price: courses.price,
+      duration: courses.duration,
+      level: courses.level,
+      isActive: courses.isActive,
+      teacherName: users.name,
+      teacherSpec: teachers.spec,
+    })
+    .from(courses)
+    .leftJoin(teachers, eq(courses.teacherId, teachers.userId))
+    .leftJoin(users, eq(teachers.userId, users.id))
+    .where(eq(courses.isActive, true));
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center gap-8">
-              <Link href="/student" className="text-xl font-bold text-gray-900">
-                CUBIS Academy
-              </Link>
-              <Link href="/student/courses" className="text-sm font-medium text-blue-600">
-                Courses
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="min-h-screen bg-[#F4F5F7]">
+      <StudentNav locale={locale} />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Courses</h2>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-[#17224D] mb-2">
+            <Trans>Browse Courses</Trans>
+          </h2>
+          <p className="text-[#363942]/70">
+            <Trans>Explore our course catalog and start learning today</Trans>
+          </p>
+        </div>
 
-        {courses.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <p className="text-gray-600">No courses available at the moment.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {courses.map((course: any) => (
-              <div key={course.id} className="bg-white rounded-lg shadow hover:shadow-md transition">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-medium text-blue-600 uppercase">
-                      {course.level}
-                    </span>
-                    <span className="text-lg font-bold text-gray-900">
-                      ${course.price}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {course.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                    {course.desc || 'No description available'}
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                    <span>{course.category}</span>
-                    {course.duration && <span>{course.duration}h</span>}
-                  </div>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Teacher: {course.teacher?.user?.name || 'TBA'}
-                  </p>
-                  <Link
-                    href={`/student/courses/${course.id}`}
-                    className="block w-full text-center py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <CoursesGrid courses={coursesList} locale={locale} />
       </div>
     </div>
   );
