@@ -59,7 +59,6 @@ export default async function PaymentDetailsPage({
     notes: paymentRow.payments.notes,
     proofUrl: paymentRow.payments.proofUrl,
     created: paymentRow.payments.created,
-    updated: paymentRow.payments.updated,
   };
 
   return (
@@ -273,19 +272,6 @@ export default async function PaymentDetailsPage({
                     </p>
                   </div>
                 </div>
-                {payment.updated && payment.updated !== payment.created && (
-                  <div className="flex gap-3">
-                    <div className="w-2 h-2 bg-[#007FFF] rounded-full mt-2" />
-                    <div>
-                      <p className="text-sm font-medium text-[#17224D]">
-                        <Trans>Last Updated</Trans>
-                      </p>
-                      <p className="text-xs text-[#363942]/70">
-                        {new Date(payment.updated).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>

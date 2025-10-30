@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { enrollments, courses, scores, attendances } from '@/lib/drizzle/schema';
+import { enrollments, courses, scores, attendances, teachers, users } from '@/lib/drizzle/schema';
 import { eq, desc, count, avg } from 'drizzle-orm';
 import { Trans } from '@lingui/react/macro';
 import { StudentNav } from '@/components/student/StudentNav';
@@ -25,7 +25,7 @@ export default async function EnrollmentsPage({
     redirect(`/${locale}/login`);
   }
 
-  // Get enrollments with course details
+  // Get enrollments with course and teacher details
   const enrollmentsList = await db
     .select({
       id: enrollments.id,
@@ -38,6 +38,11 @@ export default async function EnrollmentsPage({
       courseDuration: courses.duration,
       youtubeUrl: courses.youtubeUrl,
       zoomUrl: courses.zoomUrl,
+      teacherId: courses.teacherId,
+      teacherName: users.name,
+      teacherPhoto: teachers.photo,
+      teacherBio: teachers.bio,
+      teacherSpec: teachers.spec,
       status: enrollments.status,
       progress: enrollments.progress,
       enrolled: enrollments.enrolled,
@@ -45,8 +50,21 @@ export default async function EnrollmentsPage({
     })
     .from(enrollments)
     .innerJoin(courses, eq(enrollments.courseId, courses.id))
+    .leftJoin(teachers, eq(courses.teacherId, teachers.userId))
+    .leftJoin(users, eq(teachers.userId, users.id))
     .where(eq(enrollments.studentId, session.user.id))
     .orderBy(desc(enrollments.enrolled));
+
+  // Get course counts for each teacher
+  const teacherCourseCountsMap = new Map<string, number>();
+  for (const enrollment of enrollmentsList) {
+    if (enrollment.teacherId) {
+      if (!teacherCourseCountsMap.has(enrollment.teacherId)) {
+        const count = enrollmentsList.filter(e => e.teacherId === enrollment.teacherId).length;
+        teacherCourseCountsMap.set(enrollment.teacherId, count);
+      }
+    }
+  }
 
   // Calculate stats
   const totalEnrollments = enrollmentsList.length;
@@ -117,7 +135,11 @@ export default async function EnrollmentsPage({
           })}
         </div>
 
-        <MyCoursesGrid enrollments={enrollmentsList} locale={locale} />
+        <MyCoursesGrid 
+          enrollments={enrollmentsList} 
+          locale={locale}
+          teacherCourseCountsMap={teacherCourseCountsMap}
+        />
       </div>
     </div>
   );

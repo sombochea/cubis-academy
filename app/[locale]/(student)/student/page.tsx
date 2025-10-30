@@ -1,275 +1,267 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { getUserById } from '@/lib/drizzle/queries';
 import { db } from '@/lib/drizzle/db';
-import { enrollments, courses, payments } from '@/lib/drizzle/schema';
-import { eq, and, count, desc, sql } from 'drizzle-orm';
-import Link from 'next/link';
+import {
+  enrollments,
+  courses,
+  scores,
+  attendances,
+  payments,
+  classSchedules,
+} from '@/lib/drizzle/schema';
+import { eq, and, desc, sql, gte, lte } from 'drizzle-orm';
 import { Trans } from '@lingui/react/macro';
 import { StudentNav } from '@/components/student/StudentNav';
-import { 
-  BookOpen, 
-  GraduationCap, 
-  TrendingUp, 
-  DollarSign,
-  Clock,
-  Award,
-  ArrowRight
-} from 'lucide-react';
+import { PaymentAlert } from '@/components/student/PaymentAlert';
+import { DashboardStats } from '@/components/student/DashboardStats';
+import { RecentActivity } from '@/components/student/RecentActivity';
+import { UpcomingClasses } from '@/components/student/UpcomingClasses';
+import { QuickActions } from '@/components/student/QuickActions';
+import { ProgressChart } from '@/components/student/ProgressChart';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 
-async function getEnrollmentCount(userId: string) {
-  const result = await db.select({ count: count() })
-    .from(enrollments)
-    .where(eq(enrollments.studentId, userId));
-  return result[0]?.count || 0;
-}
-
-async function getCompletedCount(userId: string) {
-  const result = await db.select({ count: count() })
-    .from(enrollments)
-    .where(and(
-      eq(enrollments.studentId, userId),
-      eq(enrollments.status, 'completed')
-    ));
-  return result[0]?.count || 0;
-}
-
-async function getActiveCount(userId: string) {
-  const result = await db.select({ count: count() })
-    .from(enrollments)
-    .where(and(
-      eq(enrollments.studentId, userId),
-      eq(enrollments.status, 'active')
-    ));
-  return result[0]?.count || 0;
-}
-
-export default async function StudentDashboard({ 
-  params 
-}: { 
-  params: Promise<{ locale: string }> 
+export default async function StudentDashboard({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   await loadCatalog(locale);
   setI18n(i18n);
-  
+
   const session = await auth();
-  
+
   if (!session?.user) {
     redirect(`/${locale}/login`);
   }
 
-  const user = await getUserById(session.user.id);
-  
-  if (!user) {
-    redirect(`/${locale}/login`);
-  }
-
-  // Get stats
-  const enrollmentCount = user.student ? await getEnrollmentCount(user.id) : 0;
-  const completedCount = user.student ? await getCompletedCount(user.id) : 0;
-  const activeCount = user.student ? await getActiveCount(user.id) : 0;
-  
-  // Get recent enrollments
-  const recentEnrollments = user.student ? await db
+  // Get all enrollments with course details
+  const userEnrollments = await db
     .select({
       id: enrollments.id,
+      courseId: enrollments.courseId,
       courseTitle: courses.title,
       courseCategory: courses.category,
+      courseLevel: courses.level,
       status: enrollments.status,
       progress: enrollments.progress,
       enrolled: enrollments.enrolled,
+      totalAmount: enrollments.totalAmount,
+      paidAmount: enrollments.paidAmount,
     })
     .from(enrollments)
     .innerJoin(courses, eq(enrollments.courseId, courses.id))
-    .where(eq(enrollments.studentId, user.id))
-    .orderBy(desc(enrollments.enrolled))
-    .limit(5) : [];
+    .where(eq(enrollments.studentId, session.user.id))
+    .orderBy(desc(enrollments.enrolled));
+
+  // Get stats
+  const totalCourses = userEnrollments.length;
+  const activeCourses = userEnrollments.filter((e) => e.status === 'active').length;
+  const completedCourses = userEnrollments.filter((e) => e.status === 'completed').length;
+
+  // Calculate average progress
+  const avgProgress =
+    activeCourses > 0
+      ? Math.round(
+          userEnrollments
+            .filter((e) => e.status === 'active')
+            .reduce((sum, e) => sum + e.progress, 0) / activeCourses
+        )
+      : 0;
 
   // Get total spent
-  const [totalSpent] = user.student ? await db
-    .select({ total: sql<number>`COALESCE(SUM(${payments.amount}), 0)` })
+  const [totalSpentResult] = await db
+    .select({ total: sql<number>`COALESCE(SUM(CAST(${payments.amount} AS DECIMAL)), 0)` })
     .from(payments)
-    .where(and(
-      eq(payments.studentId, user.id),
-      eq(payments.status, 'completed')
-    )) : [{ total: 0 }];
+    .where(and(eq(payments.studentId, session.user.id), eq(payments.status, 'completed')));
 
-  const stats = [
-    {
-      title: <Trans>Total Courses</Trans>,
-      value: enrollmentCount,
-      icon: BookOpen,
-      color: 'from-blue-500 to-cyan-500',
-      href: `/${locale}/student/enrollments`,
-    },
-    {
-      title: <Trans>Completed</Trans>,
-      value: completedCount,
-      icon: Award,
-      color: 'from-green-500 to-emerald-500',
-      href: `/${locale}/student/enrollments`,
-    },
-    {
-      title: <Trans>In Progress</Trans>,
-      value: activeCount,
-      icon: Clock,
-      color: 'from-purple-500 to-pink-500',
-      href: `/${locale}/student/enrollments`,
-    },
-    {
-      title: <Trans>Total Spent</Trans>,
-      value: `$${Number(totalSpent.total).toFixed(2)}`,
-      icon: DollarSign,
-      color: 'from-orange-500 to-red-500',
-      href: `/${locale}/student/payments`,
-    },
-  ];
+  const totalSpent = Number(totalSpentResult.total);
+
+  // Get average score
+  const userScores = await db
+    .select({
+      score: scores.score,
+      maxScore: scores.maxScore,
+    })
+    .from(scores)
+    .innerJoin(enrollments, eq(scores.enrollmentId, enrollments.id))
+    .where(eq(enrollments.studentId, session.user.id));
+
+  const avgScore =
+    userScores.length > 0
+      ? Math.round(
+          userScores.reduce(
+            (sum, s) => sum + (Number(s.score) / Number(s.maxScore)) * 100,
+            0
+          ) / userScores.length
+        )
+      : 0;
+
+  // Get attendance rate
+  const userAttendances = await db
+    .select({
+      status: attendances.status,
+    })
+    .from(attendances)
+    .innerJoin(enrollments, eq(attendances.enrollmentId, enrollments.id))
+    .where(eq(enrollments.studentId, session.user.id));
+
+  const attendanceRate =
+    userAttendances.length > 0
+      ? Math.round(
+          (userAttendances.filter((a) => a.status === 'present').length /
+            userAttendances.length) *
+            100
+        )
+      : 0;
+
+  // Get overdue enrollments for payment alerts
+  const overdueEnrollments = userEnrollments
+    .filter(
+      (e) =>
+        e.status === 'active' &&
+        Number(e.totalAmount) > Number(e.paidAmount)
+    )
+    .map((e) => ({
+      ...e,
+      daysSinceEnrollment: Math.floor(
+        (new Date().getTime() - new Date(e.enrolled).getTime()) / (1000 * 60 * 60 * 24)
+      ),
+    }));
+
+  // Get upcoming classes (next 7 days)
+  const today = new Date();
+  const dayOfWeek = [
+    'sunday',
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+  ][today.getDay()];
+
+  const upcomingSchedules = await db
+    .select({
+      id: classSchedules.id,
+      courseId: classSchedules.courseId,
+      courseTitle: courses.title,
+      dayOfWeek: classSchedules.dayOfWeek,
+      startTime: classSchedules.startTime,
+      endTime: classSchedules.endTime,
+      location: classSchedules.location,
+      notes: classSchedules.notes,
+    })
+    .from(classSchedules)
+    .innerJoin(courses, eq(classSchedules.courseId, courses.id))
+    .innerJoin(enrollments, eq(courses.id, enrollments.courseId))
+    .where(
+      and(
+        eq(enrollments.studentId, session.user.id),
+        eq(enrollments.status, 'active'),
+        eq(classSchedules.isActive, true)
+      )
+    );
+
+  // Get recent activities (scores, attendance, payments)
+  const recentScores = await db
+    .select({
+      type: sql<string>`'score'`,
+      title: scores.title,
+      courseTitle: courses.title,
+      value: sql<string>`CONCAT(${scores.score}, '/', ${scores.maxScore})`,
+      date: scores.created,
+    })
+    .from(scores)
+    .innerJoin(enrollments, eq(scores.enrollmentId, enrollments.id))
+    .innerJoin(courses, eq(enrollments.courseId, courses.id))
+    .where(eq(enrollments.studentId, session.user.id))
+    .orderBy(desc(scores.created))
+    .limit(5);
+
+  const recentAttendances = await db
+    .select({
+      type: sql<string>`'attendance'`,
+      title: sql<string>`'Attendance'`,
+      courseTitle: courses.title,
+      value: attendances.status,
+      date: attendances.date,
+    })
+    .from(attendances)
+    .innerJoin(enrollments, eq(attendances.enrollmentId, enrollments.id))
+    .innerJoin(courses, eq(enrollments.courseId, courses.id))
+    .where(eq(enrollments.studentId, session.user.id))
+    .orderBy(desc(attendances.date))
+    .limit(5);
+
+  const recentPayments = await db
+    .select({
+      type: sql<string>`'payment'`,
+      title: sql<string>`'Payment'`,
+      courseTitle: courses.title,
+      value: sql<string>`CONCAT('$', ${payments.amount})`,
+      date: payments.created,
+    })
+    .from(payments)
+    .innerJoin(courses, eq(payments.courseId, courses.id))
+    .where(and(eq(payments.studentId, session.user.id), eq(payments.status, 'completed')))
+    .orderBy(desc(payments.created))
+    .limit(5);
+
+  // Combine and sort activities
+  const allActivities = [...recentScores, ...recentAttendances, ...recentPayments]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 10);
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
       <StudentNav locale={locale} />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-[#17224D] mb-2">
-            <Trans>Welcome back, {user.name}!</Trans>
+            <Trans>Welcome back!</Trans>
           </h2>
           <p className="text-[#363942]/70">
-            <Trans>Student ID:</Trans> {user.student?.suid}
+            <Trans>Here's what's happening with your courses today</Trans>
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Link 
-                key={index}
-                href={stat.href}
-                className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center shadow-lg`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-                <p className="text-sm text-[#363942]/70 mb-1">{stat.title}</p>
-                <p className="text-2xl font-bold text-[#17224D]">{stat.value}</p>
-              </Link>
-            );
-          })}
-        </div>
+        {/* Payment Alert */}
+        <PaymentAlert overdueEnrollments={overdueEnrollments} locale={locale} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Courses */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold text-[#17224D]">
-                  <Trans>Recent Courses</Trans>
-                </h3>
-                <Link 
-                  href={`/${locale}/student/enrollments`}
-                  className="text-sm text-[#007FFF] hover:underline flex items-center gap-1"
-                >
-                  <Trans>View all</Trans>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
+        {/* Stats Dashboard */}
+        <DashboardStats
+          totalCourses={totalCourses}
+          activeCourses={activeCourses}
+          completedCourses={completedCourses}
+          avgProgress={avgProgress}
+          totalSpent={totalSpent}
+          avgScore={avgScore}
+          attendanceRate={attendanceRate}
+          locale={locale}
+        />
 
-              {recentEnrollments.length > 0 ? (
-                <div className="space-y-4">
-                  {recentEnrollments.map((enrollment) => (
-                    <Link
-                      key={enrollment.id}
-                      href={`/${locale}/student/enrollments`}
-                      className="flex items-center justify-between p-4 bg-[#F4F5F7] rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex-1">
-                        <h4 className="font-medium text-[#17224D] mb-1">
-                          {enrollment.courseTitle}
-                        </h4>
-                        <p className="text-sm text-[#363942]/70">
-                          {enrollment.courseCategory}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <p className="text-sm font-medium text-[#363942]">
-                            {enrollment.progress}%
-                          </p>
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            enrollment.status === 'active'
-                              ? 'bg-green-100 text-green-700'
-                              : enrollment.status === 'completed'
-                              ? 'bg-blue-100 text-blue-700'
-                              : 'bg-gray-100 text-gray-700'
-                          }`}>
-                            <Trans>{enrollment.status}</Trans>
-                          </span>
-                        </div>
-                        <ArrowRight className="w-5 h-5 text-[#363942]/40" />
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <GraduationCap className="w-12 h-12 text-[#363942]/20 mx-auto mb-3" />
-                  <p className="text-[#363942]/70 mb-4">
-                    <Trans>No courses enrolled yet</Trans>
-                  </p>
-                  <Link href={`/${locale}/student/courses`}>
-                    <button className="px-4 py-2 bg-[#007FFF] text-white rounded-lg hover:bg-[#007FFF]/90 transition-colors">
-                      <Trans>Browse Courses</Trans>
-                    </button>
-                  </Link>
-                </div>
-              )}
-            </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+          {/* Left Column - Progress & Activities */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Progress Chart */}
+            <ProgressChart enrollments={userEnrollments} />
+
+            {/* Recent Activity */}
+            <RecentActivity activities={allActivities} locale={locale} />
           </div>
 
-          {/* Quick Actions */}
+          {/* Right Column - Quick Actions & Upcoming Classes */}
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-[#17224D] mb-4">
-                <Trans>Quick Actions</Trans>
-              </h3>
-              <div className="space-y-3">
-                <Link
-                  href={`/${locale}/student/courses`}
-                  className="flex items-center gap-3 p-3 bg-[#F4F5F7] rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <BookOpen className="w-5 h-5 text-[#007FFF]" />
-                  <span className="text-sm font-medium text-[#17224D]">
-                    <Trans>Browse Courses</Trans>
-                  </span>
-                </Link>
-                <Link
-                  href={`/${locale}/student/payments/new`}
-                  className="flex items-center gap-3 p-3 bg-[#F4F5F7] rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <DollarSign className="w-5 h-5 text-[#007FFF]" />
-                  <span className="text-sm font-medium text-[#17224D]">
-                    <Trans>Make Payment</Trans>
-                  </span>
-                </Link>
-                <Link
-                  href={`/${locale}/student/profile`}
-                  className="flex items-center gap-3 p-3 bg-[#F4F5F7] rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <TrendingUp className="w-5 h-5 text-[#007FFF]" />
-                  <span className="text-sm font-medium text-[#17224D]">
-                    <Trans>View Profile</Trans>
-                  </span>
-                </Link>
-              </div>
-            </div>
+            {/* Quick Actions */}
+            <QuickActions locale={locale} />
+
+            {/* Upcoming Classes */}
+            <UpcomingClasses schedules={upcomingSchedules} locale={locale} />
           </div>
         </div>
       </div>

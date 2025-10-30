@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Trans } from '@lingui/react/macro';
 import { StudentNav } from '@/components/student/StudentNav';
 import { EnrollButton } from '@/components/student/EnrollButton';
+import { TeacherProfilePopover } from '@/components/student/TeacherProfilePopover';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   ArrowLeft, 
   BookOpen, 
@@ -48,7 +50,9 @@ export default async function CourseDetailPage({
       level: courses.level,
       youtubeUrl: courses.youtubeUrl,
       zoomUrl: courses.zoomUrl,
+      teacherId: courses.teacherId,
       teacherName: users.name,
+      teacherPhoto: teachers.photo,
       teacherSpec: teachers.spec,
       teacherBio: teachers.bio,
     })
@@ -56,6 +60,16 @@ export default async function CourseDetailPage({
     .leftJoin(teachers, eq(courses.teacherId, teachers.userId))
     .leftJoin(users, eq(teachers.userId, users.id))
     .where(eq(courses.id, id));
+
+  // Get teacher's course count if teacher exists
+  let teacherCourseCount = 0;
+  if (courseData.teacherId) {
+    const teacherCourses = await db
+      .select({ id: courses.id })
+      .from(courses)
+      .where(and(eq(courses.teacherId, courseData.teacherId), eq(courses.isActive, true)));
+    teacherCourseCount = teacherCourses.length;
+  }
 
   if (!courseData) {
     redirect(`/${locale}/student/courses`);
@@ -180,23 +194,45 @@ export default async function CourseDetailPage({
             )}
 
             {/* Instructor */}
-            {courseData.teacherName && (
+            {courseData.teacherName && courseData.teacherId && (
               <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
                 <h2 className="text-xl font-bold text-[#17224D] mb-4">
                   <Trans>Instructor</Trans>
                 </h2>
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-full flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
-                    {courseData.teacherName.charAt(0)}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-[#17224D] text-lg">{courseData.teacherName}</h3>
+                  <Avatar className="w-16 h-16 flex-shrink-0">
+                    <AvatarImage src={courseData.teacherPhoto || undefined} alt={courseData.teacherName} />
+                    <AvatarFallback className="bg-gradient-to-br from-[#007FFF] to-[#17224D] text-white text-2xl font-bold">
+                      {courseData.teacherName.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <TeacherProfilePopover
+                      teacher={{
+                        id: courseData.teacherId,
+                        name: courseData.teacherName,
+                        photo: courseData.teacherPhoto,
+                        bio: courseData.teacherBio,
+                        spec: courseData.teacherSpec,
+                        courseCount: teacherCourseCount,
+                      }}
+                      locale={locale}
+                    >
+                      <h3 className="font-semibold text-[#17224D] text-lg hover:text-[#007FFF] transition-colors">
+                        {courseData.teacherName}
+                      </h3>
+                    </TeacherProfilePopover>
                     {courseData.teacherSpec && (
                       <p className="text-sm text-[#007FFF] mb-2">{courseData.teacherSpec}</p>
                     )}
                     {courseData.teacherBio && (
-                      <p className="text-sm text-[#363942]/70">{courseData.teacherBio}</p>
+                      <p className="text-sm text-[#363942]/70 line-clamp-2">{courseData.teacherBio}</p>
                     )}
+                    <Link href={`/${locale}/student/instructors/${courseData.teacherId}`}>
+                      <Button variant="outline" size="sm" className="mt-3">
+                        <Trans>View Profile</Trans>
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>

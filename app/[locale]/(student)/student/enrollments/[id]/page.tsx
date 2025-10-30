@@ -489,23 +489,30 @@ export default async function EnrollmentDetailsPage({
               {paymentsList.map((payment) => (
                 <div key={payment.id} className="p-4 bg-[#F4F5F7] rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <div>
+                    <div className="flex-1">
                       <p className="font-semibold text-[#17224D]">${Number(payment.amount).toFixed(2)}</p>
                       <span className="text-sm text-[#363942]/70">
                         {new Date(payment.created).toLocaleDateString()} • {payment.method}
                       </span>
                     </div>
-                    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                      payment.status === 'completed'
-                        ? 'bg-green-100 text-green-700'
-                        : payment.status === 'pending'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : payment.status === 'failed'
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-gray-100 text-gray-700'
-                    }`}>
-                      <Trans>{payment.status}</Trans>
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
+                        payment.status === 'completed'
+                          ? 'bg-green-100 text-green-700'
+                          : payment.status === 'pending'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : payment.status === 'failed'
+                          ? 'bg-red-100 text-red-700'
+                          : 'bg-gray-100 text-gray-700'
+                      }`}>
+                        <Trans>{payment.status}</Trans>
+                      </span>
+                      <Link href={`/${locale}/student/payments/${payment.id}`}>
+                        <Button variant="ghost" size="sm">
+                          <Trans>View</Trans>
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                   {payment.txnId && (
                     <p className="text-xs text-[#363942]/70 font-mono">TXN: {payment.txnId}</p>

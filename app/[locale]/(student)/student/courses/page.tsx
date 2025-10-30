@@ -35,13 +35,27 @@ export default async function CoursesPage({
       duration: courses.duration,
       level: courses.level,
       isActive: courses.isActive,
+      teacherId: courses.teacherId,
       teacherName: users.name,
+      teacherPhoto: teachers.photo,
+      teacherBio: teachers.bio,
       teacherSpec: teachers.spec,
     })
     .from(courses)
     .leftJoin(teachers, eq(courses.teacherId, teachers.userId))
     .leftJoin(users, eq(teachers.userId, users.id))
     .where(eq(courses.isActive, true));
+
+  // Get course counts for each teacher
+  const teacherCourseCountsMap = new Map<string, number>();
+  for (const course of coursesList) {
+    if (course.teacherId) {
+      if (!teacherCourseCountsMap.has(course.teacherId)) {
+        const count = coursesList.filter(c => c.teacherId === course.teacherId).length;
+        teacherCourseCountsMap.set(course.teacherId, count);
+      }
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
@@ -57,7 +71,11 @@ export default async function CoursesPage({
           </p>
         </div>
 
-        <CoursesGrid courses={coursesList} locale={locale} />
+        <CoursesGrid 
+          courses={coursesList} 
+          locale={locale}
+          teacherCourseCountsMap={teacherCourseCountsMap}
+        />
       </div>
     </div>
   );
