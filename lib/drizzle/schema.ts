@@ -29,6 +29,7 @@ export const paymentStatusEnum = pgEnum("payment_status", [
   "pending",
   "completed",
   "failed",
+  "refunded",
 ]);
 export const attendanceStatusEnum = pgEnum("attendance_status", [
   "present",
@@ -39,6 +40,11 @@ export const courseLevelEnum = pgEnum("course_level", [
   "beginner",
   "intermediate",
   "advanced",
+]);
+export const deliveryModeEnum = pgEnum("delivery_mode", [
+  "online",
+  "face_to_face",
+  "hybrid",
 ]);
 
 // Users table
@@ -168,6 +174,10 @@ export const courses = pgTable(
     price: decimal("price", { precision: 10, scale: 2 }).notNull().default("0"),
     duration: integer("duration"),
     level: courseLevelEnum("level").notNull().default("beginner"),
+    deliveryMode: deliveryModeEnum("delivery_mode")
+      .notNull()
+      .default("online"),
+    location: text("location"), // Physical location for face-to-face/hybrid courses
     coverImage: varchar("cover_image", { length: 500 }),
     isActive: boolean("is_active").notNull().default(true),
     youtubeUrl: varchar("youtube_url", { length: 500 }),
@@ -181,6 +191,7 @@ export const courses = pgTable(
     index("courses_category_id_idx").on(table.categoryId),
     index("courses_teacher_id_idx").on(table.teacherId),
     index("courses_level_idx").on(table.level),
+    index("courses_delivery_mode_idx").on(table.deliveryMode),
     index("courses_is_active_idx").on(table.isActive),
     index("courses_created_idx").on(table.created),
   ]
@@ -199,6 +210,12 @@ export const enrollments = pgTable(
       .references(() => courses.id, { onDelete: "cascade" }),
     status: enrollmentStatusEnum("status").notNull().default("active"),
     progress: integer("progress").notNull().default(0),
+    totalAmount: decimal("total_amount", { precision: 10, scale: 2 })
+      .notNull()
+      .default("0"), // Total course price at enrollment time
+    paidAmount: decimal("paid_amount", { precision: 10, scale: 2 })
+      .notNull()
+      .default("0"), // Total amount paid so far
     enrolled: timestamp("enrolled").notNull().defaultNow(),
     completed: timestamp("completed"),
   },
@@ -220,6 +237,9 @@ export const payments = pgTable(
     studentId: uuid("student_id")
       .notNull()
       .references(() => students.userId, { onDelete: "cascade" }),
+    enrollmentId: uuid("enrollment_id").references(() => enrollments.id, {
+      onDelete: "set null",
+    }),
     courseId: uuid("course_id").references(() => courses.id, {
       onDelete: "set null",
     }),
@@ -227,11 +247,13 @@ export const payments = pgTable(
     method: varchar("method", { length: 100 }),
     status: paymentStatusEnum("status").notNull().default("pending"),
     txnId: varchar("txn_id", { length: 255 }).unique(),
+    proofUrl: varchar("proof_url", { length: 500 }), // Payment proof/receipt
     notes: text("notes"),
     created: timestamp("created").notNull().defaultNow(),
   },
   (table) => [
     index("payments_student_id_idx").on(table.studentId),
+    index("payments_enrollment_id_idx").on(table.enrollmentId),
     index("payments_course_id_idx").on(table.courseId),
     index("payments_method_idx").on(table.method),
     index("payments_status_idx").on(table.status),
@@ -307,6 +329,35 @@ export const teacherCourses = pgTable(
   ]
 );
 
+// Course feedback/reviews table
+export const courseFeedback = pgTable(
+  "course_feedback",
+  {
+    id: uuid("id").primaryKey().default(uuidv7),
+    enrollmentId: uuid("enrollment_id")
+      .notNull()
+      .references(() => enrollments.id, { onDelete: "cascade" }),
+    studentId: uuid("student_id")
+      .notNull()
+      .references(() => students.userId, { onDelete: "cascade" }),
+    courseId: uuid("course_id")
+      .notNull()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    rating: integer("rating").notNull(), // 1-5 stars
+    comment: text("comment"),
+    isAnonymous: boolean("is_anonymous").notNull().default(false),
+    created: timestamp("created").notNull().defaultNow(),
+    updated: timestamp("updated").notNull().defaultNow(),
+  },
+  (table) => [
+    unique().on(table.enrollmentId), // One feedback per enrollment
+    index("course_feedback_student_id_idx").on(table.studentId),
+    index("course_feedback_course_id_idx").on(table.courseId),
+    index("course_feedback_rating_idx").on(table.rating),
+    index("course_feedback_created_idx").on(table.created),
+  ]
+);
+
 // Email verification codes table
 export const emailVerificationCodes = pgTable(
   "email_verification_codes",
@@ -366,12 +417,18 @@ export const enrollmentsRelations = relations(enrollments, ({ one, many }) => ({
   }),
   scores: many(scores),
   attendances: many(attendances),
+  payments: many(payments),
+  feedback: one(courseFeedback),
 }));
 
 export const paymentsRelations = relations(payments, ({ one }) => ({
   student: one(students, {
     fields: [payments.studentId],
     references: [students.userId],
+  }),
+  enrollment: one(enrollments, {
+    fields: [payments.enrollmentId],
+    references: [enrollments.id],
   }),
   course: one(courses, {
     fields: [payments.courseId],
@@ -453,5 +510,20 @@ export const userSessionsRelations = relations(userSessions, ({ one }) => ({
   user: one(users, {
     fields: [userSessions.userId],
     references: [users.id],
+  }),
+}));
+
+export const courseFeedbackRelations = relations(courseFeedback, ({ one }) => ({
+  enrollment: one(enrollments, {
+    fields: [courseFeedback.enrollmentId],
+    references: [enrollments.id],
+  }),
+  student: one(students, {
+    fields: [courseFeedback.studentId],
+    references: [students.userId],
+  }),
+  course: one(courses, {
+    fields: [courseFeedback.courseId],
+    references: [courses.id],
   }),
 }));
