@@ -25,7 +25,8 @@ msgstr ""
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:225
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:254
 #: app/[locale]/(admin)/admin/page.tsx:123
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:228
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:232
+#: app/[locale]/(student)/student/page.tsx:213
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
 #: components/landing-page.tsx:375
@@ -70,7 +71,7 @@ msgstr ""
 msgid "Account Information"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:236
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:240
 #: components/admin/CategoriesDataTable.tsx:126
 #: components/admin/CourseManagementMenu.tsx:26
 #: components/admin/CoursesDataTable.tsx:151
@@ -96,7 +97,7 @@ msgstr "Actions"
 #: components/admin/StudentsDataTable.tsx:156
 #: components/admin/TeacherFilters.tsx:46
 #: components/admin/TeachersDataTable.tsx:164
-#: components/SessionsManager.tsx:177
+#: components/SessionsManager.tsx:178
 #: components/SettingsPage.tsx:167
 msgid "Active"
 msgstr "Active"
@@ -105,7 +106,7 @@ msgstr "Active"
 #~ msgid "Active Enrollments"
 #~ msgstr "Active Enrollments"
 
-#: components/SessionsManager.tsx:126
+#: components/SessionsManager.tsx:127
 #: components/SettingsPage.tsx:193
 msgid "Active Sessions"
 msgstr ""
@@ -224,7 +225,7 @@ msgstr "All Status"
 msgid "All Users"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:107
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:111
 #: components/admin/PaymentsDataTable.tsx:95
 msgid "Amount"
 msgstr "Amount"
@@ -234,7 +235,7 @@ msgid "Approve payment"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/payments/[id]/approve/page.tsx:50
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:242
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:246
 msgid "Approve Payment"
 msgstr ""
 
@@ -316,7 +317,7 @@ msgstr "Back to Courses"
 msgid "Back to Enrollments"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:71
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:75
 msgid "Back to Payments"
 msgstr ""
 
@@ -363,6 +364,11 @@ msgstr "Biography"
 msgid "browse"
 msgstr "browse"
 
+#: app/[locale]/(student)/student/page.tsx:229
+#: app/[locale]/(student)/student/page.tsx:250
+msgid "Browse Courses"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/enrollments/[id]/delete/page.tsx:83
 #: app/[locale]/(admin)/admin/payments/[id]/approve/page.tsx:82
 #: app/[locale]/(admin)/admin/payments/[id]/reject/page.tsx:108
@@ -379,7 +385,7 @@ msgstr "browse"
 #: components/admin/TeacherForm.tsx:273
 #: components/ProfileForm.tsx:252
 #: components/ProfileForm.tsx:311
-#: components/SessionsManager.tsx:250
+#: components/SessionsManager.tsx:258
 #: components/student/EmailVerificationBanner.tsx:193
 msgid "Cancel"
 msgstr "Cancel"
@@ -467,6 +473,7 @@ msgstr ""
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:141
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:220
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:235
+#: app/[locale]/(student)/student/page.tsx:109
 #: components/admin/EnrollmentFilters.tsx:41
 #: components/admin/EnrollmentsDataTable.tsx:153
 #: components/admin/PaymentFilters.tsx:44
@@ -527,7 +534,7 @@ msgid "Copy this password and share it securely with the user"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:132
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:194
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:198
 #: components/admin/EnrollmentsDataTable.tsx:70
 #: components/admin/PaymentsDataTable.tsx:76
 msgid "Course"
@@ -662,7 +669,7 @@ msgstr ""
 msgid "Current Password"
 msgstr ""
 
-#: components/SessionsManager.tsx:166
+#: components/SessionsManager.tsx:167
 msgid "Current Session"
 msgstr ""
 
@@ -999,7 +1006,7 @@ msgstr "Get Started Free"
 msgid "Go Home"
 msgstr ""
 
-#: components/SessionsManager.tsx:172
+#: components/SessionsManager.tsx:173
 msgid "Google"
 msgstr ""
 
@@ -1009,6 +1016,10 @@ msgstr ""
 
 #: app/[locale]/unauthorized/page.tsx:56
 msgid "If you just logged in, try refreshing the page."
+msgstr ""
+
+#: app/[locale]/(student)/student/page.tsx:116
+msgid "In Progress"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
@@ -1044,12 +1055,12 @@ msgstr "JPG, PNG or WebP • Max 5MB • 400x400px recommended"
 #~ msgid "JPG, PNG or WebP. Max 5MB. Recommended 400x400px."
 #~ msgstr "JPG, PNG or WebP. Max 5MB. Recommended 400x400px."
 
-#: components/SessionsManager.tsx:204
+#: components/SessionsManager.tsx:212
 msgid "Last active"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:225
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:277
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:281
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:237
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:211
 msgid "Last Updated"
@@ -1091,6 +1102,10 @@ msgstr "Login"
 msgid "Logout"
 msgstr "Logout"
 
+#: app/[locale]/(student)/student/page.tsx:259
+msgid "Make Payment"
+msgstr ""
+
 #: components/admin/StudentFilters.tsx:76
 #: components/admin/StudentForm.tsx:237
 msgid "Male"
@@ -1128,7 +1143,7 @@ msgstr "Manage teachers and assign courses"
 msgid "Manage your account settings and preferences"
 msgstr ""
 
-#: components/SessionsManager.tsx:129
+#: components/SessionsManager.tsx:130
 msgid "Manage your active login sessions across devices"
 msgstr ""
 
@@ -1207,7 +1222,7 @@ msgstr ""
 msgid "Next"
 msgstr "Next"
 
-#: components/SessionsManager.tsx:147
+#: components/SessionsManager.tsx:148
 msgid "No active sessions found"
 msgstr ""
 
@@ -1221,6 +1236,10 @@ msgstr ""
 
 #: components/admin/AssignCoursesForm.tsx:216
 msgid "No courses assigned yet"
+msgstr ""
+
+#: app/[locale]/(student)/student/page.tsx:225
+msgid "No courses enrolled yet"
 msgstr ""
 
 #: components/admin/AssignCoursesForm.tsx:161
@@ -1285,7 +1304,7 @@ msgstr ""
 msgid "Not provided"
 msgstr "Not provided"
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:141
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:145
 msgid "Notes"
 msgstr ""
 
@@ -1340,27 +1359,27 @@ msgstr ""
 msgid "Password sent to email successfully!"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:265
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:269
 msgid "Payment Created"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:129
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:133
 msgid "Payment Date"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:75
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:79
 msgid "Payment Details"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:88
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:92
 msgid "Payment Information"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:118
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:122
 msgid "Payment Method"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:217
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:221
 msgid "Payment Status"
 msgstr ""
 
@@ -1432,7 +1451,7 @@ msgstr "Price"
 msgid "Price ($)"
 msgstr "Price ($)"
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:204
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:208
 msgid "Price:"
 msgstr ""
 
@@ -1462,10 +1481,11 @@ msgstr ""
 msgid "Progress"
 msgstr "Progress"
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:151
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:155
 msgid "Proof of Payment"
 msgstr ""
 
+#: app/[locale]/(student)/student/page.tsx:241
 #: components/admin/QuickActionsMenu.tsx:26
 msgid "Quick Actions"
 msgstr "Quick Actions"
@@ -1478,6 +1498,10 @@ msgstr ""
 
 #~ msgid "Ready to Transform Your Career?"
 #~ msgstr "Ready to Transform Your Career?"
+
+#: app/[locale]/(student)/student/page.tsx:174
+msgid "Recent Courses"
+msgstr ""
 
 #~ msgid "Recognized Certificates"
 #~ msgstr "Recognized Certificates"
@@ -1498,7 +1522,7 @@ msgstr ""
 msgid "Reject payment"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:248
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:252
 #: app/[locale]/(admin)/admin/payments/[id]/reject/page.tsx:62
 msgid "Reject Payment"
 msgstr ""
@@ -1511,7 +1535,7 @@ msgstr ""
 msgid "Rejection Reason"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:169
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:173
 msgid "Related Information"
 msgstr ""
 
@@ -1532,11 +1556,11 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: components/SessionsManager.tsx:140
+#: components/SessionsManager.tsx:141
 msgid "Revoke All Sessions"
 msgstr ""
 
-#: components/SessionsManager.tsx:239
+#: components/SessionsManager.tsx:247
 msgid "Revoke All Sessions?"
 msgstr ""
 
@@ -1549,7 +1573,7 @@ msgstr ""
 msgid "Revoke Verification"
 msgstr ""
 
-#: components/SessionsManager.tsx:260
+#: components/SessionsManager.tsx:268
 msgid "Revoking..."
 msgstr ""
 
@@ -1694,7 +1718,7 @@ msgstr "Status"
 #~ msgstr "Status:"
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:116
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:177
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:181
 #: components/admin/EnrollmentsDataTable.tsx:49
 #: components/admin/PaymentsDataTable.tsx:62
 #: components/ProfileView.tsx:43
@@ -1706,6 +1730,10 @@ msgstr "Student"
 #: components/ProfileView.tsx:147
 msgid "Student ID"
 msgstr "Student ID"
+
+#: app/[locale]/(student)/student/page.tsx:142
+msgid "Student ID:"
+msgstr ""
 
 #~ msgid "students"
 #~ msgstr "students"
@@ -1785,11 +1813,11 @@ msgstr ""
 msgid "This student hasn't enrolled in any courses"
 msgstr ""
 
-#: components/SessionsManager.tsx:242
+#: components/SessionsManager.tsx:250
 msgid "This will log you out from all devices and browsers. You will need to log in again on this device."
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:258
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:262
 msgid "Timeline"
 msgstr ""
 
@@ -1827,9 +1855,9 @@ msgstr ""
 msgid "Total Amount"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/page.tsx:
-#~ msgid "Total Courses"
-#~ msgstr "Total Courses"
+#: app/[locale]/(student)/student/page.tsx:102
+msgid "Total Courses"
+msgstr "Total Courses"
 
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:117
 msgid "Total Enrollments"
@@ -1842,6 +1870,10 @@ msgstr ""
 #: app/[locale]/(admin)/admin/payments/page.tsx:59
 msgid "Total Revenue"
 msgstr "Total Revenue"
+
+#: app/[locale]/(student)/student/page.tsx:123
+msgid "Total Spent"
+msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:116
 msgid "Total Students"
@@ -1859,7 +1891,7 @@ msgstr ""
 msgid "Track and manage all payment transactions"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:96
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:100
 #: components/admin/PaymentsDataTable.tsx:43
 msgid "Transaction ID"
 msgstr "Transaction ID"
@@ -1985,6 +2017,10 @@ msgstr ""
 msgid "View"
 msgstr "View"
 
+#: app/[locale]/(student)/student/page.tsx:180
+msgid "View all"
+msgstr ""
+
 #: components/admin/CourseManagementMenu.tsx:43
 msgid "View All Courses"
 msgstr ""
@@ -2005,7 +2041,7 @@ msgstr ""
 msgid "View and manage student accounts"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:160
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:164
 msgid "View attachment"
 msgstr ""
 
@@ -2043,13 +2079,17 @@ msgstr ""
 msgid "View enrollments"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:78
+#: app/[locale]/(admin)/admin/payments/[id]/page.tsx:82
 msgid "View payment transaction information"
 msgstr ""
 
 #: components/admin/QuickActionsMenu.tsx:79
 msgid "View Payments"
 msgstr "View Payments"
+
+#: app/[locale]/(student)/student/page.tsx:268
+msgid "View Profile"
+msgstr ""
 
 #: components/admin/EnrollmentsDataTable.tsx:188
 #: components/admin/PaymentsDataTable.tsx:189
@@ -2095,6 +2135,11 @@ msgstr ""
 msgid "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
 msgstr ""
 
+#. placeholder {0}: user.name
+#: app/[locale]/(student)/student/page.tsx:139
+msgid "Welcome back, {0}!"
+msgstr ""
+
 #: components/LoadingRedirect.tsx:77
 msgid "Welcome Back!"
 msgstr ""
@@ -2123,7 +2168,7 @@ msgstr ""
 msgid "Yes, Reject Payment"
 msgstr ""
 
-#: components/SessionsManager.tsx:263
+#: components/SessionsManager.tsx:271
 msgid "Yes, Revoke All"
 msgstr ""
 
