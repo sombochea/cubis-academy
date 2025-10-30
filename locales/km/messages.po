@@ -22,7 +22,8 @@ msgstr "(Check server logs for the code during development)"
 #. placeholder {0}: feature.description
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:100
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:89
-#: app/[locale]/(admin)/admin/enrollments/page.tsx:97
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:225
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:254
 #: app/[locale]/(admin)/admin/page.tsx:123
 #: app/[locale]/(admin)/admin/payments/page.tsx:110
 #: components/admin/AdminNavClient.tsx:36
@@ -43,6 +44,10 @@ msgstr "{level}"
 #: components/PasswordChangeForm.tsx:119
 msgid "{revokedSessions} other session{0} logged out for security. A notification email has been sent."
 msgstr "{revokedSessions} other session{0} logged out for security. A notification email has been sent."
+
+#: components/admin/EnrollmentsDataTable.tsx:94
+msgid "{status}"
+msgstr "{status}"
 
 #: app/[locale]/unauthorized/page.tsx:31
 msgid "403 - Unauthorized"
@@ -67,6 +72,7 @@ msgstr "Account Information"
 #: components/admin/CategoriesDataTable.tsx:126
 #: components/admin/CourseManagementMenu.tsx:26
 #: components/admin/CoursesDataTable.tsx:151
+#: components/admin/EnrollmentsDataTable.tsx:177
 #: components/admin/StudentsDataTable.tsx:175
 #: components/admin/TeachersDataTable.tsx:183
 msgid "Actions"
@@ -82,6 +88,7 @@ msgstr "Actions"
 #: components/admin/CategoriesDataTable.tsx:107
 #: components/admin/CourseFilters.tsx:46
 #: components/admin/CoursesDataTable.tsx:132
+#: components/admin/EnrollmentFilters.tsx:38
 #: components/admin/StudentFilters.tsx:49
 #: components/admin/StudentsDataTable.tsx:156
 #: components/admin/TeacherFilters.tsx:46
@@ -195,6 +202,7 @@ msgid "All Roles"
 msgstr "All Roles"
 
 #: components/admin/CourseFilters.tsx:43
+#: components/admin/EnrollmentFilters.tsx:35
 #: components/admin/StudentFilters.tsx:46
 #: components/admin/TeacherFilters.tsx:43
 msgid "All Status"
@@ -211,6 +219,10 @@ msgstr "Amount"
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:116
 msgid "Are you sure you want to delete this course? This will permanently remove:"
 msgstr "Are you sure you want to delete this course? This will permanently remove:"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/delete/page.tsx:54
+msgid "Are you sure you want to delete this enrollment? This action cannot be undone and will also delete all associated scores and attendance records."
+msgstr "Are you sure you want to delete this enrollment? This action cannot be undone and will also delete all associated scores and attendance records."
 
 #: app/[locale]/(admin)/admin/teachers/[id]/delete/page.tsx:115
 msgid "Are you sure you want to delete this teacher? This will permanently remove:"
@@ -245,9 +257,21 @@ msgstr "Assign Teacher"
 msgid "Assigned Courses"
 msgstr "Assigned Courses"
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:296
+msgid "Attendance Rate"
+msgstr "Attendance Rate"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:208
+msgid "Attendance Records"
+msgstr "Attendance Records"
+
 #: components/admin/AssignCoursesForm.tsx:108
 msgid "Available Courses"
 msgstr "Available Courses"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:282
+msgid "Average Score"
+msgstr "Average Score"
 
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:60
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:82
@@ -257,6 +281,10 @@ msgstr "Back to Course"
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:71
 msgid "Back to Courses"
 msgstr "Back to Courses"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:91
+msgid "Back to Enrollments"
+msgstr "Back to Enrollments"
 
 #: app/[locale]/(admin)/admin/students/[id]/edit/page.tsx:61
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:81
@@ -297,6 +325,7 @@ msgstr "Biography"
 msgid "browse"
 msgstr "browse"
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/delete/page.tsx:83
 #: components/admin/AssignCoursesForm.tsx:231
 #: components/admin/CategoryForm.tsx:257
 #: components/admin/ChangeEmailDialog.tsx:200
@@ -367,6 +396,10 @@ msgstr "Changing..."
 #~ msgid "Choose Image"
 #~ msgstr "Choose Image"
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:303
+msgid "classes"
+msgstr "classes"
+
 #: components/admin/CreateCourseWizard.tsx:616
 msgid "Click to upload or drag and drop"
 msgstr "Click to upload or drag and drop"
@@ -390,8 +423,14 @@ msgstr "Color"
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:141
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:220
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:235
+#: components/admin/EnrollmentFilters.tsx:41
+#: components/admin/EnrollmentsDataTable.tsx:153
 msgid "Completed"
 msgstr "Completed"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:163
+msgid "Completed Date"
+msgstr "Completed Date"
 
 #: components/landing-page.tsx:346
 msgid "Comprehensive learning experience designed for your success"
@@ -438,8 +477,9 @@ msgstr "Contact Information"
 msgid "Copy this password and share it securely with the user"
 msgstr "Copy this password and share it securely with the user"
 
-#: app/[locale]/(admin)/admin/enrollments/page.tsx:64
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:132
 #: app/[locale]/(admin)/admin/payments/page.tsx:65
+#: components/admin/EnrollmentsDataTable.tsx:70
 msgid "Course"
 msgstr "Course"
 
@@ -479,6 +519,10 @@ msgstr "Course Links"
 #: components/admin/CourseManagementMenu.tsx:26
 #~ msgid "Course Management"
 #~ msgstr "Course Management"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:263
+msgid "Course Progress"
+msgstr "Course Progress"
 
 #: components/admin/CourseForm.tsx:113
 msgid "Course saved successfully! Redirecting..."
@@ -601,6 +645,14 @@ msgstr "Delete course"
 msgid "Delete Course"
 msgstr "Delete Course"
 
+#: components/admin/EnrollmentsDataTable.tsx:204
+msgid "Delete enrollment"
+msgstr "Delete enrollment"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/delete/page.tsx:50
+msgid "Delete Enrollment"
+msgstr "Delete Enrollment"
+
 #: components/admin/StudentsDataTable.tsx:202
 msgid "Delete student"
 msgstr "Delete student"
@@ -622,6 +674,7 @@ msgstr "Delete Teacher"
 msgid "Deleting this student will also remove all associated enrollments, payments, and records. This action cannot be undone."
 msgstr "Deleting this student will also remove all associated enrollments, payments, and records. This action cannot be undone."
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/delete/page.tsx:73
 #: components/admin/DeleteCourseForm.tsx:78
 #: components/admin/DeleteStudentForm.tsx:71
 #: components/admin/DeleteTeacherForm.tsx:78
@@ -647,6 +700,7 @@ msgstr "Drop your image here, or"
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:152
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:237
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:226
+#: components/admin/EnrollmentFilters.tsx:44
 msgid "Dropped"
 msgstr "Dropped"
 
@@ -754,7 +808,8 @@ msgstr "ផ្តល់សិទ្ធិអំណាចដល់អ្នករ
 msgid "Enrolled"
 msgstr "Enrolled"
 
-#: app/[locale]/(admin)/admin/enrollments/page.tsx:73
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:152
+#: components/admin/EnrollmentsDataTable.tsx:137
 msgid "Enrolled Date"
 msgstr "Enrolled Date"
 
@@ -766,15 +821,27 @@ msgstr "Enrolled Since"
 msgid "Enrolled Students"
 msgstr "Enrolled Students"
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:95
+msgid "Enrollment Details"
+msgstr "Enrollment Details"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:108
+msgid "Enrollment Information"
+msgstr "Enrollment Information"
+
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:151
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:152
 #: components/admin/StudentsDataTable.tsx:135
 msgid "Enrollments"
 msgstr "Enrollments"
 
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:48
+msgid "Enrollments Management"
+msgstr "Enrollments Management"
+
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:45
-msgid "Enrollments Overview"
-msgstr "Enrollments Overview"
+#~ msgid "Enrollments Overview"
+#~ msgstr "Enrollments Overview"
 
 #: components/student/EmailVerificationBanner.tsx:182
 msgid "Enter the 6-digit code from your email"
@@ -994,6 +1061,10 @@ msgstr "Manage course catalog and assignments"
 msgid "Manage course categories and organization"
 msgstr "Manage course categories and organization"
 
+#: app/[locale]/(admin)/admin/enrollments/page.tsx:51
+msgid "Manage student course enrollments and track progress"
+msgstr "Manage student course enrollments and track progress"
+
 #: app/[locale]/(admin)/admin/teachers/page.tsx:70
 msgid "Manage teachers and assign courses"
 msgstr "Manage teachers and assign courses"
@@ -1081,6 +1152,10 @@ msgstr "Next"
 msgid "No active sessions found"
 msgstr "No active sessions found"
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:232
+msgid "No attendance records yet"
+msgstr "No attendance records yet"
+
 #: components/admin/CreateCourseWizard.tsx:354
 msgid "No categories available. Please create one first."
 msgstr "No categories available. Please create one first."
@@ -1102,8 +1177,8 @@ msgid "No description provided"
 msgstr "No description provided"
 
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:123
-msgid "No enrollments found."
-msgstr "No enrollments found."
+#~ msgid "No enrollments found."
+#~ msgstr "No enrollments found."
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:272
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:260
@@ -1117,6 +1192,10 @@ msgstr "No payments found."
 #: components/ui/data-table.tsx:240
 msgid "No results found."
 msgstr "No results found."
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:200
+msgid "No scores recorded yet"
+msgstr "No scores recorded yet"
 
 #: app/[locale]/(admin)/admin/students/page.tsx:156
 #~ msgid "No students found."
@@ -1151,6 +1230,7 @@ msgstr "Not provided"
 msgid "OAuth2 (Google, etc.)"
 msgstr "OAuth2 (Google, etc.)"
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:303
 #: components/ui/data-table.tsx:284
 msgid "of"
 msgstr "of"
@@ -1159,6 +1239,10 @@ msgstr "of"
 #: components/admin/StudentForm.tsx:239
 msgid "Other"
 msgstr "Other"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:192
+msgid "out of"
+msgstr "out of"
 
 #: components/ui/data-table.tsx:273
 msgid "page"
@@ -1266,8 +1350,8 @@ msgid "Profile updated successfully!"
 msgstr "Profile updated successfully!"
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:208
-#: app/[locale]/(admin)/admin/enrollments/page.tsx:70
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:191
+#: components/admin/EnrollmentsDataTable.tsx:108
 msgid "Progress"
 msgstr "Progress"
 
@@ -1364,6 +1448,10 @@ msgstr "Save Teacher"
 msgid "Saving..."
 msgstr "Saving..."
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:176
+msgid "Scores History"
+msgstr "Scores History"
+
 #: components/SettingsPage.tsx:31
 msgid "Security"
 msgstr "Security"
@@ -1453,12 +1541,13 @@ msgid "Start Learning Free"
 msgstr "ចាប់ផ្តើមរៀនដោយឥតគិតថ្លៃ"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:163
-#: app/[locale]/(admin)/admin/enrollments/page.tsx:67
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:243
 #: app/[locale]/(admin)/admin/payments/page.tsx:74
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:176
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:170
 #: components/admin/CategoriesDataTable.tsx:98
 #: components/admin/CoursesDataTable.tsx:123
+#: components/admin/EnrollmentsDataTable.tsx:81
 #: components/admin/StudentsDataTable.tsx:147
 #: components/admin/TeachersDataTable.tsx:155
 msgid "Status"
@@ -1468,14 +1557,14 @@ msgstr "Status"
 #~ msgid "Status:"
 #~ msgstr "Status:"
 
-#: app/[locale]/(admin)/admin/enrollments/page.tsx:58
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:116
 #: app/[locale]/(admin)/admin/payments/page.tsx:62
+#: components/admin/EnrollmentsDataTable.tsx:49
 #: components/ProfileView.tsx:43
 #: components/UserNav.tsx:60
 msgid "Student"
 msgstr "Student"
 
-#: app/[locale]/(admin)/admin/enrollments/page.tsx:61
 #: components/admin/StudentsDataTable.tsx:44
 #: components/ProfileView.tsx:147
 msgid "Student ID"
@@ -1500,6 +1589,10 @@ msgstr "Students Management"
 
 #~ msgid "Success Rate"
 #~ msgstr "អត្រាជោគជ័យ"
+
+#: components/admin/EnrollmentFilters.tsx:47
+msgid "Suspended"
+msgstr "Suspended"
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:182
 #: components/admin/CoursesDataTable.tsx:66
@@ -1743,8 +1836,8 @@ msgstr "View All Courses"
 #~ msgstr "View all registered students and their enrollments"
 
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:48
-msgid "View all student course enrollments"
-msgstr "View all student course enrollments"
+#~ msgid "View all student course enrollments"
+#~ msgstr "View all student course enrollments"
 
 #: app/[locale]/(admin)/admin/payments/page.tsx:49
 msgid "View and manage all payment transactions"
@@ -1753,6 +1846,10 @@ msgstr "View and manage all payment transactions"
 #: app/[locale]/(admin)/admin/students/page.tsx:71
 msgid "View and manage student accounts"
 msgstr "View and manage student accounts"
+
+#: components/admin/EnrollmentsDataTable.tsx:194
+msgid "View course"
+msgstr "View course"
 
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:248
 msgid "View Course"
@@ -1763,6 +1860,7 @@ msgid "View Courses"
 msgstr "View Courses"
 
 #: components/admin/CoursesDataTable.tsx:156
+#: components/admin/EnrollmentsDataTable.tsx:182
 #: components/admin/StudentsDataTable.tsx:180
 #: components/admin/TeachersDataTable.tsx:188
 msgid "View details"
@@ -1772,6 +1870,10 @@ msgstr "View details"
 msgid "View Details"
 msgstr "មើលព័ត៌មានលម្អិត"
 
+#: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:98
+msgid "View enrollment information and progress"
+msgstr "View enrollment information and progress"
+
 #: components/admin/CoursesDataTable.tsx:168
 #: components/admin/StudentsDataTable.tsx:192
 msgid "View enrollments"
@@ -1780,6 +1882,10 @@ msgstr "View enrollments"
 #: components/admin/QuickActionsMenu.tsx:79
 msgid "View Payments"
 msgstr "View Payments"
+
+#: components/admin/EnrollmentsDataTable.tsx:188
+msgid "View student"
+msgstr "View student"
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:260
 msgid "View Student"
@@ -1831,6 +1937,10 @@ msgstr "ហេតុអ្វីជ្រើសរើសយើង"
 #: components/ProfileForm.tsx:175
 #~ msgid "Yes, Change Email"
 #~ msgstr "Yes, Change Email"
+
+#: app/[locale]/(admin)/admin/enrollments/[id]/delete/page.tsx:76
+msgid "Yes, Delete Enrollment"
+msgstr "Yes, Delete Enrollment"
 
 #: components/admin/DeleteStudentForm.tsx:74
 msgid "Yes, Delete Student"
