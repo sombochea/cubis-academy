@@ -265,7 +265,7 @@ export default async function PaymentDetailsPage({
                     <Trans>Payment Approval</Trans>
                   </p>
                   <Link href={`/${locale}/admin/payments/${payment.id}/approve`}>
-                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm">
+                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm mb-2">
                       <CheckCircle className="mr-2 h-4 w-4" />
                       <Trans>Approve Payment</Trans>
                     </Button>
