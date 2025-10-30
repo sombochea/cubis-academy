@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect, notFound } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { enrollments, courses, scores, attendances, payments, courseFeedback } from '@/lib/drizzle/schema';
+import { enrollments, courses, scores, attendances, payments, courseFeedback, classSchedules } from '@/lib/drizzle/schema';
 import { eq, and, desc, sum } from 'drizzle-orm';
 import { Trans } from '@lingui/react/macro';
 import { StudentNav } from '@/components/student/StudentNav';
@@ -27,6 +27,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Progress } from '@/components/ui/progress';
 import { CourseFeedbackForm } from '@/components/student/CourseFeedbackForm';
+import { ClassSchedule } from '@/components/student/ClassSchedule';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 
@@ -135,6 +136,24 @@ export default async function EnrollmentDetailsPage({
     .from(courseFeedback)
     .where(eq(courseFeedback.enrollmentId, id));
 
+  // Get class schedules
+  const schedulesList = await db
+    .select({
+      id: classSchedules.id,
+      dayOfWeek: classSchedules.dayOfWeek,
+      startTime: classSchedules.startTime,
+      endTime: classSchedules.endTime,
+      location: classSchedules.location,
+      notes: classSchedules.notes,
+    })
+    .from(classSchedules)
+    .where(
+      and(
+        eq(classSchedules.courseId, enrollment.courseId),
+        eq(classSchedules.isActive, true)
+      )
+    );
+
   // Calculate stats
   const totalAttendance = attendanceList.length;
   const presentCount = attendanceList.filter(a => a.status === 'present').length;
@@ -144,7 +163,7 @@ export default async function EnrollmentDetailsPage({
 
   const avgScore = scoresList.length > 0
     ? Math.round(
-        scoresList.reduce((sum, s) => sum + (s.score / s.maxScore) * 100, 0) / scoresList.length
+        scoresList.reduce((sum, s) => sum + (Number(s.score) / Number(s.maxScore)) * 100, 0) / scoresList.length
       )
     : 0;
 
@@ -339,7 +358,16 @@ export default async function EnrollmentDetailsPage({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Class Schedule */}
+          <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+            <h3 className="text-xl font-semibold text-[#17224D] mb-4 flex items-center gap-2">
+              <Calendar className="w-5 h-5" />
+              <Trans>Class Schedule</Trans>
+            </h3>
+            <ClassSchedule schedules={schedulesList} deliveryMode={enrollment.deliveryMode} />
+          </div>
+
           {/* Scores */}
           <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
             <h3 className="text-xl font-semibold text-[#17224D] mb-4 flex items-center gap-2">
@@ -419,7 +447,7 @@ export default async function EnrollmentDetailsPage({
         </div>
 
         {/* Payment Section */}
-        <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm mb-6">
+        <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm mb-6 mt-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-xl font-semibold text-[#17224D] flex items-center gap-2">
               <DollarSign className="w-5 h-5" />

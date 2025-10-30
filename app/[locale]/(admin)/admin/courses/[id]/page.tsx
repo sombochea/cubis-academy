@@ -97,6 +97,13 @@ export default async function CourseViewPage({
               </div>
               <div className="flex gap-2">
                 <Link
+                  href={`/${locale}/admin/courses/${id}/schedules`}
+                  className="px-4 py-2 bg-white text-[#007FFF] rounded-lg hover:bg-white/90 transition-colors font-semibold flex items-center gap-2"
+                >
+                  <Calendar className="w-4 h-4" />
+                  <Trans>Schedules</Trans>
+                </Link>
+                <Link
                   href={`/${locale}/admin/courses/${id}/edit`}
                   className="px-4 py-2 bg-white text-[#007FFF] rounded-lg hover:bg-white/90 transition-colors font-semibold flex items-center gap-2"
                 >

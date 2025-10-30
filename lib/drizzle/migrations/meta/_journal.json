@@ -43,6 +43,13 @@
       "when": 1761819401793,
       "tag": "0005_demonic_spyke",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1761820233875,
+      "tag": "0006_sturdy_mystique",
+      "breakpoints": true
     }
   ]
 }

@@ -46,6 +46,15 @@ export const deliveryModeEnum = pgEnum("delivery_mode", [
   "face_to_face",
   "hybrid",
 ]);
+export const dayOfWeekEnum = pgEnum("day_of_week", [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+]);
 
 // Users table
 export const users = pgTable(
@@ -358,6 +367,30 @@ export const courseFeedback = pgTable(
   ]
 );
 
+// Class schedules table
+export const classSchedules = pgTable(
+  "class_schedules",
+  {
+    id: uuid("id").primaryKey().default(uuidv7),
+    courseId: uuid("course_id")
+      .notNull()
+      .references(() => courses.id, { onDelete: "cascade" }),
+    dayOfWeek: dayOfWeekEnum("day_of_week").notNull(),
+    startTime: varchar("start_time", { length: 5 }).notNull(), // HH:MM format (e.g., "09:00")
+    endTime: varchar("end_time", { length: 5 }).notNull(), // HH:MM format (e.g., "11:00")
+    location: text("location"), // Physical location or online meeting link
+    notes: text("notes"), // Additional notes about the class
+    isActive: boolean("is_active").notNull().default(true),
+    created: timestamp("created").notNull().defaultNow(),
+    updated: timestamp("updated").notNull().defaultNow(),
+  },
+  (table) => [
+    index("class_schedules_course_id_idx").on(table.courseId),
+    index("class_schedules_day_of_week_idx").on(table.dayOfWeek),
+    index("class_schedules_is_active_idx").on(table.isActive),
+  ]
+);
+
 // Email verification codes table
 export const emailVerificationCodes = pgTable(
   "email_verification_codes",
@@ -404,6 +437,7 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
   }),
   enrollments: many(enrollments),
   payments: many(payments),
+  schedules: many(classSchedules),
 }));
 
 export const enrollmentsRelations = relations(enrollments, ({ one, many }) => ({
@@ -524,6 +558,13 @@ export const courseFeedbackRelations = relations(courseFeedback, ({ one }) => ({
   }),
   course: one(courses, {
     fields: [courseFeedback.courseId],
+    references: [courses.id],
+  }),
+}));
+
+export const classSchedulesRelations = relations(classSchedules, ({ one }) => ({
+  course: one(courses, {
+    fields: [classSchedules.courseId],
     references: [courses.id],
   }),
 }));

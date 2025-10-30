@@ -28,9 +28,9 @@ msgstr ""
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:232
 #: app/[locale]/(student)/student/courses/[id]/page.tsx:101
 #: app/[locale]/(student)/student/courses/[id]/page.tsx:232
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:212
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:408
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:479
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:231
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:436
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:507
 #: app/[locale]/(student)/student/page.tsx:213
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
@@ -100,7 +100,7 @@ msgstr "Actions"
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:128
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:225
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:172
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:129
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:214
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:178
@@ -110,6 +110,7 @@ msgstr "Actions"
 #: components/admin/CourseFilters.tsx:46
 #: components/admin/CoursesDataTable.tsx:132
 #: components/admin/EnrollmentFilters.tsx:38
+#: components/admin/ScheduleManager.tsx:320
 #: components/admin/StudentFilters.tsx:49
 #: components/admin/StudentsDataTable.tsx:156
 #: components/admin/TeacherFilters.tsx:46
@@ -161,6 +162,12 @@ msgstr ""
 msgid "Add New Teacher"
 msgstr "Add New Teacher"
 
+#: components/admin/ScheduleManager.tsx:207
+#: components/admin/ScheduleManager.tsx:213
+#: components/admin/ScheduleManager.tsx:362
+msgid "Add Schedule"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/students/page.tsx:79
 #: components/admin/QuickActionsMenu.tsx:43
 msgid "Add Student"
@@ -171,6 +178,10 @@ msgstr ""
 #: components/admin/QuickActionsMenu.tsx:37
 msgid "Add Teacher"
 msgstr "Add Teacher"
+
+#: components/admin/ScheduleManager.tsx:379
+msgid "Add your first class schedule to get started"
+msgstr ""
 
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:225
 #: components/admin/StudentForm.tsx:250
@@ -194,7 +205,7 @@ msgstr ""
 msgid "Admins"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:160
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:179
 #: components/admin/CourseFilters.tsx:79
 #: components/admin/CourseForm.tsx:265
 #: components/admin/CreateCourseWizard.tsx:464
@@ -284,6 +295,10 @@ msgstr "Are you sure you want to delete this course? This will permanently remov
 msgid "Are you sure you want to delete this enrollment? This action cannot be undone and will also delete all associated scores and attendance records."
 msgstr ""
 
+#: components/admin/ScheduleManager.tsx:468
+msgid "Are you sure you want to delete this schedule? This action cannot be undone."
+msgstr ""
+
 #: app/[locale]/(admin)/admin/teachers/[id]/delete/page.tsx:115
 msgid "Are you sure you want to delete this teacher? This will permanently remove:"
 msgstr "Are you sure you want to delete this teacher? This will permanently remove:"
@@ -317,8 +332,8 @@ msgstr "Assign Teacher"
 msgid "Assigned Courses"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:312
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:384
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:331
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:412
 msgid "Attendance"
 msgstr ""
 
@@ -342,12 +357,13 @@ msgstr ""
 msgid "Avg Progress"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:300
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:319
 msgid "Avg Score"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/delete/page.tsx:60
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:82
+#: app/[locale]/(admin)/admin/courses/[id]/schedules/page.tsx:61
 msgid "Back to Course"
 msgstr "Back to Course"
 
@@ -360,7 +376,7 @@ msgstr "Back to Courses"
 msgid "Back to Enrollments"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:174
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:193
 msgid "Back to My Courses"
 msgstr ""
 
@@ -396,7 +412,7 @@ msgstr ""
 msgid "Basic Information"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:158
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:177
 #: components/admin/CourseFilters.tsx:73
 #: components/admin/CourseForm.tsx:259
 #: components/admin/CreateCourseWizard.tsx:452
@@ -433,6 +449,8 @@ msgstr ""
 #: components/admin/DeleteTeacherForm.tsx:88
 #: components/admin/ManualVerifyButton.tsx:103
 #: components/admin/ManualVerifyButton.tsx:147
+#: components/admin/ScheduleManager.tsx:351
+#: components/admin/ScheduleManager.tsx:475
 #: components/admin/StudentForm.tsx:287
 #: components/admin/TeacherForm.tsx:273
 #: components/ProfileForm.tsx:252
@@ -499,11 +517,19 @@ msgstr ""
 #~ msgid "Choose Image"
 #~ msgstr "Choose Image"
 
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:366
+msgid "Class Schedule"
+msgstr ""
+
+#: app/[locale]/(admin)/admin/courses/[id]/schedules/page.tsx:73
+msgid "Class Schedules"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:303
 msgid "classes"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:324
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:343
 msgid "Classes"
 msgstr ""
 
@@ -620,7 +646,7 @@ msgstr "Course Details"
 msgid "Course Enrollments"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:498
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:526
 msgid "Course Feedback"
 msgstr ""
 
@@ -636,7 +662,7 @@ msgstr "Course information and materials"
 msgid "Course Level"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:190
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:197
 msgid "Course Links"
 msgstr "Course Links"
 
@@ -711,7 +737,7 @@ msgstr ""
 msgid "Create Student"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:221
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:228
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:233
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:207
 msgid "Created"
@@ -756,9 +782,14 @@ msgstr "Date"
 msgid "Date of Birth"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:111
+#: components/admin/ScheduleManager.tsx:224
+msgid "Day of Week"
+msgstr ""
+
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:118
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:136
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:130
+#: components/admin/ScheduleManager.tsx:488
 msgid "Delete"
 msgstr ""
 
@@ -781,6 +812,10 @@ msgstr ""
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/delete/page.tsx:50
 msgid "Delete Enrollment"
+msgstr ""
+
+#: components/admin/ScheduleManager.tsx:465
+msgid "Delete Schedule"
 msgstr ""
 
 #: components/admin/StudentsDataTable.tsx:202
@@ -808,6 +843,7 @@ msgstr ""
 #: components/admin/DeleteCourseForm.tsx:78
 #: components/admin/DeleteStudentForm.tsx:71
 #: components/admin/DeleteTeacherForm.tsx:78
+#: components/admin/ScheduleManager.tsx:485
 msgid "Deleting..."
 msgstr "Deleting..."
 
@@ -815,7 +851,7 @@ msgstr "Deleting..."
 msgid "Describe what students will learn"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:175
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:182
 #: components/admin/CategoriesDataTable.tsx:68
 #: components/admin/CategoryForm.tsx:167
 #: components/admin/CourseForm.tsx:141
@@ -834,7 +870,7 @@ msgstr "Drop your image here, or"
 msgid "Dropped"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:139
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:146
 #: app/[locale]/(student)/student/courses/[id]/page.tsx:219
 #: components/admin/CoursesDataTable.tsx:97
 msgid "Duration"
@@ -848,7 +884,7 @@ msgstr "Duration (hours)"
 #~ msgid "Earn certificates that boost your career prospects"
 #~ msgstr "Earn certificates that boost your career prospects"
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:104
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:111
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:129
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:123
 msgid "Edit"
@@ -868,6 +904,10 @@ msgstr "Edit Course"
 
 #: components/ProfileView.tsx:192
 msgid "Edit Profile"
+msgstr ""
+
+#: components/admin/ScheduleManager.tsx:213
+msgid "Edit Schedule"
 msgstr ""
 
 #: components/admin/StudentsDataTable.tsx:186
@@ -931,6 +971,10 @@ msgstr ""
 msgid "Empowering learners with professional skills for the digital age"
 msgstr "Empowering learners with professional skills for the digital age"
 
+#: components/admin/ScheduleManager.tsx:264
+msgid "End Time"
+msgstr ""
+
 #~ msgid "Engage with teachers and peers in live sessions"
 #~ msgstr "Engage with teachers and peers in live sessions"
 
@@ -986,7 +1030,7 @@ msgstr ""
 msgid "Enrollment Information"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:151
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:158
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:152
 #: components/admin/StudentsDataTable.tsx:135
 msgid "Enrollments"
@@ -1054,7 +1098,7 @@ msgstr ""
 msgid "Exporting..."
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:228
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:247
 msgid "Face-to-Face"
 msgstr ""
 
@@ -1085,6 +1129,11 @@ msgstr ""
 #: components/student/CoursesGrid.tsx:238
 #: components/student/CoursesGrid.tsx:304
 msgid "FREE"
+msgstr ""
+
+#: components/admin/ScheduleManager.tsx:85
+#: components/student/ClassSchedule.tsx:28
+msgid "Friday"
 msgstr ""
 
 #: components/admin/StudentForm.tsx:130
@@ -1136,7 +1185,7 @@ msgstr ""
 msgid "Google"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:230
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:249
 msgid "Hybrid"
 msgstr ""
 
@@ -1153,12 +1202,13 @@ msgstr ""
 msgid "In Progress"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:172
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:178
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:172
 #: components/admin/CategoriesDataTable.tsx:107
 #: components/admin/CourseFilters.tsx:49
 #: components/admin/CoursesDataTable.tsx:132
+#: components/admin/ScheduleManager.tsx:404
 #: components/admin/StudentFilters.tsx:52
 #: components/admin/StudentsDataTable.tsx:156
 #: components/admin/TeacherFilters.tsx:49
@@ -1173,7 +1223,7 @@ msgstr ""
 #~ msgid "Interactive Learning"
 #~ msgstr "Interactive Learning"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:159
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:178
 #: components/admin/CourseFilters.tsx:76
 #: components/admin/CourseForm.tsx:262
 #: components/admin/CreateCourseWizard.tsx:458
@@ -1189,7 +1239,7 @@ msgstr ""
 #~ msgid "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
 #~ msgstr "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:268
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:287
 msgid "Join Zoom Class"
 msgstr ""
 
@@ -1205,7 +1255,7 @@ msgstr "JPG, PNG or WebP • Max 5MB • 400x400px recommended"
 msgid "Last active"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:225
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:232
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:281
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:237
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:211
@@ -1241,6 +1291,10 @@ msgstr ""
 msgid "Loading your dashboard"
 msgstr ""
 
+#: components/admin/ScheduleManager.tsx:282
+msgid "Location"
+msgstr ""
+
 #: components/landing-page.tsx:107
 msgid "Login"
 msgstr "Login"
@@ -1249,7 +1303,7 @@ msgstr "Login"
 msgid "Logout"
 msgstr "Logout"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:430
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:458
 #: app/[locale]/(student)/student/page.tsx:259
 msgid "Make Payment"
 msgstr ""
@@ -1286,6 +1340,10 @@ msgstr ""
 #: app/[locale]/(admin)/admin/teachers/page.tsx:70
 msgid "Manage teachers and assign courses"
 msgstr "Manage teachers and assign courses"
+
+#: app/[locale]/(admin)/admin/courses/[id]/schedules/page.tsx:79
+msgid "Manage weekly class schedules for this course"
+msgstr ""
 
 #: components/SettingsPage.tsx:62
 msgid "Manage your account settings and preferences"
@@ -1338,6 +1396,11 @@ msgstr ""
 msgid "Mobile Payment"
 msgstr ""
 
+#: components/admin/ScheduleManager.tsx:81
+#: components/student/ClassSchedule.tsx:24
+msgid "Monday"
+msgstr ""
+
 #: app/[locale]/(student)/student/enrollments/page.tsx:94
 #: components/teacher/TeacherNav.tsx:35
 msgid "My Courses"
@@ -1375,12 +1438,16 @@ msgid "No active sessions found"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:232
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:390
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:418
 msgid "No attendance records yet"
 msgstr ""
 
 #: components/admin/CreateCourseWizard.tsx:354
 msgid "No categories available. Please create one first."
+msgstr ""
+
+#: components/student/ClassSchedule.tsx:43
+msgid "No class schedule available"
 msgstr ""
 
 #: components/admin/AssignCoursesForm.tsx:216
@@ -1412,7 +1479,7 @@ msgstr ""
 msgid "No description available."
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:177
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:184
 msgid "No description provided"
 msgstr "No description provided"
 
@@ -1429,7 +1496,7 @@ msgstr ""
 #~ msgid "No payments found."
 #~ msgstr "No payments found."
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:456
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:484
 msgid "No payments recorded yet"
 msgstr ""
 
@@ -1437,8 +1504,12 @@ msgstr ""
 msgid "No results found."
 msgstr "No results found."
 
+#: components/admin/ScheduleManager.tsx:376
+msgid "No schedules yet"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:200
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:353
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:381
 msgid "No scores recorded yet"
 msgstr ""
 
@@ -1450,7 +1521,7 @@ msgstr ""
 msgid "No students have enrolled in this course"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:184
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:191
 #: components/admin/CourseForm.tsx:187
 #: components/admin/CreateCourseWizard.tsx:376
 msgid "No teacher assigned"
@@ -1472,6 +1543,7 @@ msgid "Not provided"
 msgstr "Not provided"
 
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:145
+#: components/admin/ScheduleManager.tsx:303
 msgid "Notes"
 msgstr ""
 
@@ -1484,7 +1556,7 @@ msgstr ""
 msgid "of"
 msgstr "of"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:232
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:251
 msgid "Online"
 msgstr ""
 
@@ -1517,12 +1589,12 @@ msgstr "page"
 #~ msgid "Page {0} of {1}"
 #~ msgstr "Page {0} of {1}"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:336
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:355
 #: components/student/CoursesGrid.tsx:158
 msgid "Paid"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:442
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:470
 msgid "Paid Amount"
 msgstr ""
 
@@ -1555,7 +1627,7 @@ msgstr ""
 msgid "Payment Details"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:426
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:454
 msgid "Payment History"
 msgstr ""
 
@@ -1629,7 +1701,7 @@ msgstr ""
 msgid "Previous"
 msgstr "Previous"
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:127
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:134
 #: components/admin/CoursesDataTable.tsx:85
 msgid "Price"
 msgstr "Price"
@@ -1665,7 +1737,7 @@ msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:208
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:191
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:287
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:306
 #: components/admin/EnrollmentsDataTable.tsx:108
 #: components/student/MyCoursesGrid.tsx:147
 msgid "Progress"
@@ -1741,7 +1813,7 @@ msgstr ""
 msgid "Related scores and attendance records"
 msgstr "Related scores and attendance records"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:446
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:474
 msgid "Remaining"
 msgstr ""
 
@@ -1783,6 +1855,11 @@ msgstr ""
 #~ msgid "Rows per page"
 #~ msgstr "Rows per page"
 
+#: components/admin/ScheduleManager.tsx:86
+#: components/student/ClassSchedule.tsx:29
+msgid "Saturday"
+msgstr ""
+
 #: components/admin/AssignCoursesForm.tsx:244
 msgid "Save Assignments"
 msgstr ""
@@ -1804,13 +1881,18 @@ msgstr "Save Teacher"
 #: components/admin/CategoryForm.tsx:242
 #: components/admin/CourseForm.tsx:326
 #: components/admin/CreateCourseWizard.tsx:707
+#: components/admin/ScheduleManager.tsx:357
 #: components/admin/StudentForm.tsx:274
 #: components/admin/TeacherForm.tsx:262
 #: components/ProfileForm.tsx:465
 msgid "Saving..."
 msgstr "Saving..."
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:347
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:104
+msgid "Schedules"
+msgstr ""
+
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:375
 msgid "Scores"
 msgstr ""
 
@@ -1857,6 +1939,10 @@ msgstr ""
 msgid "Set the course price and estimated duration"
 msgstr ""
 
+#: components/admin/ScheduleManager.tsx:216
+msgid "Set the day, time, and location for this class session"
+msgstr ""
+
 #: components/LoadingRedirect.tsx:18
 msgid "Setting up your session"
 msgstr ""
@@ -1872,6 +1958,10 @@ msgstr ""
 #: components/ui/data-table.tsx:
 #~ msgid "Show"
 #~ msgstr "Show"
+
+#: components/admin/ScheduleManager.tsx:323
+msgid "Show this schedule to students"
+msgstr ""
 
 #. placeholder {0}: filteredCourses.length
 #. placeholder {1}: courses.length
@@ -1916,7 +2006,11 @@ msgstr "Start Learning Free"
 msgid "Start learning immediately after enrollment"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:163
+#: components/admin/ScheduleManager.tsx:249
+msgid "Start Time"
+msgstr ""
+
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:170
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:243
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:176
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:170
@@ -1983,11 +2077,16 @@ msgstr ""
 #~ msgid "Success Rate"
 #~ msgstr "Success Rate"
 
+#: components/admin/ScheduleManager.tsx:87
+#: components/student/ClassSchedule.tsx:30
+msgid "Sunday"
+msgstr ""
+
 #: components/admin/EnrollmentFilters.tsx:47
 msgid "Suspended"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:182
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:189
 #: components/admin/CoursesDataTable.tsx:66
 #: components/ProfileView.tsx:41
 #: components/UserNav.tsx:58
@@ -2049,6 +2148,11 @@ msgstr ""
 msgid "This will log you out from all devices and browsers. You will need to log in again on this device."
 msgstr ""
 
+#: components/admin/ScheduleManager.tsx:84
+#: components/student/ClassSchedule.tsx:27
+msgid "Thursday"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:262
 msgid "Timeline"
 msgstr ""
@@ -2084,7 +2188,7 @@ msgid "Total"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:153
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:438
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:466
 msgid "Total Amount"
 msgstr ""
 
@@ -2153,6 +2257,11 @@ msgstr ""
 msgid "Try adjusting your search or filters"
 msgstr "Try adjusting your search or filters"
 
+#: components/admin/ScheduleManager.tsx:82
+#: components/student/ClassSchedule.tsx:25
+msgid "Tuesday"
+msgstr ""
+
 #: components/admin/DeleteCourseForm.tsx:59
 #: components/admin/DeleteTeacherForm.tsx:59
 msgid "Type DELETE to confirm"
@@ -2184,6 +2293,10 @@ msgstr ""
 
 #: components/ProfileForm.tsx:470
 msgid "Update Profile"
+msgstr ""
+
+#: components/admin/ScheduleManager.tsx:360
+msgid "Update Schedule"
 msgstr ""
 
 #: components/admin/StudentForm.tsx:277
@@ -2382,7 +2495,7 @@ msgid "Watch Demo"
 msgstr "Watch Demo"
 
 #: app/[locale]/(student)/student/courses/[id]/page.tsx:159
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:256
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:275
 msgid "Watch on YouTube"
 msgstr ""
 
@@ -2393,6 +2506,11 @@ msgstr ""
 
 #: components/ProfileForm.tsx:239
 msgid "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
+msgstr ""
+
+#: components/admin/ScheduleManager.tsx:83
+#: components/student/ClassSchedule.tsx:26
+msgid "Wednesday"
 msgstr ""
 
 #. placeholder {0}: user.name
@@ -2489,7 +2607,7 @@ msgstr ""
 msgid "YouTube URL"
 msgstr "YouTube URL"
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:200
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:207
 msgid "YouTube Video"
 msgstr "YouTube Video"
 
@@ -2497,7 +2615,7 @@ msgstr "YouTube Video"
 #~ msgid "Zoom"
 #~ msgstr ""
 
-#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:211
+#: app/[locale]/(admin)/admin/courses/[id]/page.tsx:218
 msgid "Zoom Meeting"
 msgstr "Zoom Meeting"
 
