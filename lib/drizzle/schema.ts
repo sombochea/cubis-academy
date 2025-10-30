@@ -94,6 +94,7 @@ export const students = pgTable(
     address: text("address"),
     photo: varchar("photo", { length: 500 }),
     enrolled: timestamp("enrolled").notNull().defaultNow(),
+    onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
   },
   (table) => [
     index("students_gender_idx").on(table.gender),

@@ -6,12 +6,12 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const feedbackSchema = z.object({
-  enrollmentId: z.string().uuid(),
-  courseId: z.string().uuid(),
+  enrollmentId: z.uuid(),
+  courseId: z.uuid(),
   rating: z.number().int().min(1).max(5),
   comment: z.string().nullable().optional(),
   isAnonymous: z.boolean().default(false),
-  feedbackId: z.string().uuid().optional(),
+  feedbackId: z.uuid().optional(),
 });
 
 export async function POST(request: Request) {

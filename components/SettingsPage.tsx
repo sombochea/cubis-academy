@@ -1,12 +1,20 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ProfileForm } from '@/components/ProfileForm';
-import { PasswordChangeForm } from '@/components/PasswordChangeForm';
-import { SessionsManager } from '@/components/SessionsManager';
-import { Trans } from '@lingui/react/macro';
-import { Shield, User, Lock, Monitor, Link as LinkIcon, Chrome } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { ProfileForm } from "@/components/ProfileForm";
+import { PasswordChangeForm } from "@/components/PasswordChangeForm";
+import { SessionsManager } from "@/components/SessionsManager";
+import { Trans } from "@lingui/react/macro";
+import {
+  Shield,
+  User,
+  Lock,
+  Monitor,
+  Link as LinkIcon,
+  Chrome,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Icons } from "./icons";
 
 interface SettingsPageProps {
   locale: string;
@@ -14,32 +22,33 @@ interface SettingsPageProps {
   roleData: any;
 }
 
-type SettingsSection = 'account' | 'security' | 'linked-accounts' | 'sessions';
+type SettingsSection = "account" | "security" | "linked-accounts" | "sessions";
 
 export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
-  const [activeSection, setActiveSection] = useState<SettingsSection>('account');
+  const [activeSection, setActiveSection] =
+    useState<SettingsSection>("account");
 
   const sections = [
     {
-      id: 'account' as SettingsSection,
+      id: "account" as SettingsSection,
       label: <Trans>Account</Trans>,
       icon: User,
       description: <Trans>Manage your profile information</Trans>,
     },
     {
-      id: 'security' as SettingsSection,
+      id: "security" as SettingsSection,
       label: <Trans>Security</Trans>,
       icon: Lock,
       description: <Trans>Password and security settings</Trans>,
     },
     {
-      id: 'linked-accounts' as SettingsSection,
+      id: "linked-accounts" as SettingsSection,
       label: <Trans>Linked Accounts</Trans>,
       icon: LinkIcon,
       description: <Trans>Connect your Google account</Trans>,
     },
     {
-      id: 'sessions' as SettingsSection,
+      id: "sessions" as SettingsSection,
       label: <Trans>Sessions</Trans>,
       icon: Monitor,
       description: <Trans>Manage active and inactive sessions</Trans>,
@@ -74,19 +83,24 @@ export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
               {sections.map((section) => {
                 const Icon = section.icon;
                 const isActive = activeSection === section.id;
-                
+
                 return (
                   <button
                     key={section.id}
                     onClick={() => setActiveSection(section.id)}
                     className={cn(
-                      'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors',
+                      "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors",
                       isActive
-                        ? 'bg-[#007FFF] text-white'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        ? "bg-[#007FFF] text-white"
+                        : "text-gray-700 hover:bg-gray-50"
                     )}
                   >
-                    <Icon className={cn('w-5 h-5', isActive ? 'text-white' : 'text-gray-400')} />
+                    <Icon
+                      className={cn(
+                        "w-5 h-5",
+                        isActive ? "text-white" : "text-gray-400"
+                      )}
+                    />
                     <span className="font-medium">{section.label}</span>
                   </button>
                 );
@@ -99,7 +113,7 @@ export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
         <div className="lg:col-span-3">
           <div className="bg-white rounded-xl border border-gray-100 p-6">
             {/* Account Section */}
-            {activeSection === 'account' && (
+            {activeSection === "account" && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <User className="w-5 h-5 text-[#007FFF]" />
@@ -115,7 +129,7 @@ export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
             )}
 
             {/* Security Section */}
-            {activeSection === 'security' && (
+            {activeSection === "security" && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Lock className="w-5 h-5 text-[#007FFF]" />
@@ -126,12 +140,15 @@ export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
                 <p className="text-sm text-gray-600 mb-6">
                   <Trans>Manage your password and security preferences</Trans>
                 </p>
-                <PasswordChangeForm locale={locale} hasPassword={!!user.passHash} />
+                <PasswordChangeForm
+                  locale={locale}
+                  hasPassword={!!user.passHash}
+                />
               </div>
             )}
 
             {/* Linked Accounts Section */}
-            {activeSection === 'linked-accounts' && (
+            {activeSection === "linked-accounts" && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <LinkIcon className="w-5 h-5 text-[#007FFF]" />
@@ -148,7 +165,7 @@ export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center">
-                        <Chrome className="w-5 h-5 text-[#4285F4]" />
+                        <Icons.Google className="w-5 h-5 text-[#4285F4]" />
                       </div>
                       <div>
                         <p className="font-medium text-[#17224D]">Google</p>
@@ -185,7 +202,7 @@ export function SettingsPage({ locale, user, roleData }: SettingsPageProps) {
             )}
 
             {/* Sessions Section */}
-            {activeSection === 'sessions' && (
+            {activeSection === "sessions" && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Monitor className="w-5 h-5 text-[#007FFF]" />

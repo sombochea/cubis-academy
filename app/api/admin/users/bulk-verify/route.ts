@@ -6,7 +6,7 @@ import { inArray } from 'drizzle-orm';
 import { z } from 'zod';
 
 const bulkVerifySchema = z.object({
-  userIds: z.array(z.string().uuid()).min(1, 'At least one user ID required'),
+  userIds: z.array(z.uuid()).min(1, 'At least one user ID required'),
 });
 
 export async function POST(req: Request) {

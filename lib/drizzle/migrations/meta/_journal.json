@@ -15,6 +15,13 @@
       "when": 1761841438631,
       "tag": "0001_white_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1761847350303,
+      "tag": "0002_melted_saracen",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Trans } from "@lingui/react/macro";
 import {
   User,
@@ -8,6 +12,8 @@ import {
   MapPin,
   Shield,
   BookOpen,
+  Edit,
+  X,
 } from "lucide-react";
 import { ProfileForm } from "@/components/ProfileForm";
 import { DotPattern } from "@/components/ui/dot-pattern";
@@ -19,6 +25,7 @@ import {
   getRoleLabel as getRoleLabelUtil,
   getRoleIcon,
 } from "@/lib/avatar-utils";
+import { formatDate } from "@/lib/utils/date";
 
 interface ProfileViewProps {
   user: any;
@@ -27,6 +34,8 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  
   // Get consistent gradient based on user ID
   const profileBg = getProfileBackground(user.id);
   const avatarGradient = getAvatarGradient(user.id);
@@ -69,6 +78,28 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
 
         {/* Profile Info - Clean white section */}
         <div className="relative px-6 pt-20 pb-8 bg-white">
+          {/* Edit Button */}
+          <div className="absolute top-4 right-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditing(!isEditing)}
+              className="gap-2"
+            >
+              {isEditing ? (
+                <>
+                  <X className="w-4 h-4" />
+                  <Trans>Cancel</Trans>
+                </>
+              ) : (
+                <>
+                  <Edit className="w-4 h-4" />
+                  <Trans>Edit Profile</Trans>
+                </>
+              )}
+            </Button>
+          </div>
+          
           {/* Avatar positioned to overlap background */}
           <div className="absolute -top-12 left-6">
             <div className="relative">
@@ -161,7 +192,7 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
                     <Trans>Date of Birth</Trans>
                   </p>
                   <p className="text-sm font-medium text-[#17224D]">
-                    {new Date(roleData.dob).toLocaleDateString()}
+                    {formatDate(roleData.dob, locale) || '-'}
                   </p>
                 </div>
               </div>
@@ -189,7 +220,7 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
                     <Trans>Enrolled Since</Trans>
                   </p>
                   <p className="text-sm font-medium text-[#17224D]">
-                    {new Date(roleData.enrolled).toLocaleDateString()}
+                    {formatDate(roleData.enrolled, locale) || '-'}
                   </p>
                 </div>
               </div>
@@ -212,19 +243,26 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
         </div>
       </div>
 
-      {/* Edit Profile Section */}
-      <div className="bg-white rounded-xl border border-gray-100 p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <User className="w-5 h-5 text-[#007FFF]" />
-          <h2 className="text-xl font-semibold text-[#17224D]">
-            <Trans>Edit Profile</Trans>
-          </h2>
+      {/* Edit Profile Section - Only show when editing */}
+      {isEditing && (
+        <div className="bg-white rounded-xl border border-gray-100 p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <User className="w-5 h-5 text-[#007FFF]" />
+            <h2 className="text-xl font-semibold text-[#17224D]">
+              <Trans>Edit Profile</Trans>
+            </h2>
+          </div>
+          <p className="text-sm text-gray-600 mb-6">
+            <Trans>Update your basic information</Trans>
+          </p>
+          <ProfileForm 
+            user={user} 
+            roleData={roleData} 
+            locale={locale}
+            onSuccess={() => setIsEditing(false)}
+          />
         </div>
-        <p className="text-sm text-gray-600 mb-6">
-          <Trans>Update your basic information</Trans>
-        </p>
-        <ProfileForm user={user} roleData={roleData} locale={locale} />
-      </div>
+      )}
     </div>
   );
 }

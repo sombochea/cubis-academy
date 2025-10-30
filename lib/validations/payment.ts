@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const paymentSchema = z.object({
-  courseId: z.string().uuid('Invalid course ID'),
+  courseId: z.uuid('Invalid course ID'),
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/, 'Invalid amount format'),
   method: z.string().min(1, 'Payment method is required'),
   txnId: z.string().optional(),

@@ -24,26 +24,18 @@ import {
   Phone,
   Lock,
   User,
-  CalendarIcon,
   MapPin,
   AlertCircle,
   CheckCircle2,
   ArrowRight,
-  ChevronDown,
 } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { format } from "date-fns";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [step, setStep] = useState(1);
-  const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -563,53 +555,24 @@ export default function RegisterPage() {
                           <Label className="text-sm font-semibold text-[#17224D]">
                             Date of Birth
                           </Label>
-                          <Popover
-                            open={datePickerOpen}
-                            onOpenChange={setDatePickerOpen}
-                          >
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={`w-full h-12 justify-start text-left font-normal border-gray-200 hover:bg-[#F4F5F7] hover:border-[#007FFF]/30 ${
-                                  !field.state.value && "text-[#363942]/50"
-                                }`}
-                              >
-                                <CalendarIcon className="mr-2 h-5 w-5 text-[#363942]/40" />
-                                {field.state.value ? (
-                                  format(new Date(field.state.value), "PPP")
-                                ) : (
-                                  <span>Select date</span>
-                                )}
-                                <ChevronDown className="ml-auto h-4 w-4 text-[#363942]/40" />
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0"
-                              align="start"
-                            >
-                              <Calendar
-                                mode="single"
-                                selected={
-                                  field.state.value
-                                    ? new Date(field.state.value)
-                                    : undefined
-                                }
-                                onSelect={(date) => {
-                                  if (date) {
-                                    field.handleChange(
-                                      format(date, "yyyy-MM-dd")
-                                    );
-                                    setDatePickerOpen(false);
-                                  }
-                                }}
-                                captionLayout="dropdown"
-                                fromYear={1950}
-                                toYear={new Date().getFullYear()}
-                                disabled={(date) => date > new Date()}
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
+                          <DatePicker
+                            date={
+                              field.state.value
+                                ? new Date(field.state.value)
+                                : undefined
+                            }
+                            onSelect={(date) => {
+                              if (date) {
+                                field.handleChange(format(date, "yyyy-MM-dd"));
+                              } else {
+                                field.handleChange("");
+                              }
+                            }}
+                            placeholder="Select date"
+                            disabled={(date) => date > new Date()}
+                            fromYear={1950}
+                            toYear={new Date().getFullYear()}
+                          />
                         </div>
                       )}
                     </form.Field>

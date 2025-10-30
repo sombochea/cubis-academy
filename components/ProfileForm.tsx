@@ -1,6 +1,5 @@
 'use client';
 
-import { useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -27,9 +26,12 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Trans } from '@lingui/react/macro';
-import { Loader2, Upload, User, AlertTriangle, Mail } from 'lucide-react';
+import { Loader2, Upload, User, AlertTriangle, Mail, Phone as PhoneIcon, MapPin } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAvatarGradient, getInitials } from '@/lib/avatar-utils';
+import { DatePicker } from '@/components/ui/date-picker';
+import { format } from 'date-fns';
+import { useForm } from '@tanstack/react-form';
 
 const profileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -48,6 +50,7 @@ interface ProfileFormProps {
   user: any;
   roleData: any;
   locale: string;
+  onSuccess?: () => void;
 }
 
 const getErrorMessage = (error: any): string => {
@@ -56,7 +59,7 @@ const getErrorMessage = (error: any): string => {
   return 'Invalid value';
 };
 
-export function ProfileForm({ user, roleData }: ProfileFormProps) {
+export function ProfileForm({ user, roleData, locale, onSuccess }: ProfileFormProps) {
   const router = useRouter();
   const { update: updateSession } = useSession();
   const [error, setError] = useState<string | null>(null);
@@ -153,6 +156,7 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
       console.log('✅ Session updated');
       
       setSuccess(true);
+      onSuccess?.();
       setTimeout(() => {
         router.refresh();
         setSuccess(false);
@@ -410,15 +414,20 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
         <form.Field name="name">
           {(field) => (
             <div className="space-y-2">
-              <Label htmlFor={field.name}>
+              <Label htmlFor={field.name} className="text-sm font-semibold text-[#17224D]">
                 <Trans>Full Name</Trans> <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#363942]/40" />
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="Sirika Ly"
+                  className="pl-10 h-12 border-gray-200 hover:border-[#007FFF]/30 focus-visible:ring-[#007FFF] transition-colors"
+                />
+              </div>
               {field.state.meta.errors.length > 0 && (
                 <p className="text-sm text-red-600">
                   {getErrorMessage(field.state.meta.errors[0])}
@@ -431,16 +440,21 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
         <form.Field name="email">
           {(field) => (
             <div className="space-y-2">
-              <Label htmlFor={field.name}>
+              <Label htmlFor={field.name} className="text-sm font-semibold text-[#17224D]">
                 <Trans>Email Address</Trans> <span className="text-red-500">*</span>
               </Label>
-              <Input
-                id={field.name}
-                type="email"
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#363942]/40" />
+                <Input
+                  id={field.name}
+                  type="email"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="you@cubis.academy"
+                  className="pl-10 h-12 border-gray-200 hover:border-[#007FFF]/30 focus-visible:ring-[#007FFF] transition-colors"
+                />
+              </div>
               {field.state.meta.errors.length > 0 && (
                 <p className="text-sm text-red-600">
                   {getErrorMessage(field.state.meta.errors[0])}
@@ -453,17 +467,21 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
         <form.Field name="phone">
           {(field) => (
             <div className="space-y-2">
-              <Label htmlFor={field.name}>
+              <Label htmlFor={field.name} className="text-sm font-semibold text-[#17224D]">
                 <Trans>Phone Number</Trans>
               </Label>
-              <Input
-                id={field.name}
-                type="tel"
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder="+855 12 345 678"
-              />
+              <div className="relative">
+                <PhoneIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#363942]/40" />
+                <Input
+                  id={field.name}
+                  type="tel"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="012345678"
+                  className="pl-10 h-12 border-gray-200 hover:border-[#007FFF]/30 focus-visible:ring-[#007FFF] transition-colors"
+                />
+              </div>
             </div>
           )}
         </form.Field>
@@ -471,66 +489,76 @@ export function ProfileForm({ user, roleData }: ProfileFormProps) {
         {/* Student-specific fields */}
         {user.role === 'student' && (
           <>
-            <form.Field name="dob">
-              {(field) => (
-                <div className="space-y-2">
-                  <Label htmlFor={field.name}>
-                    <Trans>Date of Birth</Trans>
-                  </Label>
-                  <Input
-                    id={field.name}
-                    type="date"
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                </div>
-              )}
-            </form.Field>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <form.Field name="dob">
+                {(field) => (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-[#17224D]">
+                      <Trans>Date of Birth</Trans>
+                    </Label>
+                    <DatePicker
+                      date={field.state.value ? new Date(field.state.value) : undefined}
+                      onSelect={(date) => {
+                        if (date) {
+                          field.handleChange(format(date, 'yyyy-MM-dd'));
+                        } else {
+                          field.handleChange('');
+                        }
+                      }}
+                      placeholder="Select date"
+                      disabled={(date) => date > new Date()}
+                      fromYear={1950}
+                      toYear={new Date().getFullYear()}
+                    />
+                  </div>
+                )}
+              </form.Field>
 
-            <form.Field name="gender">
-              {(field) => (
-                <div className="space-y-2">
-                  <Label htmlFor={field.name}>
-                    <Trans>Gender</Trans>
-                  </Label>
-                  <Select
-                    value={field.state.value}
-                    onValueChange={(value) => field.handleChange(value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">
-                        <Trans>Male</Trans>
-                      </SelectItem>
-                      <SelectItem value="female">
-                        <Trans>Female</Trans>
-                      </SelectItem>
-                      <SelectItem value="other">
-                        <Trans>Other</Trans>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            </form.Field>
+              <form.Field name="gender">
+                {(field) => (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-[#17224D]">
+                      <Trans>Gender</Trans>
+                    </Label>
+                    <Select
+                      value={field.state.value}
+                      onValueChange={(value) => field.handleChange(value)}
+                    >
+                      <SelectTrigger className="w-full !h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF] transition-colors">
+                        <SelectValue placeholder="Select gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">
+                          <Trans>Male</Trans>
+                        </SelectItem>
+                        <SelectItem value="female">
+                          <Trans>Female</Trans>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </form.Field>
+            </div>
 
             <form.Field name="address">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>
+                  <Label htmlFor={field.name} className="text-sm font-semibold text-[#17224D]">
                     <Trans>Address</Trans>
                   </Label>
-                  <Textarea
-                    id={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Enter your full address"
-                    rows={3}
-                  />
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-3 w-5 h-5 text-[#363942]/40" />
+                    <Textarea
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="Street address, city, state, postal code..."
+                      rows={3}
+                      className="pl-10 resize-none border-gray-200 hover:border-[#007FFF]/30 focus-visible:ring-[#007FFF]"
+                    />
+                  </div>
                 </div>
               )}
             </form.Field>

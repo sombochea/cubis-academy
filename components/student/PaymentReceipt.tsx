@@ -450,12 +450,12 @@ export function PaymentReceipt({ payment, locale }: PaymentReceiptProps) {
               </div>
             )}
 
-            {payment.enrollmentId && (
+            {/* {payment.enrollmentId && (
               <div className="pt-3 border-t border-gray-200">
                 <p className="text-xs text-gray-500 uppercase mb-1">Enrollment ID</p>
                 <p className="text-sm font-mono">{payment.enrollmentId.slice(0, 13)}...</p>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Payment Progress */}

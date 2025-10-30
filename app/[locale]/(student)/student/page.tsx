@@ -8,6 +8,8 @@ import {
   attendances,
   payments,
   classSchedules,
+  students,
+  users,
 } from '@/lib/drizzle/schema';
 import { eq, and, desc, sql, gte, lte } from 'drizzle-orm';
 import { Trans } from '@lingui/react/macro';
@@ -18,6 +20,7 @@ import { RecentActivity } from '@/components/student/RecentActivity';
 import { UpcomingClasses } from '@/components/student/UpcomingClasses';
 import { QuickActions } from '@/components/student/QuickActions';
 import { ProgressChart } from '@/components/student/ProgressChart';
+import { OnboardingFlow } from '@/components/student/OnboardingFlow';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 
@@ -35,6 +38,18 @@ export default async function StudentDashboard({
   if (!session?.user) {
     redirect(`/${locale}/login`);
   }
+
+  // Get student data for onboarding
+  const [studentData] = await db
+    .select({
+      onboardingCompleted: students.onboardingCompleted,
+      userName: users.name,
+      userEmail: users.email,
+    })
+    .from(students)
+    .innerJoin(users, eq(students.userId, users.id))
+    .where(eq(students.userId, session.user.id))
+    .limit(1);
 
   // Get all enrollments with course details
   const userEnrollments = await db
@@ -218,6 +233,17 @@ export default async function StudentDashboard({
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
       <StudentNav locale={locale} />
+      
+      {/* Onboarding Flow */}
+      {studentData && (
+        <OnboardingFlow
+          userId={session.user.id}
+          userName={studentData.userName}
+          userEmail={studentData.userEmail}
+          locale={locale}
+          onboardingCompleted={studentData.onboardingCompleted}
+        />
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
