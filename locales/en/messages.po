@@ -961,6 +961,10 @@ msgstr "Level:"
 msgid "Linked Accounts"
 msgstr ""
 
+#: components/LoadingRedirect.tsx:19
+msgid "Loading your dashboard"
+msgstr ""
+
 #: components/landing-page.tsx:107
 msgid "Login"
 msgstr "Login"
@@ -1231,6 +1235,10 @@ msgstr ""
 msgid "Please verify your email address"
 msgstr ""
 
+#: components/LoadingRedirect.tsx:80
+msgid "Please wait while we prepare your dashboard"
+msgstr ""
+
 #: components/admin/CreateCourseWizard.tsx:678
 msgid "Previous"
 msgstr "Previous"
@@ -1403,6 +1411,10 @@ msgstr ""
 msgid "Set the course price and estimated duration"
 msgstr ""
 
+#: components/LoadingRedirect.tsx:18
+msgid "Setting up your session"
+msgstr ""
+
 #: components/SettingsPage.tsx:59
 #: components/UserNav.tsx:124
 msgid "Settings"
@@ -1542,6 +1554,10 @@ msgstr ""
 #: app/[locale]/(admin)/admin/teachers/[id]/delete/page.tsx:76
 msgid "This action cannot be undone"
 msgstr "This action cannot be undone"
+
+#: components/LoadingRedirect.tsx:141
+msgid "This should only take a moment..."
+msgstr ""
 
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:263
 msgid "This student hasn't enrolled in any courses"
@@ -1725,6 +1741,10 @@ msgstr ""
 msgid "Verify Your Email"
 msgstr ""
 
+#: components/LoadingRedirect.tsx:17
+msgid "Verifying credentials"
+msgstr ""
+
 #: components/ProfileForm.tsx:321
 #: components/student/EmailVerificationBanner.tsx:203
 msgid "Verifying..."
@@ -1818,6 +1838,10 @@ msgstr ""
 
 #: components/ProfileForm.tsx:239
 msgid "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
+msgstr ""
+
+#: components/LoadingRedirect.tsx:77
+msgid "Welcome Back!"
 msgstr ""
 
 #: components/landing-page.tsx:339

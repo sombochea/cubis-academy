@@ -957,6 +957,10 @@ msgstr "Level:"
 msgid "Linked Accounts"
 msgstr "Linked Accounts"
 
+#: components/LoadingRedirect.tsx:19
+msgid "Loading your dashboard"
+msgstr "Loading your dashboard"
+
 #: components/landing-page.tsx:107
 msgid "Login"
 msgstr "ចូលប្រើប្រាស់"
@@ -1223,6 +1227,10 @@ msgstr "Phone Number"
 msgid "Please verify your email address"
 msgstr "Please verify your email address"
 
+#: components/LoadingRedirect.tsx:80
+msgid "Please wait while we prepare your dashboard"
+msgstr "Please wait while we prepare your dashboard"
+
 #: components/admin/CreateCourseWizard.tsx:678
 msgid "Previous"
 msgstr "Previous"
@@ -1395,6 +1403,10 @@ msgstr "Sessions"
 msgid "Set the course price and estimated duration"
 msgstr "Set the course price and estimated duration"
 
+#: components/LoadingRedirect.tsx:18
+msgid "Setting up your session"
+msgstr "Setting up your session"
+
 #: components/SettingsPage.tsx:59
 #: components/UserNav.tsx:124
 msgid "Settings"
@@ -1534,6 +1546,10 @@ msgstr "The user will need to verify their email again to enroll in courses."
 #: app/[locale]/(admin)/admin/teachers/[id]/delete/page.tsx:76
 msgid "This action cannot be undone"
 msgstr "This action cannot be undone"
+
+#: components/LoadingRedirect.tsx:141
+msgid "This should only take a moment..."
+msgstr "This should only take a moment..."
 
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:263
 msgid "This student hasn't enrolled in any courses"
@@ -1705,6 +1721,10 @@ msgstr "Verify Email"
 msgid "Verify Your Email"
 msgstr "Verify Your Email"
 
+#: components/LoadingRedirect.tsx:17
+msgid "Verifying credentials"
+msgstr "Verifying credentials"
+
 #: components/ProfileForm.tsx:321
 #: components/student/EmailVerificationBanner.tsx:203
 msgid "Verifying..."
@@ -1799,6 +1819,10 @@ msgstr "We sent a 6-digit code to <0>{0}</0>. Please check your email and enter 
 #: components/ProfileForm.tsx:239
 msgid "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
 msgstr "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
+
+#: components/LoadingRedirect.tsx:77
+msgid "Welcome Back!"
+msgstr "Welcome Back!"
 
 #: components/landing-page.tsx:339
 msgid "Why Choose Us"

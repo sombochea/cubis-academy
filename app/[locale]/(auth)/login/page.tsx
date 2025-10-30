@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { BookOpen, Mail, Lock, AlertCircle } from "lucide-react";
+import { LoadingRedirect } from "@/components/LoadingRedirect";
 
 const loginSchema = z.object({
   email: z.email("Invalid email address"),
@@ -20,6 +21,7 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
   
   // Get callback URL from query params
   const callbackUrl = searchParams.get('callbackUrl') || '/';
@@ -48,9 +50,14 @@ export default function LoginPage() {
         if (signInResult?.error) {
           setError("Invalid email or password");
         } else {
-          // Redirect to callback URL or home
-          router.push(callbackUrl);
-          router.refresh();
+          // Show loading state before redirect
+          setIsRedirecting(true);
+          
+          // Small delay to show loading animation
+          setTimeout(() => {
+            router.push(callbackUrl);
+            router.refresh();
+          }, 1500);
         }
       } catch (err) {
         setError("An error occurred. Please try again.");
@@ -59,8 +66,14 @@ export default function LoginPage() {
   });
 
   const handleGoogleSignIn = () => {
+    setIsRedirecting(true);
     signIn("google", { callbackUrl });
   };
+
+  // Show loading screen when redirecting
+  if (isRedirecting) {
+    return <LoadingRedirect />;
+  }
 
   return (
     <div className="min-h-screen flex">
