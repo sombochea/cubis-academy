@@ -40,7 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        console.log('🔐 Login successful:', {
+        console.log("🔐 Login successful:", {
           id: user.id,
           email: user.email,
           name: user.name,
@@ -76,6 +76,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             .values({
               name: user.name!,
               email: user.email!,
+              photo: user.image || null, // Save Google profile picture
               googleId:
                 account.provider === "google"
                   ? account.providerAccountId
@@ -86,22 +87,70 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             })
             .returning();
 
+          // Update user object with role and photo for JWT callback
+          user.role = newUser.role;
+          user.id = newUser.id;
+          user.image = newUser.photo || user.image;
+
+          console.log("✅ New OAuth user created:", {
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name,
+            photo: newUser.photo,
+            role: newUser.role,
+          });
+
           // Create student profile with SUID
           const suid = await generateSuid();
           await db.insert(students).values({
             userId: newUser.id,
             suid,
           });
-        } else if (!existingUser.emailVerifiedAt) {
-          // If user exists but email not verified, verify it now
-          // OAuth2 providers have already verified the email
-          await db
-            .update(users)
-            .set({
-              emailVerifiedAt: new Date(),
-              updated: new Date(),
-            })
-            .where(eq(users.id, existingUser.id));
+        } else {
+          // Existing user - update user object with role for JWT callback
+          user.role = existingUser.role;
+          user.id = existingUser.id;
+          user.image = existingUser.photo || user.image;
+
+          console.log("✅ Existing OAuth user logged in:", {
+            id: existingUser.id,
+            email: existingUser.email,
+            name: existingUser.name,
+            photo: existingUser.photo,
+            role: existingUser.role,
+            googleImage: user.image,
+          });
+
+          // Prepare updates
+          const updates: any = {};
+
+          if (!existingUser.emailVerifiedAt) {
+            updates.emailVerifiedAt = new Date();
+          }
+
+          // Always sync Google profile picture on login
+          if (account.provider === "google" && user.image) {
+            if (user.image !== existingUser.photo) {
+              updates.photo = user.image;
+              console.log(
+                "📸 Syncing Google profile picture for user:",
+                existingUser.id,
+                "from:",
+                existingUser.photo,
+                "to:",
+                user.image
+              );
+            }
+          }
+
+          // Apply updates if any
+          if (Object.keys(updates).length > 0) {
+            updates.updated = new Date();
+            await db
+              .update(users)
+              .set(updates)
+              .where(eq(users.id, existingUser.id));
+          }
         }
       }
     },

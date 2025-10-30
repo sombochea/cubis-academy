@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: components/ProfileForm.tsx:282
+#: components/ProfileForm.tsx:290
 msgid "(Check server logs for the code during development)"
 msgstr ""
 
@@ -25,9 +25,6 @@ msgstr ""
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:97
 #: app/[locale]/(admin)/admin/page.tsx:123
 #: app/[locale]/(admin)/admin/payments/page.tsx:110
-#: app/[locale]/(admin)/admin/profile/page.tsx:96
-#: app/[locale]/(student)/student/profile/page.tsx:96
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:96
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
 #: components/landing-page.tsx:375
@@ -42,9 +39,30 @@ msgstr "{0}"
 msgid "{level}"
 msgstr ""
 
+#. placeholder {0}: revokedSessions !== 1 ? 's' : ''
+#: components/PasswordChangeForm.tsx:119
+msgid "{revokedSessions} other session{0} logged out for security. A notification email has been sent."
+msgstr ""
+
+#: app/[locale]/unauthorized/page.tsx:31
+msgid "403 - Unauthorized"
+msgstr ""
+
+#: components/PasswordChangeForm.tsx:127
+msgid "A notification email has been sent to your email address."
+msgstr ""
+
 #: app/[locale]/(admin)/admin/teachers/[id]/delete/page.tsx:120
 msgid "Access to the system"
 msgstr "Access to the system"
+
+#: components/SettingsPage.tsx:25
+msgid "Account"
+msgstr ""
+
+#: components/SettingsPage.tsx:107
+msgid "Account Information"
+msgstr ""
 
 #: components/admin/CategoriesDataTable.tsx:126
 #: components/admin/CourseManagementMenu.tsx:26
@@ -68,7 +86,8 @@ msgstr "Actions"
 #: components/admin/StudentsDataTable.tsx:156
 #: components/admin/TeacherFilters.tsx:46
 #: components/admin/TeachersDataTable.tsx:164
-#: components/SessionsManager.tsx:156
+#: components/SessionsManager.tsx:177
+#: components/SettingsPage.tsx:167
 msgid "Active"
 msgstr "Active"
 
@@ -76,7 +95,8 @@ msgstr "Active"
 #~ msgid "Active Enrollments"
 #~ msgstr "Active Enrollments"
 
-#: components/SessionsManager.tsx:118
+#: components/SessionsManager.tsx:126
+#: components/SettingsPage.tsx:193
 msgid "Active Sessions"
 msgstr ""
 
@@ -126,16 +146,21 @@ msgstr "Add Teacher"
 
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:225
 #: components/admin/StudentForm.tsx:250
+#: components/ProfileView.tsx:175
 msgid "Address"
 msgstr ""
 
-#: components/UserNav.tsx:58
+#: components/UserNav.tsx:56
 msgid "Admin"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/page.tsx:96
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
+
+#: components/ProfileView.tsx:39
+msgid "Administrator"
+msgstr ""
 
 #: components/admin/ExportUsersButton.tsx:93
 msgid "Admins"
@@ -204,8 +229,8 @@ msgid "Are you sure you want to revoke email verification for"
 msgstr ""
 
 #: app/[locale]/(auth)/logout/page.tsx:32
-msgid "Are you sure you want to sign out?"
-msgstr ""
+#~ msgid "Are you sure you want to sign out?"
+#~ msgstr ""
 
 #: components/admin/TeachersDataTable.tsx:200
 msgid "Assign courses"
@@ -276,7 +301,6 @@ msgstr "Biography"
 msgid "browse"
 msgstr "browse"
 
-#: app/[locale]/(auth)/logout/page.tsx:58
 #: components/admin/AssignCoursesForm.tsx:231
 #: components/admin/CategoryForm.tsx:257
 #: components/admin/ChangeEmailDialog.tsx:200
@@ -288,9 +312,9 @@ msgstr "browse"
 #: components/admin/ManualVerifyButton.tsx:147
 #: components/admin/StudentForm.tsx:287
 #: components/admin/TeacherForm.tsx:273
-#: components/ProfileForm.tsx:244
-#: components/ProfileForm.tsx:303
-#: components/SessionsManager.tsx:226
+#: components/ProfileForm.tsx:252
+#: components/ProfileForm.tsx:311
+#: components/SessionsManager.tsx:250
 #: components/student/EmailVerificationBanner.tsx:193
 msgid "Cancel"
 msgstr "Cancel"
@@ -330,19 +354,16 @@ msgstr ""
 msgid "Change Image"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/profile/page.tsx:125
-#: app/[locale]/(student)/student/profile/page.tsx:125
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:125
-#: components/PasswordChangeForm.tsx:205
+#: components/PasswordChangeForm.tsx:249
 msgid "Change Password"
 msgstr ""
 
-#: components/ProfileForm.tsx:377
+#: components/ProfileForm.tsx:385
 msgid "Change Photo"
 msgstr ""
 
 #: components/admin/ChangeEmailDialog.tsx:210
-#: components/PasswordChangeForm.tsx:200
+#: components/PasswordChangeForm.tsx:244
 msgid "Changing..."
 msgstr ""
 
@@ -380,7 +401,7 @@ msgstr ""
 msgid "Comprehensive learning experience designed for your success"
 msgstr "Comprehensive learning experience designed for your success"
 
-#: components/ProfileForm.tsx:219
+#: components/ProfileForm.tsx:227
 msgid "Confirm Email Change"
 msgstr ""
 
@@ -388,8 +409,24 @@ msgstr ""
 msgid "Confirm New Email"
 msgstr ""
 
-#: components/PasswordChangeForm.tsx:164
+#: components/PasswordChangeForm.tsx:208
 msgid "Confirm New Password"
+msgstr ""
+
+#: components/SettingsPage.tsx:172
+msgid "Connect"
+msgstr ""
+
+#: components/SettingsPage.tsx:143
+msgid "Connect your account with third-party services"
+msgstr ""
+
+#: components/SettingsPage.tsx:39
+msgid "Connect your Google account"
+msgstr ""
+
+#: components/SettingsPage.tsx:157
+msgid "Connected"
 msgstr ""
 
 #: components/admin/CreateCourseWizard.tsx:545
@@ -527,8 +564,12 @@ msgstr "CUBIS Academy"
 msgid "Current Email"
 msgstr ""
 
-#: components/PasswordChangeForm.tsx:101
+#: components/PasswordChangeForm.tsx:138
 msgid "Current Password"
+msgstr ""
+
+#: components/SessionsManager.tsx:166
+msgid "Current Session"
 msgstr ""
 
 #: components/student/StudentNav.tsx:29
@@ -644,6 +685,10 @@ msgstr "Edit course"
 msgid "Edit Course"
 msgstr "Edit Course"
 
+#: components/ProfileView.tsx:192
+msgid "Edit Profile"
+msgstr ""
+
 #: components/admin/StudentsDataTable.tsx:186
 msgid "Edit student"
 msgstr ""
@@ -667,11 +712,12 @@ msgstr "Edit Teacher"
 #: components/admin/StudentsDataTable.tsx:88
 #: components/admin/TeacherForm.tsx:146
 #: components/admin/TeachersDataTable.tsx:96
+#: components/ProfileView.tsx:120
 msgid "Email"
 msgstr "Email"
 
 #: components/admin/ResetPasswordDialog.tsx:142
-#: components/ProfileForm.tsx:411
+#: components/ProfileForm.tsx:419
 msgid "Email Address"
 msgstr ""
 
@@ -716,6 +762,10 @@ msgstr ""
 msgid "Enrolled Date"
 msgstr "Enrolled Date"
 
+#: components/ProfileView.tsx:161
+msgid "Enrolled Since"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:163
 msgid "Enrolled Students"
 msgstr ""
@@ -738,7 +788,7 @@ msgstr ""
 msgid "Enter the 6-digit code sent to"
 msgstr ""
 
-#: components/ProfileForm.tsx:273
+#: components/ProfileForm.tsx:281
 msgid "Enter Verification Code"
 msgstr ""
 
@@ -797,7 +847,7 @@ msgstr ""
 
 #: components/admin/StudentForm.tsx:130
 #: components/admin/TeacherForm.tsx:126
-#: components/ProfileForm.tsx:390
+#: components/ProfileForm.tsx:398
 msgid "Full Name"
 msgstr "Full Name"
 
@@ -828,8 +878,20 @@ msgstr ""
 msgid "Get Started Free"
 msgstr "Get Started Free"
 
+#: app/[locale]/unauthorized/page.tsx:44
+msgid "Go Home"
+msgstr ""
+
+#: components/SessionsManager.tsx:172
+msgid "Google"
+msgstr ""
+
 #: components/admin/CategoryForm.tsx:186
 msgid "Icon (Emoji)"
+msgstr ""
+
+#: app/[locale]/unauthorized/page.tsx:56
+msgid "If you just logged in, try refreshing the page."
 msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:165
@@ -865,7 +927,7 @@ msgstr "JPG, PNG or WebP • Max 5MB • 400x400px recommended"
 #~ msgid "JPG, PNG or WebP. Max 5MB. Recommended 400x400px."
 #~ msgstr "JPG, PNG or WebP. Max 5MB. Recommended 400x400px."
 
-#: components/SessionsManager.tsx:182
+#: components/SessionsManager.tsx:204
 msgid "Last active"
 msgstr ""
 
@@ -894,17 +956,26 @@ msgstr "Level"
 msgid "Level:"
 msgstr "Level:"
 
+#: components/SettingsPage.tsx:37
+#: components/SettingsPage.tsx:139
+msgid "Linked Accounts"
+msgstr ""
+
 #: components/landing-page.tsx:107
 msgid "Login"
 msgstr "Login"
 
-#: components/admin/AdminNav.tsx:31
-#~ msgid "Logout"
-#~ msgstr "Logout"
+#: app/[locale]/unauthorized/page.tsx:50
+msgid "Logout"
+msgstr "Logout"
 
 #: components/admin/StudentFilters.tsx:76
 #: components/admin/StudentForm.tsx:237
 msgid "Male"
+msgstr ""
+
+#: components/SettingsPage.tsx:45
+msgid "Manage active and inactive sessions"
 msgstr ""
 
 #: components/admin/CourseManagementMenu.tsx:61
@@ -927,19 +998,29 @@ msgstr ""
 msgid "Manage teachers and assign courses"
 msgstr "Manage teachers and assign courses"
 
-#: app/[locale]/(admin)/admin/profile/page.tsx:77
-#: app/[locale]/(student)/student/profile/page.tsx:77
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:77
+#: components/SettingsPage.tsx:62
 msgid "Manage your account settings and preferences"
 msgstr ""
 
-#: components/SessionsManager.tsx:121
+#: components/SessionsManager.tsx:129
 msgid "Manage your active login sessions across devices"
+msgstr ""
+
+#: components/SettingsPage.tsx:197
+msgid "Manage your active sessions across all devices"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/page.tsx:99
 msgid "Manage your learning management system"
 msgstr "Manage your learning management system"
+
+#: components/SettingsPage.tsx:127
+msgid "Manage your password and security preferences"
+msgstr ""
+
+#: components/SettingsPage.tsx:27
+msgid "Manage your profile information"
+msgstr ""
 
 #: components/admin/ManualVerifyButton.tsx:137
 msgid "Manually Verify Email?"
@@ -960,7 +1041,7 @@ msgstr ""
 msgid "Method"
 msgstr "Method"
 
-#: components/PasswordChangeForm.tsx:154
+#: components/PasswordChangeForm.tsx:198
 msgid "Minimum 6 characters"
 msgstr ""
 
@@ -969,10 +1050,7 @@ msgstr ""
 msgid "My Courses"
 msgstr ""
 
-#: app/[locale]/(admin)/admin/profile/page.tsx:74
-#: app/[locale]/(student)/student/profile/page.tsx:74
-#: app/[locale]/(teacher)/teacher/profile/page.tsx:74
-#: components/UserNav.tsx:100
+#: components/UserNav.tsx:114
 msgid "My Profile"
 msgstr ""
 
@@ -991,7 +1069,7 @@ msgid "New Email Address"
 msgstr ""
 
 #: components/admin/ResetPasswordDialog.tsx:167
-#: components/PasswordChangeForm.tsx:131
+#: components/PasswordChangeForm.tsx:175
 msgid "New Password"
 msgstr ""
 
@@ -999,7 +1077,7 @@ msgstr ""
 msgid "Next"
 msgstr "Next"
 
-#: components/SessionsManager.tsx:139
+#: components/SessionsManager.tsx:147
 msgid "No active sessions found"
 msgstr ""
 
@@ -1058,6 +1136,10 @@ msgstr "No teacher assigned"
 #~ msgid "No teachers found. Add your first teacher to get started."
 #~ msgstr "No teachers found. Add your first teacher to get started."
 
+#: components/SettingsPage.tsx:159
+msgid "Not connected"
+msgstr ""
+
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:197
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:210
 #: app/[locale]/(admin)/admin/students/[id]/page.tsx:217
@@ -1099,7 +1181,11 @@ msgstr "page"
 msgid "Password"
 msgstr "Password"
 
-#: components/PasswordChangeForm.tsx:93
+#: components/SettingsPage.tsx:33
+msgid "Password and security settings"
+msgstr ""
+
+#: components/PasswordChangeForm.tsx:115
 msgid "Password changed successfully!"
 msgstr ""
 
@@ -1132,11 +1218,12 @@ msgstr ""
 #: components/admin/StudentsDataTable.tsx:119
 #: components/admin/TeacherForm.tsx:168
 #: components/admin/TeachersDataTable.tsx:127
+#: components/ProfileView.tsx:133
 msgid "Phone"
 msgstr "Phone"
 
 #: components/admin/StudentForm.tsx:173
-#: components/ProfileForm.tsx:433
+#: components/ProfileForm.tsx:441
 msgid "Phone Number"
 msgstr ""
 
@@ -1165,16 +1252,16 @@ msgstr ""
 #: app/[locale]/(admin)/admin/profile/page.tsx:113
 #: app/[locale]/(student)/student/profile/page.tsx:113
 #: app/[locale]/(teacher)/teacher/profile/page.tsx:113
-msgid "Profile Information"
-msgstr ""
+#~ msgid "Profile Information"
+#~ msgstr ""
 
 #: components/admin/StudentForm.tsx:117
 #: components/admin/TeacherForm.tsx:243
-#: components/ProfileForm.tsx:345
+#: components/ProfileForm.tsx:353
 msgid "Profile Photo"
 msgstr "Profile Photo"
 
-#: components/ProfileForm.tsx:338
+#: components/ProfileForm.tsx:346
 msgid "Profile updated successfully!"
 msgstr ""
 
@@ -1225,11 +1312,11 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: components/SessionsManager.tsx:132
+#: components/SessionsManager.tsx:140
 msgid "Revoke All Sessions"
 msgstr ""
 
-#: components/SessionsManager.tsx:215
+#: components/SessionsManager.tsx:239
 msgid "Revoke All Sessions?"
 msgstr ""
 
@@ -1242,7 +1329,7 @@ msgstr ""
 msgid "Revoke Verification"
 msgstr ""
 
-#: components/SessionsManager.tsx:236
+#: components/SessionsManager.tsx:260
 msgid "Revoking..."
 msgstr ""
 
@@ -1273,15 +1360,23 @@ msgstr "Save Teacher"
 #: components/admin/CreateCourseWizard.tsx:707
 #: components/admin/StudentForm.tsx:274
 #: components/admin/TeacherForm.tsx:262
-#: components/ProfileForm.tsx:457
+#: components/ProfileForm.tsx:465
 msgid "Saving..."
 msgstr "Saving..."
+
+#: components/SettingsPage.tsx:31
+msgid "Security"
+msgstr ""
+
+#: components/SettingsPage.tsx:123
+msgid "Security Settings"
+msgstr ""
 
 #: components/admin/CreateCourseWizard.tsx:336
 msgid "Select a category"
 msgstr ""
 
-#: components/ProfileForm.tsx:259
+#: components/ProfileForm.tsx:267
 msgid "Send Verification Code"
 msgstr ""
 
@@ -1290,7 +1385,7 @@ msgid "Send via Email"
 msgstr ""
 
 #: components/admin/ResetPasswordDialog.tsx:201
-#: components/ProfileForm.tsx:254
+#: components/ProfileForm.tsx:262
 #: components/student/EmailVerificationBanner.tsx:111
 #: components/student/EmailVerificationBanner.tsx:218
 msgid "Sending..."
@@ -1300,11 +1395,16 @@ msgstr ""
 msgid "Sent"
 msgstr ""
 
+#: components/SettingsPage.tsx:43
+msgid "Sessions"
+msgstr ""
+
 #: components/admin/CreateCourseWizard.tsx:490
 msgid "Set the course price and estimated duration"
 msgstr ""
 
-#: components/UserNav.tsx:107
+#: components/SettingsPage.tsx:59
+#: components/UserNav.tsx:124
 msgid "Settings"
 msgstr ""
 
@@ -1323,8 +1423,7 @@ msgstr ""
 msgid "Sign In"
 msgstr "Sign In"
 
-#: app/[locale]/(auth)/logout/page.tsx:29
-#: components/UserNav.tsx:119
+#: components/UserNav.tsx:136
 msgid "Sign Out"
 msgstr ""
 
@@ -1367,12 +1466,14 @@ msgstr "Status"
 
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:58
 #: app/[locale]/(admin)/admin/payments/page.tsx:62
-#: components/UserNav.tsx:62
+#: components/ProfileView.tsx:43
+#: components/UserNav.tsx:60
 msgid "Student"
 msgstr "Student"
 
 #: app/[locale]/(admin)/admin/enrollments/page.tsx:61
 #: components/admin/StudentsDataTable.tsx:44
+#: components/ProfileView.tsx:147
 msgid "Student ID"
 msgstr "Student ID"
 
@@ -1398,7 +1499,8 @@ msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/page.tsx:182
 #: components/admin/CoursesDataTable.tsx:66
-#: components/UserNav.tsx:60
+#: components/ProfileView.tsx:41
+#: components/UserNav.tsx:58
 msgid "Teacher"
 msgstr "Teacher"
 
@@ -1445,7 +1547,7 @@ msgstr "This action cannot be undone"
 msgid "This student hasn't enrolled in any courses"
 msgstr ""
 
-#: components/SessionsManager.tsx:218
+#: components/SessionsManager.tsx:242
 msgid "This will log you out from all devices and browsers. You will need to log in again on this device."
 msgstr ""
 
@@ -1461,7 +1563,7 @@ msgstr "Title"
 msgid "Title:"
 msgstr "Title:"
 
-#: components/ProfileForm.tsx:226
+#: components/ProfileForm.tsx:234
 msgid "to"
 msgstr ""
 
@@ -1547,7 +1649,7 @@ msgstr ""
 msgid "Update email address for"
 msgstr ""
 
-#: components/ProfileForm.tsx:462
+#: components/ProfileForm.tsx:470
 msgid "Update Profile"
 msgstr ""
 
@@ -1563,13 +1665,21 @@ msgstr ""
 msgid "Update teacher information"
 msgstr "Update teacher information"
 
+#: components/ProfileView.tsx:196
+msgid "Update your basic information"
+msgstr ""
+
+#: components/SettingsPage.tsx:111
+msgid "Update your profile information and photo"
+msgstr ""
+
 #: components/admin/ImageUpload.tsx:211
 msgid "Uploaded!"
 msgstr "Uploaded!"
 
 #: components/admin/CreateCourseWizard.tsx:613
 #: components/admin/ImageUpload.tsx:232
-#: components/ProfileForm.tsx:370
+#: components/ProfileForm.tsx:378
 msgid "Uploading..."
 msgstr "Uploading..."
 
@@ -1600,7 +1710,7 @@ msgstr ""
 msgid "Verified"
 msgstr ""
 
-#: components/ProfileForm.tsx:316
+#: components/ProfileForm.tsx:324
 msgid "Verify & Change Email"
 msgstr ""
 
@@ -1615,7 +1725,7 @@ msgstr ""
 msgid "Verify Your Email"
 msgstr ""
 
-#: components/ProfileForm.tsx:313
+#: components/ProfileForm.tsx:321
 #: components/student/EmailVerificationBanner.tsx:203
 msgid "Verifying..."
 msgstr ""
@@ -1702,11 +1812,11 @@ msgid "Watch Demo"
 msgstr "Watch Demo"
 
 #. placeholder {0}: pendingValues?.email
-#: components/ProfileForm.tsx:276
+#: components/ProfileForm.tsx:284
 msgid "We sent a 6-digit code to <0>{0}</0>. Please check your email and enter the code below."
 msgstr ""
 
-#: components/ProfileForm.tsx:231
+#: components/ProfileForm.tsx:239
 msgid "We will send a 6-digit verification code to your new email address. You must enter this code to complete the change."
 msgstr ""
 
@@ -1722,15 +1832,15 @@ msgstr "Why Choose Us"
 msgid "Yes, Delete Student"
 msgstr ""
 
-#: components/SessionsManager.tsx:239
+#: components/SessionsManager.tsx:263
 msgid "Yes, Revoke All"
 msgstr ""
 
 #: app/[locale]/(auth)/logout/page.tsx:48
-msgid "Yes, Sign Out"
-msgstr ""
+#~ msgid "Yes, Sign Out"
+#~ msgstr ""
 
-#: components/ProfileForm.tsx:222
+#: components/ProfileForm.tsx:230
 msgid "You are about to change your email from"
 msgstr ""
 
@@ -1738,9 +1848,21 @@ msgstr ""
 msgid "You are about to delete:"
 msgstr ""
 
-#: app/[locale]/(auth)/logout/page.tsx:65
-msgid "You will be redirected to the login page after signing out."
+#: components/SettingsPage.tsx:179
+msgid "You can sign in with your Google account"
 msgstr ""
+
+#: app/[locale]/unauthorized/page.tsx:36
+msgid "You don't have permission to access this page. Please contact your administrator if you believe this is an error."
+msgstr ""
+
+#: components/PasswordChangeForm.tsx:167
+msgid "You signed in with Google. Set a password to enable password login."
+msgstr ""
+
+#: app/[locale]/(auth)/logout/page.tsx:65
+#~ msgid "You will be redirected to the login page after signing out."
+#~ msgstr ""
 
 #: components/ProfileForm.tsx:164
 #~ msgid "You will need to verify your new email address. Are you sure you want to continue?"

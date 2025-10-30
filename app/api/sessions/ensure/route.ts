@@ -17,6 +17,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No session token' }, { status: 400 });
     }
 
+    // Verify user exists in database before creating session
+    const { db } = await import('@/lib/drizzle/db');
+    const { users } = await import('@/lib/drizzle/schema');
+    const { eq } = await import('drizzle-orm');
+    
+    const userExists = await db.query.users.findFirst({
+      where: eq(users.id, session.user.id),
+      columns: { id: true },
+    });
+
+    if (!userExists) {
+      console.error('❌ User not found in database:', session.user.id);
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
     // Get request body for deviceId
     const body = await req.json().catch(() => ({}));
     const deviceId = body.deviceId;

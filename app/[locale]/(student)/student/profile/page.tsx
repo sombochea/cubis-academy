@@ -24,6 +24,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
     .from(users)
     .where(eq(users.id, session.user.id));
 
+  // Prioritize session photo (fresh from OAuth) over database photo
+  const sessionUser = session.user as any;
+  const userWithSessionPhoto = {
+    ...user,
+    photo: sessionUser.image || user.photo,
+  };
+
   let roleData = null;
   if (user.role === 'student') {
     [roleData] = await db
@@ -36,7 +43,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
     <div className="min-h-screen bg-gray-50">
       <StudentNav locale={locale} />
       <div className="container mx-auto px-4 py-8">
-        <ProfileView user={user} roleData={roleData} locale={locale} />
+        <ProfileView user={userWithSessionPhoto} roleData={roleData} locale={locale} />
       </div>
     </div>
   );

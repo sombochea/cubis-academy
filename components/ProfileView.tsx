@@ -93,7 +93,7 @@ export function ProfileView({ user, roleData, locale }: ProfileViewProps) {
           </div>
 
           {/* User info with better spacing */}
-          <div className="space-y-3 mb-4">
+          <div className="space-y-3 mb-2">
             <div>
               <h1 className="text-2xl font-bold text-[#17224D] mb-2">
                 {user.name}

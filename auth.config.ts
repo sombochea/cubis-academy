@@ -65,21 +65,60 @@ export const authConfig = {
 
       return true;
     },
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user, trigger, session, account }) {
       if (user) {
-        token.role = user.role;
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.picture = user.image;
-        
-        console.log('🎫 JWT token created:', {
-          id: token.id,
-          name: token.name,
-          email: token.email,
-          picture: token.picture,
-          role: token.role,
-        });
+        // For OAuth users, we need to fetch the user from DB to ensure it exists
+        // For credentials users, role comes from authorize function
+        if (account?.provider && account.provider !== 'credentials') {
+          // OAuth login - fetch user from database to get the actual user ID
+          const { db } = await import('@/lib/drizzle/db');
+          const { users } = await import('@/lib/drizzle/schema');
+          const { eq } = await import('drizzle-orm');
+          
+          const dbUser = await db.query.users.findFirst({
+            where: eq(users.email, user.email!),
+          });
+          
+          if (dbUser) {
+            token.id = dbUser.id;
+            token.role = dbUser.role;
+            token.name = dbUser.name;
+            token.email = dbUser.email;
+            // Prioritize Google image over stored photo for OAuth users
+            token.picture = user.image || dbUser.photo;
+            
+            console.log('🎫 JWT token created for OAuth user:', {
+              id: token.id,
+              email: token.email,
+              role: token.role,
+              picture: token.picture,
+              googleImage: user.image,
+              dbPhoto: dbUser.photo,
+            });
+          } else {
+            console.error('❌ OAuth user not found in database:', user.email);
+            // User should have been created in signIn event
+            // Fallback to user object values
+            token.role = user.role || 'student';
+            token.id = user.id;
+            token.name = user.name;
+            token.email = user.email;
+            token.picture = user.image;
+          }
+        } else {
+          // Credentials login
+          token.role = user.role || 'student';
+          token.id = user.id;
+          token.name = user.name;
+          token.email = user.email;
+          token.picture = user.image;
+          
+          console.log('🎫 JWT token created for credentials user:', {
+            id: token.id,
+            email: token.email,
+            role: token.role,
+          });
+        }
         
         // Generate session token on sign in (using Web Crypto API for edge compatibility)
         if (typeof globalThis.crypto !== 'undefined' && globalThis.crypto.randomUUID) {

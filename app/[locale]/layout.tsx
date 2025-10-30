@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Manrope, Kantumruy_Pro } from 'next/font/google';
 import '../globals.css';
 import { LanguageProvider } from '@/components/LanguageProvider';
+import { SessionProvider } from '@/components/SessionProvider';
+import { SessionInitializer } from '@/components/SessionInitializer';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -35,9 +37,12 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className={`${manrope.variable} ${kantumruyPro.variable} ${locale === 'km' ? 'font-kantumruy' : 'font-sans'} antialiased`}>
-        <LanguageProvider locale={locale}>
-          {children}
-        </LanguageProvider>
+        <SessionProvider>
+          <SessionInitializer />
+          <LanguageProvider locale={locale}>
+            {children}
+          </LanguageProvider>
+        </SessionProvider>
       </body>
     </html>
   );
