@@ -1,53 +1,83 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { Trans } from '@lingui/react/macro';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { XCircle, ArrowLeft } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Trans } from "@lingui/react/macro";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { XCircle, ArrowLeft } from "lucide-react";
 
-export default function RejectPaymentPage({ 
-  params 
-}: { 
-  params: { locale: string; id: string } 
+export default function RejectPaymentPage({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
 }) {
   const router = useRouter();
   const [isRejecting, setIsRejecting] = useState(false);
-  const [error, setError] = useState('');
-  const [reason, setReason] = useState('');
+  const [error, setError] = useState("");
+  const [reason, setReason] = useState("");
+  const [resolvedParams, setResolvedParams] = useState<{
+    locale: string;
+    id: string;
+  } | null>(null);
+
+  // Resolve params on mount
+  useEffect(() => {
+    params.then(setResolvedParams);
+  }, [params]);
 
   const handleReject = async () => {
+    if (!resolvedParams) {
+      setError("Loading...");
+      return;
+    }
+
     if (!reason.trim()) {
-      setError('Please provide a reason for rejection');
+      setError("Please provide a reason for rejection");
       return;
     }
 
     setIsRejecting(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch(`/api/payments/${params.id}/reject`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ reason }),
-      });
+      const response = await fetch(
+        `/api/payments/${resolvedParams.id}/reject`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ reason }),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to reject payment');
+        throw new Error("Failed to reject payment");
       }
 
-      router.push(`/${params.locale}/admin/payments/${params.id}`);
+      router.push(
+        `/${resolvedParams.locale}/admin/payments/${resolvedParams.id}`
+      );
       router.refresh();
     } catch (err) {
-      setError('Failed to reject payment. Please try again.');
+      setError("Failed to reject payment. Please try again.");
       setIsRejecting(false);
     }
   };
+
+  if (!resolvedParams) {
+    return (
+      <div className="min-h-screen bg-[#F4F5F7] flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-[#007FFF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#363942]/70">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] flex items-center justify-center p-4">
@@ -61,13 +91,19 @@ export default function RejectPaymentPage({
         <h2 className="text-2xl font-bold text-[#17224D] text-center mb-3">
           <Trans>Reject Payment</Trans>
         </h2>
-        
+
         <p className="text-[#363942]/70 text-center mb-6">
-          <Trans>Please provide a reason for rejecting this payment. The student will be notified.</Trans>
+          <Trans>
+            Please provide a reason for rejecting this payment. The student will
+            be notified.
+          </Trans>
         </p>
 
         <div className="mb-6">
-          <Label htmlFor="reason" className="text-sm font-semibold text-[#17224D] mb-2">
+          <Label
+            htmlFor="reason"
+            className="text-sm font-semibold text-[#17224D] mb-2"
+          >
             <Trans>Rejection Reason</Trans>
           </Label>
           <Textarea
@@ -102,7 +138,9 @@ export default function RejectPaymentPage({
             )}
           </Button>
 
-          <Link href={`/${params.locale}/admin/payments/${params.id}`}>
+          <Link
+            href={`/${resolvedParams.locale}/admin/payments/${resolvedParams.id}`}
+          >
             <Button variant="outline" className="w-full">
               <ArrowLeft className="mr-2 h-4 w-4" />
               <Trans>Cancel</Trans>

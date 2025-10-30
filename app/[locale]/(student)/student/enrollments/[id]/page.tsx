@@ -83,6 +83,21 @@ export default async function EnrollmentDetailsPage({
     notFound();
   }
 
+  // Get course instructors
+  const { teacherCourses, teachers, users } = await import('@/lib/drizzle/schema');
+  const instructors = await db
+    .select({
+      id: teachers.userId,
+      name: users.name,
+      photo: teachers.photo,
+      bio: teachers.bio,
+      spec: teachers.spec,
+    })
+    .from(teacherCourses)
+    .innerJoin(teachers, eq(teacherCourses.teacherId, teachers.userId))
+    .innerJoin(users, eq(teachers.userId, users.id))
+    .where(eq(teacherCourses.courseId, enrollment.courseId));
+
   // Get scores
   const scoresList = await db
     .select({
@@ -233,7 +248,7 @@ export default async function EnrollmentDetailsPage({
                   </div>
 
                   {/* Delivery Mode & Location */}
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-[#363942]">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-[#363942] mb-4">
                     <div className="flex items-center gap-1.5">
                       {enrollment.deliveryMode === 'online' ? (
                         <Monitor className="w-4 h-4" />
@@ -259,6 +274,44 @@ export default async function EnrollmentDetailsPage({
                       </div>
                     )}
                   </div>
+
+                  {/* Instructors */}
+                  {instructors.length > 0 && (
+                    <div className="border-t border-gray-200 pt-4 mt-4">
+                      <p className="text-sm font-semibold text-[#17224D] mb-3">
+                        <Trans>Instructor{instructors.length > 1 ? 's' : ''}</Trans>
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        {instructors.map((instructor) => (
+                          <Link
+                            key={instructor.id}
+                            href={`/${locale}/student/instructors/${instructor.id}`}
+                            className="flex items-center gap-3 p-3 bg-[#F4F5F7] rounded-lg hover:bg-gray-200 transition-colors"
+                          >
+                            {instructor.photo ? (
+                              <img
+                                src={instructor.photo}
+                                alt={instructor.name}
+                                className="w-10 h-10 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-full flex items-center justify-center text-white font-semibold">
+                                {instructor.name.charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                            <div>
+                              <p className="font-semibold text-[#17224D] text-sm">
+                                {instructor.name}
+                              </p>
+                              {instructor.spec && (
+                                <p className="text-xs text-[#363942]/70">{instructor.spec}</p>
+                              )}
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -292,6 +345,54 @@ export default async function EnrollmentDetailsPage({
             </div>
           </div>
         </div>
+
+        {/* Payment Reminder */}
+        {remainingAmount > 0 && (
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-xl p-6 mb-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                <DollarSign className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-orange-900 mb-2">
+                  <Trans>Payment Required</Trans>
+                </h3>
+                <p className="text-sm text-orange-800 mb-4">
+                  <Trans>
+                    You have an outstanding balance of ${remainingAmount.toFixed(2)}. Make a payment to
+                    continue your learning journey.
+                  </Trans>
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-orange-800">
+                        <Trans>Paid:</Trans> ${paidAmount.toFixed(2)}
+                      </span>
+                      <span className="text-orange-800">
+                        <Trans>Total:</Trans> ${totalAmount.toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="w-full bg-orange-200 rounded-full h-2">
+                      <div
+                        className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full"
+                        style={{ width: `${(paidAmount / totalAmount) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  <Link
+                    href={`/${locale}/student/payments/new?enrollmentId=${id}&amount=${remainingAmount}&courseName=${enrollment.courseTitle}`}
+                  >
+                    <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600">
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      <Trans>Make Payment</Trans>
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">

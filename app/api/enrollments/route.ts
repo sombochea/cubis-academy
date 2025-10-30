@@ -67,17 +67,20 @@ export async function POST(req: Request) {
       );
     }
 
-    // Create enrollment
+    // Create enrollment with payment tracking
     const [enrollment] = await db.insert(enrollments).values({
       studentId: session.user.id,
       courseId,
       status: 'active',
       progress: 0,
+      totalAmount: course.price || '0',
+      paidAmount: '0',
     }).returning();
 
     return NextResponse.json(
       { 
         message: 'Enrolled successfully',
+        enrollmentId: enrollment.id,
         enrollment,
         course 
       },

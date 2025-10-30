@@ -41,14 +41,9 @@ export function EnrollButton({ courseId, courseName, price, isFree, locale }: En
         return;
       }
 
-      // For free courses, redirect to enrollments page
-      if (isFree) {
-        router.push(`/${locale}/student/enrollments?enrolled=true`);
-        router.refresh();
-      } else {
-        // For paid courses, redirect to payment page
-        router.push(`/${locale}/student/payments/new?courseId=${courseId}&amount=${price}&courseName=${encodeURIComponent(courseName)}`);
-      }
+      // Redirect to enrollment details page
+      router.push(`/${locale}/student/enrollments/${data.enrollmentId}?enrolled=true`);
+      router.refresh();
     } catch (err) {
       setError('An error occurred. Please try again.');
       setLoading(false);
@@ -120,7 +115,7 @@ export function EnrollButton({ courseId, courseName, price, isFree, locale }: En
         {isFree ? (
           <Trans>Start learning immediately after enrollment</Trans>
         ) : (
-          <Trans>You'll be redirected to payment after enrollment</Trans>
+          <Trans>Enroll now and make payment later (full or partial)</Trans>
         )}
       </p>
     </div>

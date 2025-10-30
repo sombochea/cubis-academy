@@ -429,7 +429,10 @@ export function PaymentForm({ locale }: PaymentFormProps) {
                     ></div>
                   </div>
                   <p className="text-xs text-blue-700 text-center mt-1">
-                    {((Number(enrollmentDetails.paidAmount) / Number(enrollmentDetails.totalAmount)) * 100).toFixed(1)}%{' '}
+                    {enrollmentDetails && Number(enrollmentDetails.totalAmount) > 0
+                      ? ((Number(enrollmentDetails.paidAmount) / Number(enrollmentDetails.totalAmount)) * 100).toFixed(1)
+                      : '0'}
+                    %{' '}
                     <Trans>paid</Trans>
                   </p>
                 </div>

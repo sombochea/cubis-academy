@@ -213,41 +213,69 @@ export function PaymentReceipt({ payment, locale }: PaymentReceiptProps) {
                     <Trans>Course Payment Summary</Trans>
                   </h4>
                   <div className="space-y-3">
+                    {/* Original Course Fee */}
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-[#363942]/70">
-                        <Trans>Total Course Fee:</Trans>
+                        <Trans>Original Course Fee:</Trans>
                       </span>
                       <span className="font-bold text-[#17224D]">
                         ${Number(payment.totalAmount).toFixed(2)}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-[#363942]/70">
-                        <Trans>Total Paid:</Trans>
+
+                    {/* This Payment */}
+                    <div className="flex justify-between items-center p-3 bg-white rounded-lg border-2 border-blue-300">
+                      <span className="text-sm font-semibold text-blue-900">
+                        <Trans>This Payment:</Trans>
                       </span>
-                      <span className="font-bold text-green-600">
-                        ${Number(payment.paidAmount).toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center pt-3 border-t border-blue-200">
-                      <span className="text-sm font-semibold text-[#17224D]">
-                        <Trans>Balance Due:</Trans>
-                      </span>
-                      <span className="font-bold text-orange-600">
-                        ${(Number(payment.totalAmount) - Number(payment.paidAmount)).toFixed(2)}
+                      <span className="font-bold text-blue-600 text-lg">
+                        ${Number(payment.amount).toFixed(2)}
                       </span>
                     </div>
+
+                    {/* Before and After */}
+                    <div className="pt-3 border-t border-blue-200 space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-[#363942]/70">
+                          <Trans>Paid Before This:</Trans>
+                        </span>
+                        <span className="font-semibold text-[#363942]">
+                          ${(Number(payment.paidAmount) - Number(payment.amount)).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-semibold text-green-700">
+                          <Trans>Total Paid (After):</Trans>
+                        </span>
+                        <span className="font-bold text-green-600">
+                          ${Number(payment.paidAmount).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-semibold text-orange-700">
+                          <Trans>Balance Due:</Trans>
+                        </span>
+                        <span className="font-bold text-orange-600">
+                          ${(Number(payment.totalAmount) - Number(payment.paidAmount)).toFixed(2)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
                     <div className="mt-4">
                       <div className="w-full bg-blue-200 rounded-full h-3">
                         <div
                           className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all"
                           style={{
-                            width: `${(Number(payment.paidAmount) / Number(payment.totalAmount)) * 100}%`,
+                            width: `${payment.totalAmount && Number(payment.totalAmount) > 0 ? (Number(payment.paidAmount) / Number(payment.totalAmount)) * 100 : 0}%`,
                           }}
                         ></div>
                       </div>
                       <p className="text-xs text-blue-700 text-center mt-2">
-                        {((Number(payment.paidAmount) / Number(payment.totalAmount)) * 100).toFixed(1)}%{' '}
+                        {payment.totalAmount && Number(payment.totalAmount) > 0
+                          ? ((Number(payment.paidAmount) / Number(payment.totalAmount)) * 100).toFixed(1)
+                          : '0'}
+                        %{' '}
                         <Trans>paid</Trans>
                       </p>
                     </div>

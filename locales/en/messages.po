@@ -28,9 +28,9 @@ msgstr ""
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:231
 #: app/[locale]/(student)/student/courses/[id]/page.tsx:115
 #: app/[locale]/(student)/student/courses/[id]/page.tsx:268
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:231
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:436
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:508
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:246
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:537
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:609
 #: components/admin/AdminNavClient.tsx:36
 #: components/landing-page.tsx:372
 #: components/landing-page.tsx:375
@@ -78,7 +78,7 @@ msgstr ""
 msgid "{status}"
 msgstr ""
 
-#: components/student/PaymentForm.tsx:507
+#: components/student/PaymentForm.tsx:510
 msgid "💡 Partial Payments Allowed"
 msgstr ""
 
@@ -238,7 +238,7 @@ msgstr ""
 msgid "Admins"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:179
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:194
 #: app/[locale]/(student)/student/instructors/[id]/page.tsx:91
 #: components/admin/CourseFilters.tsx:79
 #: components/admin/CourseForm.tsx:265
@@ -248,7 +248,7 @@ msgstr ""
 msgid "Advanced"
 msgstr "Advanced"
 
-#: components/student/PaymentForm.tsx:465
+#: components/student/PaymentForm.tsx:468
 msgid "After This Payment:"
 msgstr ""
 
@@ -389,8 +389,8 @@ msgstr "Assign Teacher"
 msgid "Assigned Courses"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:331
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:412
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:432
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:513
 #: components/student/DashboardStats.tsx:78
 msgid "Attendance"
 msgstr ""
@@ -420,7 +420,7 @@ msgstr ""
 msgid "Avg Progress"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:319
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:420
 #: components/student/DashboardStats.tsx:70
 msgid "Avg Score"
 msgstr ""
@@ -441,7 +441,7 @@ msgstr "Back to Courses"
 msgid "Back to Enrollments"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:193
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:208
 msgid "Back to My Courses"
 msgstr ""
 
@@ -471,7 +471,7 @@ msgstr "Back to Teacher"
 msgid "Back to Teachers"
 msgstr "Back to Teachers"
 
-#: components/student/PaymentReceipt.tsx:234
+#: components/student/PaymentReceipt.tsx:256
 msgid "Balance Due:"
 msgstr ""
 
@@ -484,7 +484,7 @@ msgstr ""
 msgid "Basic Information"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:177
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:192
 #: app/[locale]/(student)/student/instructors/[id]/page.tsx:89
 #: components/admin/CourseFilters.tsx:73
 #: components/admin/CourseForm.tsx:259
@@ -502,6 +502,10 @@ msgstr "Biography"
 #: components/admin/ImageUpload.tsx:251
 msgid "browse"
 msgstr "browse"
+
+#: app/[locale]/not-found.tsx:77
+msgid "Browse courses"
+msgstr ""
 
 #: app/[locale]/(student)/student/courses/page.tsx:67
 #: components/student/MyCoursesGrid.tsx:76
@@ -590,7 +594,7 @@ msgstr ""
 #~ msgid "Choose Image"
 #~ msgstr "Choose Image"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:366
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:467
 msgid "Class Schedule"
 msgstr ""
 
@@ -602,7 +606,7 @@ msgstr ""
 msgid "classes"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:343
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:444
 msgid "Classes"
 msgstr ""
 
@@ -614,7 +618,7 @@ msgstr ""
 msgid "Click to upload or drag and drop"
 msgstr ""
 
-#: components/student/PaymentReceipt.tsx:285
+#: components/student/PaymentReceipt.tsx:313
 msgid "Click to view"
 msgstr ""
 
@@ -739,7 +743,7 @@ msgstr "Course Details"
 msgid "Course Enrollments"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:533
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:634
 msgid "Course Feedback"
 msgstr ""
 
@@ -800,6 +804,7 @@ msgstr "Course Title"
 
 #: app/[locale]/(admin)/admin/teachers/[id]/page.tsx:146
 #: app/[locale]/(student)/student/instructors/[id]/page.tsx:172
+#: app/[locale]/not-found.tsx:74
 #: components/admin/CourseManagementMenu.tsx:31
 #: components/admin/TeachersDataTable.tsx:143
 #: components/student/TeacherProfilePopover.tsx:105
@@ -884,6 +889,7 @@ msgstr ""
 msgid "Current Session"
 msgstr ""
 
+#: app/[locale]/not-found.tsx:91
 #: components/teacher/TeacherNav.tsx:29
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -1067,7 +1073,7 @@ msgid "Email changed successfully!"
 msgstr ""
 
 #: components/student/EmailVerificationBanner.tsx:97
-#: components/student/EnrollButton.tsx:75
+#: components/student/EnrollButton.tsx:70
 msgid "Email Verification Required"
 msgstr ""
 
@@ -1098,13 +1104,17 @@ msgstr ""
 #~ msgid "Engage with teachers and peers in live sessions"
 #~ msgstr "Engage with teachers and peers in live sessions"
 
-#: components/student/EnrollButton.tsx:112
+#: components/student/EnrollButton.tsx:107
 msgid "Enroll for Free"
 msgstr ""
 
 #. placeholder {0}: Number(price).toFixed(2)
-#: components/student/EnrollButton.tsx:115
+#: components/student/EnrollButton.tsx:110
 msgid "Enroll Now - ${0}"
+msgstr ""
+
+#: components/student/EnrollButton.tsx:118
+msgid "Enroll now and make payment later (full or partial)"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:217
@@ -1134,7 +1144,7 @@ msgstr ""
 #~ msgid "Enrolled:"
 #~ msgstr ""
 
-#: components/student/EnrollButton.tsx:107
+#: components/student/EnrollButton.tsx:102
 msgid "Enrolling..."
 msgstr ""
 
@@ -1142,7 +1152,7 @@ msgstr ""
 msgid "Enrollment Details"
 msgstr ""
 
-#: components/student/EnrollButton.tsx:77
+#: components/student/EnrollButton.tsx:72
 msgid "Enrollment Failed"
 msgstr ""
 
@@ -1182,6 +1192,10 @@ msgstr ""
 
 #: components/student/CourseFeedbackForm.tsx:164
 msgid "Error"
+msgstr ""
+
+#: app/[locale]/not-found.tsx:120
+msgid "Error Code: 404 • CUBIS Academy"
 msgstr ""
 
 #: components/landing-page.tsx:343
@@ -1227,7 +1241,7 @@ msgstr ""
 msgid "Exporting..."
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:247
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:262
 msgid "Face-to-Face"
 msgstr ""
 
@@ -1291,7 +1305,7 @@ msgstr ""
 msgid "Generate New Password"
 msgstr ""
 
-#: components/student/PaymentReceipt.tsx:302
+#: components/student/PaymentReceipt.tsx:330
 msgid "Generated on"
 msgstr ""
 
@@ -1304,11 +1318,16 @@ msgstr ""
 msgid "Get Started Free"
 msgstr "Get Started Free"
 
+#: app/[locale]/not-found.tsx:55
+msgid "Go Back"
+msgstr ""
+
+#: app/[locale]/not-found.tsx:45
 #: app/[locale]/unauthorized/page.tsx:44
 msgid "Go Home"
 msgstr ""
 
-#: components/student/EnrollButton.tsx:90
+#: components/student/EnrollButton.tsx:85
 msgid "Go to Dashboard to Verify Email"
 msgstr ""
 
@@ -1324,7 +1343,7 @@ msgstr ""
 msgid "Here's what's happening with your courses today"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:249
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:264
 msgid "Hybrid"
 msgstr ""
 
@@ -1360,10 +1379,15 @@ msgstr "Inactive"
 msgid "Instructor"
 msgstr ""
 
+#. placeholder {0}: instructors.length > 1 ? 's' : ''
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:282
+msgid "Instructor{0}"
+msgstr ""
+
 #~ msgid "Interactive Learning"
 #~ msgstr "Interactive Learning"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:178
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:193
 #: app/[locale]/(student)/student/instructors/[id]/page.tsx:90
 #: components/admin/CourseFilters.tsx:76
 #: components/admin/CourseForm.tsx:262
@@ -1380,7 +1404,7 @@ msgstr ""
 #~ msgid "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
 #~ msgstr "Join thousands of students mastering technology skills with CUBIS Academy. Start your journey today!"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:287
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:340
 msgid "Join Zoom Class"
 msgstr ""
 
@@ -1448,6 +1472,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
+#: app/[locale]/not-found.tsx:108
 #: components/landing-page.tsx:107
 msgid "Login"
 msgstr "Login"
@@ -1456,7 +1481,8 @@ msgstr "Login"
 msgid "Logout"
 msgstr "Logout"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:458
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:388
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:559
 #: components/student/QuickActions.tsx:36
 msgid "Make Payment"
 msgstr ""
@@ -1607,7 +1633,7 @@ msgid "No active sessions found"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:232
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:418
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:519
 msgid "No attendance records yet"
 msgstr ""
 
@@ -1673,7 +1699,7 @@ msgstr ""
 #~ msgid "No payments found."
 #~ msgstr "No payments found."
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:484
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:585
 msgid "No payments recorded yet"
 msgstr ""
 
@@ -1690,7 +1716,7 @@ msgid "No schedules yet"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/enrollments/[id]/page.tsx:200
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:381
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:482
 msgid "No scores recorded yet"
 msgstr ""
 
@@ -1730,7 +1756,7 @@ msgstr "Not provided"
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:144
 #: components/admin/ScheduleManager.tsx:303
 #: components/student/PaymentForm.tsx:305
-#: components/student/PaymentReceipt.tsx:262
+#: components/student/PaymentReceipt.tsx:290
 msgid "Notes"
 msgstr ""
 
@@ -1743,8 +1769,12 @@ msgstr ""
 msgid "of"
 msgstr "of"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:251
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:266
 msgid "Online"
+msgstr ""
+
+#: app/[locale]/not-found.tsx:34
+msgid "Oops! The page you're looking for seems to have wandered off. Let's get you back on track."
 msgstr ""
 
 #: components/student/CourseFeedbackForm.tsx:132
@@ -1758,6 +1788,10 @@ msgstr ""
 
 #: components/student/PaymentForm.tsx:394
 msgid "Original Amount:"
+msgstr ""
+
+#: components/student/PaymentReceipt.tsx:219
+msgid "Original Course Fee:"
 msgstr ""
 
 #: components/admin/StudentFilters.tsx:82
@@ -1799,23 +1833,35 @@ msgstr "page"
 msgid "Page {0} of {1}"
 msgstr "Page {0} of {1}"
 
-#: components/student/PaymentForm.tsx:433
-#: components/student/PaymentReceipt.tsx:251
+#: app/[locale]/not-found.tsx:31
+msgid "Page Not Found"
+msgstr ""
+
+#: components/student/PaymentForm.tsx:436
+#: components/student/PaymentReceipt.tsx:279
 msgid "paid"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:355
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:456
 #: components/student/CoursesGrid.tsx:163
 msgid "Paid"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:470
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:571
 msgid "Paid Amount"
 msgstr ""
 
 #: components/student/PaymentReceipt.tsx:208
 #~ msgid "Paid Amount:"
 #~ msgstr ""
+
+#: components/student/PaymentReceipt.tsx:240
+msgid "Paid Before This:"
+msgstr ""
+
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:370
+msgid "Paid:"
+msgstr ""
 
 #. placeholder {0}: Number(enrollment.paidAmount).toFixed(2)
 #. placeholder {1}: Number(enrollment.totalAmount).toFixed(2)
@@ -1881,7 +1927,7 @@ msgstr ""
 msgid "Payment history"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:454
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:555
 #: app/[locale]/(student)/student/payments/page.tsx:139
 msgid "Payment History"
 msgstr ""
@@ -1896,7 +1942,7 @@ msgstr ""
 msgid "Payment Method"
 msgstr ""
 
-#: components/student/PaymentForm.tsx:454
+#: components/student/PaymentForm.tsx:457
 msgid "Payment Method:"
 msgstr ""
 
@@ -1904,7 +1950,7 @@ msgstr ""
 msgid "Payment Proof"
 msgstr ""
 
-#: components/student/PaymentReceipt.tsx:282
+#: components/student/PaymentReceipt.tsx:310
 msgid "Payment Proof Attached"
 msgstr ""
 
@@ -1914,6 +1960,10 @@ msgstr ""
 
 #: components/student/PaymentAlert.tsx:62
 msgid "Payment Reminder"
+msgstr ""
+
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:358
+msgid "Payment Required"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/payments/[id]/page.tsx:220
@@ -2050,7 +2100,7 @@ msgstr ""
 
 #: app/[locale]/(admin)/admin/courses/[id]/enrollments/page.tsx:208
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:191
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:306
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:407
 #: components/admin/EnrollmentsDataTable.tsx:108
 #: components/student/MyCoursesGrid.tsx:177
 msgid "Progress"
@@ -2068,6 +2118,10 @@ msgstr ""
 #: components/student/QuickActions.tsx:62
 msgid "Quick Actions"
 msgstr "Quick Actions"
+
+#: app/[locale]/not-found.tsx:62
+msgid "Quick Links"
+msgstr ""
 
 #: components/admin/VerificationStatsWidget.tsx:168
 #: components/admin/VerificationStatsWidget.tsx:194
@@ -2140,11 +2194,11 @@ msgstr ""
 msgid "Related scores and attendance records"
 msgstr "Related scores and attendance records"
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:474
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:575
 msgid "Remaining"
 msgstr ""
 
-#: components/student/PaymentForm.tsx:478
+#: components/student/PaymentForm.tsx:481
 msgid "Remaining:"
 msgstr ""
 
@@ -2227,7 +2281,7 @@ msgstr "Saving..."
 msgid "Schedules"
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:375
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:476
 msgid "Scores"
 msgstr ""
 
@@ -2319,6 +2373,10 @@ msgstr ""
 msgid "Showing next {0} classes"
 msgstr ""
 
+#: app/[locale]/not-found.tsx:111
+msgid "Sign in"
+msgstr ""
+
 #: components/landing-page.tsx:424
 msgid "Sign In"
 msgstr "Sign In"
@@ -2348,7 +2406,7 @@ msgstr "Specialization:"
 msgid "Start Learning Free"
 msgstr "Start Learning Free"
 
-#: components/student/EnrollButton.tsx:121
+#: components/student/EnrollButton.tsx:116
 msgid "Start learning immediately after enrollment"
 msgstr ""
 
@@ -2391,6 +2449,10 @@ msgstr "Student ID"
 #: app/[locale]/(student)/student/page.tsx:142
 #~ msgid "Student ID:"
 #~ msgstr ""
+
+#: app/[locale]/not-found.tsx:94
+msgid "Student portal"
+msgstr ""
 
 #~ msgid "students"
 #~ msgstr "students"
@@ -2504,11 +2566,12 @@ msgstr ""
 msgid "This action cannot be undone"
 msgstr "This action cannot be undone"
 
-#: components/student/PaymentReceipt.tsx:296
+#: components/student/PaymentReceipt.tsx:324
 msgid "This is an official receipt from CUBIS Academy. For any questions, please contact our support team."
 msgstr ""
 
-#: components/student/PaymentForm.tsx:444
+#: components/student/PaymentForm.tsx:447
+#: components/student/PaymentReceipt.tsx:229
 msgid "This Payment:"
 msgstr ""
 
@@ -2568,7 +2631,7 @@ msgid "Total"
 msgstr ""
 
 #: app/[locale]/(admin)/admin/students/[id]/enrollments/page.tsx:153
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:466
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:567
 msgid "Total Amount"
 msgstr ""
 
@@ -2581,8 +2644,8 @@ msgstr ""
 #~ msgstr ""
 
 #: components/student/PaymentReceipt.tsx:218
-msgid "Total Course Fee:"
-msgstr ""
+#~ msgid "Total Course Fee:"
+#~ msgstr ""
 
 #: app/[locale]/(student)/student/enrollments/page.tsx:79
 #: components/student/DashboardStats.tsx:38
@@ -2602,8 +2665,11 @@ msgstr ""
 #~ msgid "Total Paid"
 #~ msgstr ""
 
-#: components/student/PaymentForm.tsx:470
-#: components/student/PaymentReceipt.tsx:226
+#: components/student/PaymentReceipt.tsx:248
+msgid "Total Paid (After):"
+msgstr ""
+
+#: components/student/PaymentForm.tsx:473
 msgid "Total Paid:"
 msgstr ""
 
@@ -2632,9 +2698,9 @@ msgstr "Total Students"
 msgid "Total Users"
 msgstr ""
 
-#: components/student/PaymentForm.tsx:358
-#~ msgid "Total:"
-#~ msgstr ""
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:373
+msgid "Total:"
+msgstr ""
 
 #: app/[locale]/(admin)/admin/payments/page.tsx:94
 msgid "Track and manage all payment transactions"
@@ -2814,7 +2880,7 @@ msgstr ""
 msgid "Verifying..."
 msgstr ""
 
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:512
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:613
 #: components/admin/QuickActionsMenu.tsx:55
 msgid "View"
 msgstr "View"
@@ -2943,7 +3009,7 @@ msgid "Watch Demo"
 msgstr "Watch Demo"
 
 #: app/[locale]/(student)/student/courses/[id]/page.tsx:173
-#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:275
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:328
 msgid "Watch on YouTube"
 msgstr ""
 
@@ -3017,7 +3083,7 @@ msgstr ""
 msgid "You are enrolled in this course"
 msgstr ""
 
-#: components/student/PaymentForm.tsx:510
+#: components/student/PaymentForm.tsx:513
 msgid "You can pay any amount now and make additional payments later until the full course fee is paid."
 msgstr ""
 
@@ -3041,6 +3107,11 @@ msgstr ""
 msgid "You have {0} course(s) with outstanding balance of ${1}."
 msgstr ""
 
+#. placeholder {0}: remainingAmount.toFixed(2)
+#: app/[locale]/(student)/student/enrollments/[id]/page.tsx:361
+msgid "You have an outstanding balance of ${0}. Make a payment to continue your learning journey."
+msgstr ""
+
 #: components/PasswordChangeForm.tsx:167
 msgid "You signed in with Google. Set a password to enable password login."
 msgstr ""
@@ -3054,8 +3125,8 @@ msgstr ""
 #~ msgstr ""
 
 #: components/student/EnrollButton.tsx:123
-msgid "You'll be redirected to payment after enrollment"
-msgstr ""
+#~ msgid "You'll be redirected to payment after enrollment"
+#~ msgstr ""
 
 #: components/student/CourseFeedbackForm.tsx:132
 msgid "Your feedback"
@@ -3069,7 +3140,7 @@ msgstr ""
 msgid "Your payment has been submitted for review. You'll be notified once it's processed."
 msgstr ""
 
-#: components/student/PaymentForm.tsx:498
+#: components/student/PaymentForm.tsx:501
 msgid "Your payment will be reviewed by our team. You'll receive a confirmation email once it's processed."
 msgstr ""
 

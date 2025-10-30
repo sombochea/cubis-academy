@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Trans } from '@lingui/react/macro';
@@ -10,18 +10,29 @@ import { CheckCircle, ArrowLeft } from 'lucide-react';
 export default function ApprovePaymentPage({ 
   params 
 }: { 
-  params: { locale: string; id: string } 
+  params: Promise<{ locale: string; id: string }> 
 }) {
   const router = useRouter();
   const [isApproving, setIsApproving] = useState(false);
   const [error, setError] = useState('');
+  const [resolvedParams, setResolvedParams] = useState<{ locale: string; id: string } | null>(null);
+
+  // Resolve params on mount
+  useEffect(() => {
+    params.then(setResolvedParams);
+  }, [params]);
 
   const handleApprove = async () => {
+    if (!resolvedParams) {
+      setError('Loading...');
+      return;
+    }
+
     setIsApproving(true);
     setError('');
 
     try {
-      const response = await fetch(`/api/payments/${params.id}/approve`, {
+      const response = await fetch(`/api/payments/${resolvedParams.id}/approve`, {
         method: 'POST',
       });
 
@@ -29,13 +40,24 @@ export default function ApprovePaymentPage({
         throw new Error('Failed to approve payment');
       }
 
-      router.push(`/${params.locale}/admin/payments/${params.id}`);
+      router.push(`/${resolvedParams.locale}/admin/payments/${resolvedParams.id}`);
       router.refresh();
     } catch (err) {
       setError('Failed to approve payment. Please try again.');
       setIsApproving(false);
     }
   };
+
+  if (!resolvedParams) {
+    return (
+      <div className="min-h-screen bg-[#F4F5F7] flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-[#007FFF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#363942]/70">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] flex items-center justify-center p-4">
@@ -76,7 +98,7 @@ export default function ApprovePaymentPage({
             )}
           </Button>
 
-          <Link href={`/${params.locale}/admin/payments/${params.id}`}>
+          <Link href={`/${resolvedParams.locale}/admin/payments/${resolvedParams.id}`}>
             <Button variant="outline" className="w-full">
               <ArrowLeft className="mr-2 h-4 w-4" />
               <Trans>Cancel</Trans>
