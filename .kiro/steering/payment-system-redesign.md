@@ -119,85 +119,37 @@ export const payments = pgTable("payments", {
 - ✅ Enrollment payments always linked to enrollment
 - ✅ Flexible for future payment types
 
-## Migration Strategy
+## Implementation
 
-### Step 1: Analyze Existing Data
-
-```sql
--- Check if any payments have courseId but no enrollmentId
-SELECT COUNT(*) FROM payments 
-WHERE course_id IS NOT NULL AND enrollment_id IS NULL;
-
--- Check for inconsistencies
-SELECT p.id, p.enrollment_id, p.course_id, e.course_id as enrollment_course_id
-FROM payments p
-LEFT JOIN enrollments e ON p.enrollment_id = e.id
-WHERE p.enrollment_id IS NOT NULL 
-  AND p.course_id IS NOT NULL 
-  AND p.course_id != e.course_id;
-```
-
-### Step 2: Data Migration
-
-```sql
--- Create enrollments for orphaned payments (if any)
-INSERT INTO enrollments (student_id, course_id, status, total_amount, paid_amount, enrolled)
-SELECT 
-  p.student_id,
-  p.course_id,
-  'active',
-  p.amount,
-  CASE WHEN p.status = 'completed' THEN p.amount ELSE 0 END,
-  p.created
-FROM payments p
-WHERE p.enrollment_id IS NULL AND p.course_id IS NOT NULL
-ON CONFLICT DO NOTHING;
-
--- Update payments to link to enrollments
-UPDATE payments p
-SET enrollment_id = e.id
-FROM enrollments e
-WHERE p.enrollment_id IS NULL 
-  AND p.course_id IS NOT NULL
-  AND e.student_id = p.student_id
-  AND e.course_id = p.course_id;
-
--- Remove course_id column
-ALTER TABLE payments DROP COLUMN course_id;
-```
-
-### Step 3: Update Schema
+### Schema Definition
 
 ```typescript
-// Remove courseId from schema
 export const payments = pgTable("payments", {
-  // ... other fields
-  enrollmentId: uuid("enrollment_id").notNull()  // Now required
+  id: uuid("id").primaryKey().default(uuidv7),
+  studentId: uuid("student_id").notNull()
+    .references(() => students.userId, { onDelete: "cascade" }),
+  enrollmentId: uuid("enrollment_id").notNull()  // ✅ Required
     .references(() => enrollments.id, { onDelete: "cascade" }),
-  // courseId: removed ❌
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
+  method: varchar("method", { length: 100 }),
+  status: paymentStatusEnum("status").notNull().default("pending"),
+  txnId: varchar("txn_id", { length: 255 }).unique(),
+  proofUrl: varchar("proof_url", { length: 500 }),
+  notes: text("notes"),
+  created: timestamp("created").notNull().defaultNow(),
 });
 ```
 
-### Step 4: Update Application Code
+### Payment Creation
 
-**Before**:
 ```typescript
-// Complex payment creation
-await db.insert(payments).values({
-  studentId: session.user.id,
-  enrollmentId: enrollmentId || null,
-  courseId: courseId || null,  // ❌ Removed
-  amount: amount,
-});
-```
-
-**After**:
-```typescript
-// Simple payment creation
+// Simple and clear
 await db.insert(payments).values({
   studentId: session.user.id,
   enrollmentId: enrollmentId,  // ✅ Always required
   amount: amount,
+  method: method,
+  status: 'pending',
 });
 ```
 
@@ -346,22 +298,17 @@ const enrollment2025 = await db.insert(enrollments).values({
 - Clear audit trail
 - Flexible for future payment types
 
-## Implementation Checklist
+## Implementation Status
 
-- [ ] Analyze existing payment data
-- [ ] Create data migration script
-- [ ] Test migration on staging database
-- [ ] Update Drizzle schema
-- [ ] Remove `courseId` from payments table
-- [ ] Make `enrollmentId` required (NOT NULL)
-- [ ] Update payment creation API
-- [ ] Update payment queries (remove CASE statements)
-- [ ] Update PaymentForm component
-- [ ] Update payment list/details pages
-- [ ] Test enrollment payment flow
-- [ ] Test re-enrollment scenario
-- [ ] Update documentation
-- [ ] Deploy to production
+- [x] Update Drizzle schema (removed `courseId`, made `enrollmentId` required)
+- [x] Update payment creation API (validate `enrollmentId`)
+- [x] Update payment queries (simplified with INNER JOINs)
+- [x] Update PaymentForm component (removed `courseId` handling)
+- [x] Update payment list/details pages (removed CASE statements)
+- [x] Remove "General Payment" fallback logic
+- [x] Update documentation
+
+**Status**: ✅ IMPLEMENTED - Ready for fresh database setup
 
 ## Conclusion
 

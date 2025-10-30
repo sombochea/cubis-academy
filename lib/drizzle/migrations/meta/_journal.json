@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1761788882323,
-      "tag": "0000_glamorous_dormammu",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1761789606728,
-      "tag": "0001_spotty_paladin",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1761797536660,
-      "tag": "0002_grey_deathbird",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1761799256736,
-      "tag": "0003_nappy_rocket_racer",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1761814370832,
-      "tag": "0004_rainy_bishop",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1761819401793,
-      "tag": "0005_demonic_spyke",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1761820233875,
-      "tag": "0006_sturdy_mystique",
+      "when": 1761835624166,
+      "tag": "0000_cooing_exiles",
       "breakpoints": true
     }
   ]

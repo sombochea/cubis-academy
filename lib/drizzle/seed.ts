@@ -1,16 +1,18 @@
-import "dotenv/config"
+import "dotenv/config";
 
 import { db } from "./db";
 import {
   users,
   students,
   teachers,
+  courseCategories,
   courses,
   enrollments,
   payments,
   scores,
   attendances,
 } from "./schema";
+import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { generateSuid } from "./queries";
 
@@ -23,7 +25,7 @@ async function seed() {
 
     // Create Admin User
     console.log("Creating admin user...");
-    const [admin] = await db
+    await db
       .insert(users)
       .values({
         name: "Admin User",
@@ -170,72 +172,143 @@ async function seed() {
       studentUsers.push(user);
     }
 
+    // Create Course Categories
+    console.log("Creating course categories...");
+    const categoryData = [
+      {
+        name: "Web Development",
+        slug: "web-development",
+        description: "Learn to build modern web applications",
+        icon: "Code",
+        color: "#3B82F6",
+      },
+      {
+        name: "UX/UI Design",
+        slug: "ux-ui-design",
+        description: "Master user experience and interface design",
+        icon: "Palette",
+        color: "#EC4899",
+      },
+      {
+        name: "DevOps",
+        slug: "devops",
+        description: "Infrastructure, deployment, and automation",
+        icon: "Server",
+        color: "#10B981",
+      },
+      {
+        name: "Programming",
+        slug: "programming",
+        description: "Core programming languages and concepts",
+        icon: "Terminal",
+        color: "#F59E0B",
+      },
+      {
+        name: "Data Science",
+        slug: "data-science",
+        description: "Analytics, machine learning, and AI",
+        icon: "BarChart",
+        color: "#8B5CF6",
+      },
+      {
+        name: "Mobile Development",
+        slug: "mobile-development",
+        description: "iOS and Android app development",
+        icon: "Smartphone",
+        color: "#06B6D4",
+      },
+    ];
+
+    const createdCategories: Array<{ id: string; name: string }> = [];
+    for (const category of categoryData) {
+      const [created] = await db
+        .insert(courseCategories)
+        .values(category)
+        .returning();
+      createdCategories.push(created);
+    }
+
+    // Helper to find category by name
+    const getCategoryId = (name: string) => {
+      const category = createdCategories.find((c) => c.name === name);
+      return category?.id || null;
+    };
+
     // Create Courses
     console.log("Creating courses...");
     const courseData = [
       {
         title: "Full-Stack Web Development Bootcamp",
         desc: "Master modern web development with React, Node.js, and PostgreSQL. Build real-world applications from scratch.",
-        category: "Web Development",
+        categoryId: getCategoryId("Web Development"),
         teacherId: teacherUsers[0].id,
         price: "499.99",
         duration: 120,
         level: "intermediate" as const,
+        deliveryMode: "hybrid" as const,
+        location: "Building A, Room 301",
         youtubeUrl: "https://youtube.com/watch?v=example1",
         zoomUrl: "https://zoom.us/j/example1",
       },
       {
         title: "UX/UI Design Fundamentals",
         desc: "Learn user-centered design principles, wireframing, prototyping, and modern design tools like Figma.",
-        category: "UX/UI Design",
+        categoryId: getCategoryId("UX/UI Design"),
         teacherId: teacherUsers[1].id,
         price: "399.99",
         duration: 80,
         level: "beginner" as const,
+        deliveryMode: "online" as const,
         youtubeUrl: "https://youtube.com/watch?v=example2",
         zoomUrl: "https://zoom.us/j/example2",
       },
       {
         title: "DevOps Engineering Masterclass",
         desc: "Master CI/CD, Docker, Kubernetes, AWS, and infrastructure as code. Become a DevOps expert.",
-        category: "DevOps",
+        categoryId: getCategoryId("DevOps"),
         teacherId: teacherUsers[2].id,
         price: "599.99",
         duration: 100,
         level: "advanced" as const,
+        deliveryMode: "online" as const,
         youtubeUrl: "https://youtube.com/watch?v=example3",
         zoomUrl: "https://zoom.us/j/example3",
       },
       {
         title: "Python Programming for Beginners",
         desc: "Start your programming journey with Python. Learn syntax, data structures, and build practical projects.",
-        category: "Programming",
+        categoryId: getCategoryId("Programming"),
         teacherId: teacherUsers[3].id,
         price: "299.99",
         duration: 60,
         level: "beginner" as const,
+        deliveryMode: "face_to_face" as const,
+        location: "Building B, Computer Lab 1",
         youtubeUrl: "https://youtube.com/watch?v=example4",
         zoomUrl: "https://zoom.us/j/example4",
       },
       {
         title: "Advanced JavaScript & TypeScript",
         desc: "Deep dive into modern JavaScript and TypeScript. Master async programming, design patterns, and more.",
-        category: "Programming",
+        categoryId: getCategoryId("Programming"),
         teacherId: teacherUsers[3].id,
         price: "449.99",
         duration: 90,
         level: "advanced" as const,
+        deliveryMode: "hybrid" as const,
+        location: "Building A, Room 205",
         youtubeUrl: "https://youtube.com/watch?v=example5",
         zoomUrl: "https://zoom.us/j/example5",
       },
       {
         title: "Mobile-First Responsive Design",
         desc: "Create beautiful, responsive websites that work perfectly on all devices using modern CSS techniques.",
-        category: "UX/UI Design",
+        categoryId: getCategoryId("UX/UI Design"),
         teacherId: teacherUsers[1].id,
         price: "349.99",
         duration: 70,
         level: "intermediate" as const,
+        deliveryMode: "online" as const,
         youtubeUrl: "https://youtube.com/watch?v=example6",
         zoomUrl: "https://zoom.us/j/example6",
       },
@@ -317,20 +390,116 @@ async function seed() {
 
     // Create Payments
     console.log("Creating payments...");
+    let paymentCount = 0;
+
     for (let i = 0; i < createdEnrollments.length; i++) {
       const enrollment = enrollmentData[i];
+      const createdEnrollment = createdEnrollments[i];
       const course = createdCourses.find((c) => c.id === enrollment.courseId);
+      const totalAmount = parseFloat(course!.price);
 
-      await db.insert(payments).values({
-        studentId: enrollment.studentId,
-        courseId: enrollment.courseId,
-        amount: course!.price,
-        method: i % 2 === 0 ? "Credit Card" : "Bank Transfer",
-        status: "completed" as const,
-        txnId: `TXN-2025-${String(i + 1).padStart(6, "0")}`,
-        notes: "Course enrollment payment",
-      });
+      // Vary payment scenarios for demo
+      let paidAmount = 0;
+      let paymentScenario: "full" | "partial" | "multiple" = "full";
+
+      if (i % 3 === 0) {
+        paymentScenario = "partial"; // Partial payment
+        paidAmount = totalAmount * 0.5; // 50% paid
+      } else if (i % 3 === 1) {
+        paymentScenario = "multiple"; // Multiple payments
+        paidAmount = totalAmount; // Fully paid via multiple payments
+      } else {
+        paymentScenario = "full"; // Full payment
+        paidAmount = totalAmount;
+      }
+
+      // Update enrollment with payment info
+      await db
+        .update(enrollments)
+        .set({
+          totalAmount: course!.price,
+          paidAmount: paidAmount.toFixed(2),
+        })
+        .where(eq(enrollments.id, createdEnrollment.id));
+
+      // Create payment(s) based on scenario
+      if (paymentScenario === "full") {
+        // Single full payment
+        paymentCount++;
+        await db.insert(payments).values({
+          studentId: enrollment.studentId,
+          enrollmentId: createdEnrollment.id,
+          amount: totalAmount.toFixed(2),
+          method: "bank_transfer",
+          status: "completed" as const,
+          txnId: `TXN-2025-${String(paymentCount).padStart(6, "0")}`,
+          notes: "Full course payment",
+        });
+      } else if (paymentScenario === "partial") {
+        // Partial payment (50%)
+        paymentCount++;
+        await db.insert(payments).values({
+          studentId: enrollment.studentId,
+          enrollmentId: createdEnrollment.id,
+          amount: (totalAmount * 0.5).toFixed(2),
+          method: "credit_card",
+          status: "completed" as const,
+          txnId: `TXN-2025-${String(paymentCount).padStart(6, "0")}`,
+          notes: "Partial payment (50%)",
+        });
+      } else {
+        // Multiple payments (3 installments)
+        const installment1 = totalAmount * 0.4;
+        const installment2 = totalAmount * 0.3;
+        const installment3 = totalAmount * 0.3;
+
+        paymentCount++;
+        await db.insert(payments).values({
+          studentId: enrollment.studentId,
+          enrollmentId: createdEnrollment.id,
+          amount: installment1.toFixed(2),
+          method: "bank_transfer",
+          status: "completed" as const,
+          txnId: `TXN-2025-${String(paymentCount).padStart(6, "0")}`,
+          notes: "First installment (40%)",
+        });
+
+        paymentCount++;
+        await db.insert(payments).values({
+          studentId: enrollment.studentId,
+          enrollmentId: createdEnrollment.id,
+          amount: installment2.toFixed(2),
+          method: "mobile_payment",
+          status: "completed" as const,
+          txnId: `TXN-2025-${String(paymentCount).padStart(6, "0")}`,
+          notes: "Second installment (30%)",
+        });
+
+        paymentCount++;
+        await db.insert(payments).values({
+          studentId: enrollment.studentId,
+          enrollmentId: createdEnrollment.id,
+          amount: installment3.toFixed(2),
+          method: "cash",
+          status: "completed" as const,
+          txnId: `TXN-2025-${String(paymentCount).padStart(6, "0")}`,
+          notes: "Final installment (30%)",
+        });
+      }
     }
+
+    // Add some pending payments for demo
+    console.log("Creating pending payments...");
+    paymentCount++;
+    await db.insert(payments).values({
+      studentId: studentUsers[0].id,
+      enrollmentId: createdEnrollments[0].id,
+      amount: "100.00",
+      method: "bank_transfer",
+      status: "pending" as const,
+      txnId: `TXN-2025-${String(paymentCount).padStart(6, "0")}`,
+      notes: "Additional payment - pending approval",
+    });
 
     // Create Scores
     console.log("Creating scores...");
@@ -392,8 +561,8 @@ async function seed() {
             i === 0 && j === 0
               ? ("absent" as const)
               : i === 1 && j === 1
-              ? ("late" as const)
-              : ("present" as const),
+                ? ("late" as const)
+                : ("present" as const),
           notes: i === 0 && j === 0 ? "Sick leave" : null,
         });
       }
@@ -404,11 +573,17 @@ async function seed() {
     console.log(`- 1 Admin user`);
     console.log(`- ${teacherData.length} Teachers`);
     console.log(`- ${studentData.length} Students`);
+    console.log(`- ${categoryData.length} Course Categories`);
     console.log(`- ${courseData.length} Courses`);
     console.log(`- ${enrollmentData.length} Enrollments`);
-    console.log(`- ${enrollmentData.length} Payments`);
+    console.log(`- ${paymentCount} Payments (full, partial, and installments)`);
     console.log(`- ${scoreData.length} Scores`);
     console.log("- Multiple Attendance records");
+    console.log("\n� Poayment Scenarios:");
+    console.log("- Full payments (single transaction)");
+    console.log("- Partial payments (50% paid, balance due)");
+    console.log("- Multiple installments (3 payments per enrollment)");
+    console.log("- Pending payments (awaiting approval)");
     console.log("\n🔑 Login credentials (all passwords: 123456):");
     console.log("Admin: admin@cubisacademy.com / 123456");
     console.log("Teacher: john@cubisacademy.com / 123456");

@@ -150,7 +150,9 @@ enrollments {
 
 ## Status
 
-✅ **FIXED** - Enrollment payments now properly display course information and link to enrollments.
+✅ **IMPLEMENTED** - Payment system redesigned with single source of truth (enrollment-only).
+
+**Note**: This fix evolved into a complete payment system redesign. See `payment-system-redesign.md` for full details.
 
 ## Future Enhancements
 
