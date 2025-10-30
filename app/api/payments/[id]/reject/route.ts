@@ -40,12 +40,13 @@ export async function POST(
 
     console.log("Rejecting payment:", paymentId, "Reason:", reason);
 
-    // Update payment status to failed with rejection reason
+    // Update payment status to failed with rejection reason and timestamp
     await db
       .update(payments)
       .set({
         status: "failed",
         notes: reason,
+        rejectedAt: new Date(),
       })
       .where(eq(payments.id, paymentId));
 

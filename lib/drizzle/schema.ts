@@ -257,6 +257,8 @@ export const payments = pgTable(
     proofUrl: varchar("proof_url", { length: 500 }), // Payment proof/receipt
     notes: text("notes"),
     created: timestamp("created").notNull().defaultNow(),
+    approvedAt: timestamp("approved_at"), // When payment was approved
+    rejectedAt: timestamp("rejected_at"), // When payment was rejected
   },
   (table) => [
     index("payments_student_id_idx").on(table.studentId),

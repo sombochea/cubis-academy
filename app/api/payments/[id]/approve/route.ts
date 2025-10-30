@@ -49,8 +49,14 @@ export async function POST(
 
     // Start transaction
     await db.transaction(async (tx) => {
-      // Update payment status
-      await tx.update(payments).set({ status: 'completed' }).where(eq(payments.id, paymentId));
+      // Update payment status and set approved timestamp
+      await tx
+        .update(payments)
+        .set({ 
+          status: 'completed',
+          approvedAt: new Date(),
+        })
+        .where(eq(payments.id, paymentId));
 
       // Update enrollment paid amount if enrollment exists
       if (payment.enrollmentId) {

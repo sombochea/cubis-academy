@@ -7,9 +7,10 @@ import Link from 'next/link';
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, User, BookOpen, Calendar, DollarSign, CreditCard, FileText, CheckCircle, XCircle } from 'lucide-react';
+import { ArrowLeft, User, BookOpen, Calendar, DollarSign, CreditCard, FileText, CheckCircle, XCircle, ExternalLink } from 'lucide-react';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
+import { AdminPaymentPrint } from '@/components/admin/AdminPaymentPrint';
 
 export default async function PaymentDetailsPage({ 
   params 
@@ -49,6 +50,7 @@ export default async function PaymentDetailsPage({
     studentEmail: paymentRow.users.email,
     studentSuid: paymentRow.students.suid,
     studentPhoto: paymentRow.students.photo,
+    enrollmentId: paymentRow.enrollments.id,
     courseId: paymentRow.courses?.id || null,
     courseTitle: paymentRow.courses?.title || null,
     courseCategory: paymentRow.courses?.category || null,
@@ -60,6 +62,8 @@ export default async function PaymentDetailsPage({
     notes: paymentRow.payments.notes,
     proofUrl: paymentRow.payments.proofUrl,
     created: paymentRow.payments.created,
+    approvedAt: paymentRow.payments.approvedAt,
+    rejectedAt: paymentRow.payments.rejectedAt,
   };
 
   return (
@@ -210,6 +214,21 @@ export default async function PaymentDetailsPage({
                   </div>
                 )}
               </div>
+
+              {/* Enrollment Reference */}
+              <div className="mt-6 pt-6 border-t border-gray-100">
+                <div className="flex items-center gap-2 text-sm text-[#363942]/70 mb-2">
+                  <ExternalLink className="w-4 h-4" />
+                  <Trans>Enrollment Reference</Trans>
+                </div>
+                <Link 
+                  href={`/${locale}/admin/enrollments/${payment.enrollmentId}`}
+                  className="text-[#007FFF] hover:underline font-mono text-sm flex items-center gap-2 group"
+                >
+                  {payment.enrollmentId}
+                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -234,27 +253,46 @@ export default async function PaymentDetailsPage({
             </div>
 
             {/* Actions */}
-            {payment.status === 'pending' && (
-              <div className="bg-white rounded-xl border border-gray-100 p-6">
-                <h3 className="text-sm font-semibold text-[#363942]/70 mb-4">
-                  <Trans>Actions</Trans>
-                </h3>
-                <div className="space-y-3">
+            <div className="bg-white rounded-xl border border-gray-100 p-6">
+              <h3 className="text-sm font-semibold text-[#363942]/70 mb-4">
+                <Trans>Actions</Trans>
+              </h3>
+              
+              {/* Primary Actions - Payment Status */}
+              {payment.status === 'pending' && (
+                <div className="space-y-2 mb-4 pb-4 border-b border-gray-100">
+                  <p className="text-xs text-[#363942]/70 mb-3">
+                    <Trans>Payment Approval</Trans>
+                  </p>
                   <Link href={`/${locale}/admin/payments/${payment.id}/approve`}>
-                    <Button className="w-full bg-green-600 hover:bg-green-700">
+                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white shadow-sm">
                       <CheckCircle className="mr-2 h-4 w-4" />
                       <Trans>Approve Payment</Trans>
                     </Button>
                   </Link>
                   <Link href={`/${locale}/admin/payments/${payment.id}/reject`}>
-                    <Button variant="destructive" className="w-full">
+                    <Button variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300">
                       <XCircle className="mr-2 h-4 w-4" />
                       <Trans>Reject Payment</Trans>
                     </Button>
                   </Link>
                 </div>
+              )}
+
+              {/* Secondary Actions - Quick Links */}
+              <div className="space-y-2">
+                <p className="text-xs text-[#363942]/70 mb-3">
+                  <Trans>Quick Actions</Trans>
+                </p>
+                <AdminPaymentPrint payment={payment} locale={locale} />
+                <Link href={`/${locale}/admin/enrollments/${payment.enrollmentId}`}>
+                  <Button variant="outline" className="w-full hover:bg-[#007FFF]/5 hover:border-[#007FFF]/30 hover:text-[#007FFF] transition-colors">
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    <Trans>View Enrollment</Trans>
+                  </Button>
+                </Link>
               </div>
-            )}
+            </div>
 
             {/* Timeline */}
             <div className="bg-white rounded-xl border border-gray-100 p-6">
@@ -262,6 +300,7 @@ export default async function PaymentDetailsPage({
                 <Trans>Timeline</Trans>
               </h3>
               <div className="space-y-4">
+                {/* Payment Created */}
                 <div className="flex gap-3">
                   <div className="w-2 h-2 bg-[#007FFF] rounded-full mt-2" />
                   <div>
@@ -269,10 +308,58 @@ export default async function PaymentDetailsPage({
                       <Trans>Payment Created</Trans>
                     </p>
                     <p className="text-xs text-[#363942]/70">
-                      {new Date(payment.created).toLocaleString()}
+                      {new Date(payment.created).toLocaleString(locale, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </p>
                   </div>
                 </div>
+
+                {/* Payment Approved */}
+                {payment.approvedAt && (
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2" />
+                    <div>
+                      <p className="text-sm font-medium text-green-700">
+                        <Trans>Payment Approved</Trans>
+                      </p>
+                      <p className="text-xs text-[#363942]/70">
+                        {new Date(payment.approvedAt).toLocaleString(locale, {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Payment Rejected */}
+                {payment.rejectedAt && (
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2" />
+                    <div>
+                      <p className="text-sm font-medium text-red-700">
+                        <Trans>Payment Rejected</Trans>
+                      </p>
+                      <p className="text-xs text-[#363942]/70">
+                        {new Date(payment.rejectedAt).toLocaleString(locale, {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
