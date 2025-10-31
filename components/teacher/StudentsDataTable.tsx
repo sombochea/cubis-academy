@@ -6,7 +6,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Eye, Mail, BookOpen } from 'lucide-react';
+import { Eye, Mail, BookOpen, MoreVertical, User } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils/date';
 import { getAvatarGradient, getInitials } from '@/lib/avatar-utils';
@@ -17,6 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface Course {
   courseId: string;
@@ -172,16 +180,58 @@ export function StudentsDataTable({ students, locale }: StudentsDataTableProps) 
     },
     {
       id: 'actions',
-      header: () => <Trans>Actions</Trans>,
+      header: () => (
+        <div className="text-center">
+          <Trans>Actions</Trans>
+        </div>
+      ),
       cell: ({ row }) => {
         const student = row.original;
         return (
-          <Link href={`/${locale}/teacher/students/${student.id}`}>
-            <Button size="sm" variant="outline" className="gap-2">
-              <Eye className="w-4 h-4" />
-              <Trans>View</Trans>
-            </Button>
-          </Link>
+          <div className="flex justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                >
+                  <span className="sr-only">
+                    <Trans>Open menu</Trans>
+                  </span>
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[180px]">
+                <DropdownMenuLabel className="text-xs font-medium text-[#363942]/70">
+                  <Trans>Student Actions</Trans>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={`/${locale}/teacher/students/${student.id}`}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <Eye className="w-4 h-4 text-[#007FFF]" />
+                    <span>
+                      <Trans>View Profile</Trans>
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={`/${locale}/teacher/students/${student.id}#performance`}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <User className="w-4 h-4 text-purple-600" />
+                    <span>
+                      <Trans>Performance</Trans>
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       },
     },
