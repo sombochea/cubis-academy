@@ -1,7 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from '@tanstack/react-form';
+import { z } from 'zod';
 import { Trans } from '@lingui/react/macro';
+
+// Helper function to extract error message
+const getErrorMessage = (error: any): string => {
+  if (typeof error === 'string') return error;
+  if (error && typeof error === 'object' && 'message' in error) {
+    return error.message;
+  }
+  return 'Invalid value';
+};
 import {
   Plus,
   Edit2,
@@ -13,6 +24,8 @@ import {
   Loader2,
   CheckCircle,
   AlertCircle,
+  FileText,
+  Hash,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,6 +47,18 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { formatDate } from '@/lib/utils/date';
+
+// Validation schema
+const scoreSchema = z.object({
+  title: z.string().min(1, 'Assessment title is required'),
+  score: z.string().refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) >= 0, {
+    message: 'Score must be a valid number',
+  }),
+  maxScore: z.string().refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
+    message: 'Max score must be greater than 0',
+  }),
+  remarks: z.string(),
+});
 
 interface Score {
   id: string;
@@ -62,21 +87,13 @@ interface ScoreManagerProps {
   locale: string;
 }
 
-export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) {
+export function ScoreManager({ students, locale }: ScoreManagerProps) {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<string>('');
   const [selectedScore, setSelectedScore] = useState<Score | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
-
-  const [formData, setFormData] = useState({
-    title: '',
-    score: '',
-    maxScore: '100',
-    remarks: '',
-  });
 
   // Calculate stats
   const totalStudents = students.length;
@@ -91,74 +108,95 @@ export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) 
     : 0;
   const totalScores = students.reduce((sum, s) => sum + s.scores.length, 0);
 
-  const handleAddScore = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-    setSuccess('');
+  // Add Score Form
+  const addForm = useForm({
+    defaultValues: {
+      title: '',
+      score: '',
+      maxScore: '100',
+      remarks: '',
+    },
+    validators: {
+      onChange: scoreSchema,
+    },
+    onSubmit: async ({ value }) => {
+      setError('');
+      setSuccess('');
 
-    try {
-      const response = await fetch('/api/teacher/scores', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          enrollmentId: selectedStudent,
-          title: formData.title,
-          score: parseFloat(formData.score),
-          maxScore: parseFloat(formData.maxScore),
-          remarks: formData.remarks || null,
-        }),
-      });
+      if (!selectedStudent) {
+        setError('Please select a student');
+        return;
+      }
 
-      if (!response.ok) throw new Error('Failed to add score');
+      try {
+        const response = await fetch('/api/teacher/scores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            enrollmentId: selectedStudent,
+            title: value.title,
+            score: parseFloat(value.score),
+            maxScore: parseFloat(value.maxScore),
+            remarks: value.remarks || null,
+          }),
+        });
 
-      setSuccess('Score added successfully!');
-      setFormData({ title: '', score: '', maxScore: '100', remarks: '' });
-      setSelectedStudent('');
-      setTimeout(() => {
-        setIsAddDialogOpen(false);
-        window.location.reload();
-      }, 1500);
-    } catch (error) {
-      setError('Failed to add score. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        if (!response.ok) throw new Error('Failed to add score');
 
-  const handleEditScore = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedScore) return;
+        setSuccess('Score added successfully!');
+        addForm.reset();
+        setSelectedStudent('');
+        setTimeout(() => {
+          setIsAddDialogOpen(false);
+          window.location.reload();
+        }, 1500);
+      } catch (error) {
+        setError('Failed to add score. Please try again.');
+      }
+    },
+  });
 
-    setIsLoading(true);
-    setError('');
-    setSuccess('');
+  // Edit Score Form
+  const editForm = useForm({
+    defaultValues: {
+      title: '',
+      score: '',
+      maxScore: '100',
+      remarks: '',
+    },
+    validators: {
+      onChange: scoreSchema,
+    },
+    onSubmit: async ({ value }) => {
+      if (!selectedScore) return;
 
-    try {
-      const response = await fetch(`/api/teacher/scores/${selectedScore.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: formData.title,
-          score: parseFloat(formData.score),
-          maxScore: parseFloat(formData.maxScore),
-          remarks: formData.remarks || null,
-        }),
-      });
+      setError('');
+      setSuccess('');
 
-      if (!response.ok) throw new Error('Failed to update score');
+      try {
+        const response = await fetch(`/api/teacher/scores/${selectedScore.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: value.title,
+            score: parseFloat(value.score),
+            maxScore: parseFloat(value.maxScore),
+            remarks: value.remarks || null,
+          }),
+        });
 
-      setSuccess('Score updated successfully!');
-      setTimeout(() => {
-        setIsEditDialogOpen(false);
-        window.location.reload();
-      }, 1500);
-    } catch (error) {
-      setError('Failed to update score. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        if (!response.ok) throw new Error('Failed to update score');
+
+        setSuccess('Score updated successfully!');
+        setTimeout(() => {
+          setIsEditDialogOpen(false);
+          window.location.reload();
+        }, 1500);
+      } catch (error) {
+        setError('Failed to update score. Please try again.');
+      }
+    },
+  });
 
   const handleDeleteScore = async (scoreId: string) => {
     if (!confirm('Are you sure you want to delete this score?')) return;
@@ -178,12 +216,10 @@ export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) 
 
   const openEditDialog = (score: Score) => {
     setSelectedScore(score);
-    setFormData({
-      title: score.title,
-      score: score.score.toString(),
-      maxScore: score.maxScore.toString(),
-      remarks: score.remarks || '',
-    });
+    editForm.setFieldValue('title', score.title);
+    editForm.setFieldValue('score', score.score.toString());
+    editForm.setFieldValue('maxScore', score.maxScore.toString());
+    editForm.setFieldValue('remarks', score.remarks || '');
     setIsEditDialogOpen(true);
   };
 
@@ -267,7 +303,13 @@ export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) 
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleAddScore} className="space-y-4">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addForm.handleSubmit();
+              }}
+              className="space-y-4"
+            >
               {success && (
                 <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
                   <CheckCircle className="w-4 h-4" />
@@ -282,12 +324,14 @@ export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) 
                 </div>
               )}
 
-              <div>
-                <Label htmlFor="student">
-                  <Trans>Student</Trans> *
+              <div className="space-y-2">
+                <Label htmlFor="student" className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-[#007FFF]" />
+                  <Trans>Student</Trans>
+                  <span className="text-red-500">*</span>
                 </Label>
                 <Select value={selectedStudent} onValueChange={setSelectedStudent} required>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full !h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF] transition-colors">
                     <SelectValue placeholder="Select student" />
                   </SelectTrigger>
                   <SelectContent>
@@ -300,80 +344,142 @@ export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) 
                 </Select>
               </div>
 
-              <div>
-                <Label htmlFor="title">
-                  <Trans>Assessment Title</Trans> *
-                </Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g., Midterm Exam, Assignment 1"
-                  required
-                />
-              </div>
+              <addForm.Field name="title">
+                {(field) => (
+                  <div className="space-y-2">
+                    <Label htmlFor={field.name} className="flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-[#007FFF]" />
+                      <Trans>Assessment Title</Trans>
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="e.g., Midterm Exam, Assignment 1"
+                      className="h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF]"
+                    />
+                    {field.state.meta.errors.length > 0 && (
+                      <p className="text-sm text-red-600">
+                        {getErrorMessage(field.state.meta.errors[0])}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </addForm.Field>
 
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="score">
-                    <Trans>Score</Trans> *
-                  </Label>
-                  <Input
-                    id="score"
-                    type="number"
-                    step="0.01"
-                    value={formData.score}
-                    onChange={(e) => setFormData({ ...formData, score: e.target.value })}
-                    placeholder="0"
-                    required
-                  />
-                </div>
+                <addForm.Field name="score">
+                  {(field) => (
+                    <div className="space-y-2">
+                      <Label htmlFor={field.name} className="flex items-center gap-2">
+                        <Hash className="w-4 h-4 text-[#007FFF]" />
+                        <Trans>Score</Trans>
+                        <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id={field.name}
+                        type="number"
+                        step="0.01"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        placeholder="0"
+                        className="h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF]"
+                      />
+                      {field.state.meta.errors.length > 0 && (
+                        <p className="text-sm text-red-600">
+                          {getErrorMessage(field.state.meta.errors[0])}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </addForm.Field>
 
-                <div>
-                  <Label htmlFor="maxScore">
-                    <Trans>Max Score</Trans> *
-                  </Label>
-                  <Input
-                    id="maxScore"
-                    type="number"
-                    step="0.01"
-                    value={formData.maxScore}
-                    onChange={(e) => setFormData({ ...formData, maxScore: e.target.value })}
-                    placeholder="100"
-                    required
-                  />
-                </div>
+                <addForm.Field name="maxScore">
+                  {(field) => (
+                    <div className="space-y-2">
+                      <Label htmlFor={field.name} className="flex items-center gap-2">
+                        <Hash className="w-4 h-4 text-[#007FFF]" />
+                        <Trans>Max Score</Trans>
+                        <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id={field.name}
+                        type="number"
+                        step="0.01"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        placeholder="100"
+                        className="h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF]"
+                      />
+                      {field.state.meta.errors.length > 0 && (
+                        <p className="text-sm text-red-600">
+                          {getErrorMessage(field.state.meta.errors[0])}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </addForm.Field>
               </div>
 
-              <div>
-                <Label htmlFor="remarks">
-                  <Trans>Remarks</Trans>
-                </Label>
-                <Textarea
-                  id="remarks"
-                  value={formData.remarks}
-                  onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-                  placeholder="Optional feedback or comments"
-                  rows={3}
-                />
-              </div>
+              <addForm.Field name="remarks">
+                {(field) => (
+                  <div className="space-y-2">
+                    <Label htmlFor={field.name} className="flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-[#007FFF]" />
+                      <Trans>Remarks</Trans>
+                      <span className="text-xs text-[#363942]/70 font-normal ml-1">
+                        (<Trans>Optional</Trans>)
+                      </span>
+                    </Label>
+                    <Textarea
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="Optional feedback or comments"
+                      rows={3}
+                      className="border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF] resize-none"
+                    />
+                  </div>
+                )}
+              </addForm.Field>
 
-              <div className="flex justify-end gap-2 pt-4">
+              <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setIsAddDialogOpen(false)}
-                  disabled={isLoading}
+                  className="h-11"
                 >
                   <Trans>Cancel</Trans>
                 </Button>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Trans>Add Score</Trans>
+                <addForm.Subscribe
+                  selector={(state) => [state.canSubmit, state.isSubmitting]}
+                >
+                  {([canSubmit, isSubmitting]) => (
+                    <Button
+                      type="submit"
+                      disabled={!canSubmit || isSubmitting || !selectedStudent}
+                      className="gap-2 h-11 bg-gradient-to-r from-[#007FFF] to-[#17224D]"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Trans>Adding...</Trans>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="w-4 h-4" />
+                          <Trans>Add Score</Trans>
+                        </>
+                      )}
+                    </Button>
                   )}
-                </Button>
+                </addForm.Subscribe>
               </div>
             </form>
           </DialogContent>
@@ -508,7 +614,13 @@ export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) 
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleEditScore} className="space-y-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              editForm.handleSubmit();
+            }}
+            className="space-y-4"
+          >
             {success && (
               <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
                 <CheckCircle className="w-4 h-4" />
@@ -523,76 +635,138 @@ export function ScoreManager({ students, courseId, locale }: ScoreManagerProps) 
               </div>
             )}
 
-            <div>
-              <Label htmlFor="edit-title">
-                <Trans>Assessment Title</Trans> *
-              </Label>
-              <Input
-                id="edit-title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                required
-              />
-            </div>
+            <editForm.Field name="title">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name} className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-[#007FFF]" />
+                    <Trans>Assessment Title</Trans>
+                    <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    className="h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF]"
+                  />
+                  {field.state.meta.errors.length > 0 && (
+                    <p className="text-sm text-red-600">
+                      {getErrorMessage(field.state.meta.errors[0])}
+                    </p>
+                  )}
+                </div>
+              )}
+            </editForm.Field>
 
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="edit-score">
-                  <Trans>Score</Trans> *
-                </Label>
-                <Input
-                  id="edit-score"
-                  type="number"
-                  step="0.01"
-                  value={formData.score}
-                  onChange={(e) => setFormData({ ...formData, score: e.target.value })}
-                  required
-                />
-              </div>
+              <editForm.Field name="score">
+                {(field) => (
+                  <div className="space-y-2">
+                    <Label htmlFor={field.name} className="flex items-center gap-2">
+                      <Hash className="w-4 h-4 text-[#007FFF]" />
+                      <Trans>Score</Trans>
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id={field.name}
+                      type="number"
+                      step="0.01"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className="h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF]"
+                    />
+                    {field.state.meta.errors.length > 0 && (
+                      <p className="text-sm text-red-600">
+                        {getErrorMessage(field.state.meta.errors[0])}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </editForm.Field>
 
-              <div>
-                <Label htmlFor="edit-maxScore">
-                  <Trans>Max Score</Trans> *
-                </Label>
-                <Input
-                  id="edit-maxScore"
-                  type="number"
-                  step="0.01"
-                  value={formData.maxScore}
-                  onChange={(e) => setFormData({ ...formData, maxScore: e.target.value })}
-                  required
-                />
-              </div>
+              <editForm.Field name="maxScore">
+                {(field) => (
+                  <div className="space-y-2">
+                    <Label htmlFor={field.name} className="flex items-center gap-2">
+                      <Hash className="w-4 h-4 text-[#007FFF]" />
+                      <Trans>Max Score</Trans>
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id={field.name}
+                      type="number"
+                      step="0.01"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className="h-12 border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF]"
+                    />
+                    {field.state.meta.errors.length > 0 && (
+                      <p className="text-sm text-red-600">
+                        {getErrorMessage(field.state.meta.errors[0])}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </editForm.Field>
             </div>
 
-            <div>
-              <Label htmlFor="edit-remarks">
-                <Trans>Remarks</Trans>
-              </Label>
-              <Textarea
-                id="edit-remarks"
-                value={formData.remarks}
-                onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-                rows={3}
-              />
-            </div>
+            <editForm.Field name="remarks">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name} className="flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-[#007FFF]" />
+                    <Trans>Remarks</Trans>
+                    <span className="text-xs text-[#363942]/70 font-normal ml-1">
+                      (<Trans>Optional</Trans>)
+                    </span>
+                  </Label>
+                  <Textarea
+                    id={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    rows={3}
+                    className="border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF] resize-none"
+                  />
+                </div>
+              )}
+            </editForm.Field>
 
-            <div className="flex justify-end gap-2 pt-4">
+            <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setIsEditDialogOpen(false)}
-                disabled={isLoading}
+                className="h-11"
               >
                 <Trans>Cancel</Trans>
               </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Trans>Update Score</Trans>
+              <editForm.Subscribe
+                selector={(state) => [state.canSubmit, state.isSubmitting]}
+              >
+                {([canSubmit, isSubmitting]) => (
+                  <Button
+                    type="submit"
+                    disabled={!canSubmit || isSubmitting}
+                    className="gap-2 h-11 bg-gradient-to-r from-[#007FFF] to-[#17224D]"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Trans>Updating...</Trans>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-4 h-4" />
+                        <Trans>Update Score</Trans>
+                      </>
+                    )}
+                  </Button>
                 )}
-              </Button>
+              </editForm.Subscribe>
             </div>
           </form>
         </DialogContent>
