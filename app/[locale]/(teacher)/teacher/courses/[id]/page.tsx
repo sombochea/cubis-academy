@@ -14,7 +14,6 @@ import {
   MapPin,
   Monitor,
   Edit,
-  Settings,
   Award,
   CalendarCheck,
 } from 'lucide-react';
@@ -153,6 +152,12 @@ export default async function TeacherCourseDetailsPage({
                     <Trans>Edit</Trans>
                   </Button>
                 </Link>
+                <Link href={`/${locale}/teacher/courses/${id}/schedules`}>
+                  <Button size="sm" variant="outline" className="gap-2">
+                    <Calendar className="w-4 h-4" />
+                    <Trans>Schedules</Trans>
+                  </Button>
+                </Link>
                 <Link href={`/${locale}/teacher/courses/${id}/scores`}>
                   <Button size="sm" variant="outline" className="gap-2">
                     <Award className="w-4 h-4" />
@@ -163,12 +168,6 @@ export default async function TeacherCourseDetailsPage({
                   <Button size="sm" variant="outline" className="gap-2">
                     <CalendarCheck className="w-4 h-4" />
                     <Trans>Attendance</Trans>
-                  </Button>
-                </Link>
-                <Link href={`/${locale}/teacher/courses/${id}/settings`}>
-                  <Button size="sm" variant="outline" className="gap-2">
-                    <Settings className="w-4 h-4" />
-                    <Trans>Settings</Trans>
                   </Button>
                 </Link>
               </div>
@@ -247,7 +246,7 @@ export default async function TeacherCourseDetailsPage({
                 <Trans>Schedule</Trans>
               </h2>
               <Link
-                href={`/${locale}/admin/courses/${id}/schedules`}
+                href={`/${locale}/teacher/courses/${id}/schedules`}
                 className="text-sm text-[#007FFF] hover:text-[#0066CC] font-medium"
               >
                 <Trans>Manage</Trans>

@@ -115,7 +115,7 @@ export function DataTable<TData, TValue>({
   const hasActiveFilters = columnFilters.length > 0;
 
   return (
-    <div className="w-full flex flex-col h-[calc(100vh-200px)]">
+    <div className="w-full flex flex-col h-[calc(100vh-280px)]">
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 p-4 bg-white rounded-lg border border-gray-200 flex-shrink-0">
         <div className="flex items-center gap-3 flex-1">

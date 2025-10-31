@@ -14,6 +14,7 @@ import {
   Check,
   X,
   Clock,
+  Calendar as CalendarIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,9 +25,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { DatePicker } from '@/components/ui/date-picker';
 import { formatDate } from '@/lib/utils/date';
 
 interface AttendanceRecord {
@@ -55,14 +56,12 @@ interface AttendanceManagerProps {
   locale: string;
 }
 
-export function AttendanceManager({ students, courseId, locale }: AttendanceManagerProps) {
+export function AttendanceManager({ students, locale }: AttendanceManagerProps) {
   const [isMarkDialogOpen, setIsMarkDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split('T')[0]
-  );
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [notes, setNotes] = useState('');
   const [studentStatuses, setStudentStatuses] = useState<
     Record<string, 'present' | 'absent' | 'late' | 'excused'>
@@ -90,9 +89,15 @@ export function AttendanceManager({ students, courseId, locale }: AttendanceMana
     setSuccess('');
 
     try {
+      if (!selectedDate) {
+        setError('Please select a date');
+        setIsLoading(false);
+        return;
+      }
+
       const attendanceData = students.map((student) => ({
         enrollmentId: student.enrollmentId,
-        date: selectedDate,
+        date: selectedDate.toISOString().split('T')[0],
         status: studentStatuses[student.enrollmentId] || 'present',
         notes: notes || null,
       }));
@@ -257,24 +262,30 @@ export function AttendanceManager({ students, courseId, locale }: AttendanceMana
                 </div>
               )}
 
-              <div>
-                <Label htmlFor="date">
-                  <Trans>Date</Trans> *
+              <div className="space-y-2">
+                <Label htmlFor="session-date" className="flex items-center gap-2 text-sm font-medium text-[#17224D]">
+                  <CalendarIcon className="w-4 h-4 text-[#007FFF]" />
+                  <Trans>Session Date</Trans>
+                  <span className="text-red-500">*</span>
                 </Label>
-                <Input
-                  id="date"
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  required
+                <DatePicker
+                  date={selectedDate}
+                  onSelect={setSelectedDate}
+                  placeholder="Select session date"
+                  fromYear={2020}
+                  toYear={new Date().getFullYear() + 1}
                 />
               </div>
 
-              <div>
-                <Label>
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-sm font-medium text-[#17224D]">
+                  <Users className="w-4 h-4 text-[#007FFF]" />
                   <Trans>Students</Trans>
+                  <span className="text-xs text-[#363942]/70 font-normal ml-1">
+                    (<Trans>Click to change status</Trans>)
+                  </span>
                 </Label>
-                <div className="space-y-2 mt-2">
+                <div className="space-y-2">
                   {students.map((student) => {
                     const status = studentStatuses[student.enrollmentId] || 'present';
                     return (
@@ -312,33 +323,49 @@ export function AttendanceManager({ students, courseId, locale }: AttendanceMana
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="notes">
-                  <Trans>Notes</Trans>
+              <div className="space-y-2">
+                <Label htmlFor="notes" className="flex items-center gap-2 text-sm font-medium text-[#17224D]">
+                  <AlertCircle className="w-4 h-4 text-[#007FFF]" />
+                  <Trans>Session Notes</Trans>
+                  <span className="text-xs text-[#363942]/70 font-normal ml-1">
+                    (<Trans>Optional</Trans>)
+                  </span>
                 </Label>
                 <Textarea
                   id="notes"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Optional notes for this session"
+                  placeholder="Add any notes about this session (e.g., topics covered, announcements)"
                   rows={3}
+                  className="border-gray-200 hover:border-[#007FFF]/30 focus:ring-[#007FFF] transition-colors resize-none"
                 />
               </div>
 
-              <div className="flex justify-end gap-2 pt-4">
+              <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setIsMarkDialogOpen(false)}
                   disabled={isLoading}
+                  className="h-11"
                 >
                   <Trans>Cancel</Trans>
                 </Button>
-                <Button type="submit" disabled={isLoading}>
+                <Button
+                  type="submit"
+                  disabled={isLoading || !selectedDate}
+                  className="gap-2 h-11 bg-gradient-to-r from-[#007FFF] to-[#17224D] hover:from-[#0066CC] hover:to-[#17224D] text-white"
+                >
                   {isLoading ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Trans>Marking...</Trans>
+                    </>
                   ) : (
-                    <Trans>Mark Attendance</Trans>
+                    <>
+                      <CheckCircle className="w-4 h-4" />
+                      <Trans>Mark Attendance</Trans>
+                    </>
                   )}
                 </Button>
               </div>

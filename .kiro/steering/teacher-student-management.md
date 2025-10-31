@@ -384,11 +384,13 @@ db.select({ enrollmentId, courseId, courseTitle, progress, status, ... })
 
 ### New Files
 1. `app/[locale]/(teacher)/teacher/students/[id]/page.tsx` - Student detail page
-2. `.kiro/steering/teacher-student-management.md` - This documentation
+2. `components/teacher/CoursesDataTable.tsx` - Courses data table with filters
+3. `.kiro/steering/teacher-student-management.md` - This documentation
 
 ### Modified Files
 1. `components/teacher/StudentsDataTable.tsx` - Added advanced filtering
 2. `app/[locale]/(teacher)/teacher/students/page.tsx` - Enhanced with stats
+3. `app/[locale]/(teacher)/teacher/courses/page.tsx` - Replaced with DataTable component
 
 ## Success Metrics
 

@@ -234,26 +234,13 @@ export function StudentsDataTable({ students, locale }: StudentsDataTableProps) 
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
-      <div className="p-6 border-b border-gray-100">
-        <h2 className="text-xl font-semibold text-[#17224D]">
-          <Trans>All Students</Trans>
-        </h2>
-        <p className="text-sm text-[#363942]/70 mt-1">
-          <Trans>Filter and search through your students</Trans>
-        </p>
-      </div>
-
-      <div className="p-6">
-        <DataTable
-          columns={columns}
-          data={filteredStudents}
-          searchKey="name"
-          searchPlaceholder="Search students by name or email..."
-          showRowNumber={true}
-          filterComponent={() => <StudentFilters />}
-        />
-      </div>
-    </div>
+    <DataTable
+      columns={columns}
+      data={filteredStudents}
+      searchKey="name"
+      searchPlaceholder="Search students by name or email..."
+      showRowNumber={true}
+      filterComponent={() => <StudentFilters />}
+    />
   );
 }
