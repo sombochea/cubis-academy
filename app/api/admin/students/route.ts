@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     await db.insert(students).values({
       userId: newUser.id,
       suid,
-      dob: validatedData.dob ? new Date(validatedData.dob) : null,
+      dob: validatedData.dob || null,
       gender: validatedData.gender || null,
       address: validatedData.address || null,
       photo: validatedData.photo || null,
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error creating student:', error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ error: error.issues[0].message }, { status: 400 });
     }
     return NextResponse.json({ error: 'Failed to create student' }, { status: 500 });
   }

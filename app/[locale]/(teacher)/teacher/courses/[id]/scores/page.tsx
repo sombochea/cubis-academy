@@ -70,27 +70,36 @@ export default async function CourseScoresPage({
     .orderBy(desc(scores.created));
 
   // Group scores by enrollment
-  const scoresByEnrollment = new Map();
+  type ScoreRecord = typeof courseScores[number];
+  const scoresByEnrollment = new Map<string, ScoreRecord[]>();
   courseScores.forEach((score) => {
     if (!scoresByEnrollment.has(score.enrollmentId)) {
       scoresByEnrollment.set(score.enrollmentId, []);
     }
-    scoresByEnrollment.get(score.enrollmentId).push(score);
+    scoresByEnrollment.get(score.enrollmentId)!.push(score);
   });
 
   // Calculate average scores
   const studentsWithScores = enrolledStudents.map((student) => {
     const studentScores = scoresByEnrollment.get(student.enrollmentId) || [];
-    const avgScore = studentScores.length > 0
+    
+    // Convert score and maxScore from string to number for the component
+    const scoresWithNumbers = studentScores.map(score => ({
+      ...score,
+      score: Number(score.score),
+      maxScore: Number(score.maxScore),
+    }));
+    
+    const avgScore = scoresWithNumbers.length > 0
       ? Math.round(
-          studentScores.reduce((sum, s) => sum + (s.score / s.maxScore) * 100, 0) /
-            studentScores.length
+          scoresWithNumbers.reduce((sum: number, s) => sum + (s.score / s.maxScore) * 100, 0) /
+            scoresWithNumbers.length
         )
       : null;
 
     return {
       ...student,
-      scores: studentScores,
+      scores: scoresWithNumbers,
       avgScore,
     };
   });

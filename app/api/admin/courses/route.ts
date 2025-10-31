@@ -32,10 +32,10 @@ export async function POST(req: Request) {
     const validation = courseSchema.safeParse(body);
 
     if (!validation.success) {
-      const errorMessage = validation.error.errors[0]?.message || 'Validation failed';
-      console.error('Validation errors:', validation.error.errors);
+      const errorMessage = validation.error.issues[0]?.message || 'Validation failed';
+      console.error('Validation errors:', validation.error.issues);
       return NextResponse.json(
-        { error: errorMessage, details: validation.error.errors },
+        { error: errorMessage, details: validation.error.issues },
         { status: 400 }
       );
     }

@@ -74,7 +74,7 @@ export async function PUT(req: Request) {
       : passwordSetSchema.safeParse(body);
 
     if (!validation.success) {
-      const firstError = validation.error.errors[0];
+      const firstError = validation.error.issues[0];
       return NextResponse.json(
         { error: firstError?.message || 'Validation failed' },
         { status: 400 }
@@ -85,7 +85,7 @@ export async function PUT(req: Request) {
 
     if (hasPassword) {
       // User has existing password - verify it
-      const isValidPassword = await bcrypt.compare(currentPassword, user.passHash!);
+      const isValidPassword = await bcrypt.compare(currentPassword!, user.passHash!);
       if (!isValidPassword) {
         return NextResponse.json(
           { error: 'Current password is incorrect' },

@@ -26,7 +26,7 @@ export default async function EnrollmentsPage({
   }
 
   // Get enrollments with course and teacher details
-  const enrollmentsList = await db
+  const enrollmentsData = await db
     .select({
       id: enrollments.id,
       courseId: courses.id,
@@ -54,6 +54,12 @@ export default async function EnrollmentsPage({
     .leftJoin(users, eq(teachers.userId, users.id))
     .where(eq(enrollments.studentId, session.user.id))
     .orderBy(desc(enrollments.enrolled));
+
+  // Convert duration from number to string to match component type
+  const enrollmentsList = enrollmentsData.map(enrollment => ({
+    ...enrollment,
+    courseDuration: enrollment.courseDuration ? String(enrollment.courseDuration) : null,
+  }));
 
   // Get course counts for each teacher
   const teacherCourseCountsMap = new Map<string, number>();

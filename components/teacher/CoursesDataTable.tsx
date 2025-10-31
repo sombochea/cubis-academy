@@ -36,10 +36,10 @@ interface Course {
   id: string;
   title: string;
   desc: string | null;
-  category: string;
+  category: string | null;
   level: 'beginner' | 'intermediate' | 'advanced';
   price: string;
-  duration: string | null;
+  duration: number | null;
   deliveryMode: 'online' | 'face_to_face' | 'hybrid';
   isActive: boolean;
   created: Date;
@@ -58,7 +58,7 @@ export function CoursesDataTable({ courses, locale }: CoursesDataTableProps) {
 
   // Get unique categories
   const categories = React.useMemo(() => {
-    const uniqueCategories = Array.from(new Set(courses.map((c) => c.category)));
+    const uniqueCategories = Array.from(new Set(courses.map((c) => c.category).filter((c): c is string => c !== null)));
     return uniqueCategories.sort();
   }, [courses]);
 
@@ -112,7 +112,7 @@ export function CoursesDataTable({ courses, locale }: CoursesDataTableProps) {
       cell: ({ row }) => {
         return (
           <span className="px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-semibold">
-            {row.original.category}
+            {row.original.category || '-'}
           </span>
         );
       },

@@ -1,8 +1,8 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { users, teachers } from '@/lib/drizzle/schema';
-import { eq } from 'drizzle-orm';
+import { users, teachers, courses } from '@/lib/drizzle/schema';
+import { eq, sql } from 'drizzle-orm';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
@@ -27,13 +27,35 @@ export default async function TeachersTablePage({ params }: { params: Promise<{ 
       userId: teachers.userId,
       name: users.name,
       email: users.email,
+      emailVerifiedAt: users.emailVerifiedAt,
       phone: users.phone,
       bio: teachers.bio,
       spec: teachers.spec,
+      photo: teachers.photo,
       isActive: users.isActive,
     })
     .from(teachers)
     .innerJoin(users, eq(teachers.userId, users.id));
+
+  // Get course counts for each teacher
+  const courseCounts = await db
+    .select({
+      teacherId: courses.teacherId,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(courses)
+    .groupBy(courses.teacherId);
+
+  // Create a map for quick lookup
+  const courseCountMap = new Map(
+    courseCounts.map((c) => [c.teacherId, c.count])
+  );
+
+  // Add course counts to teachers list
+  const teachersWithCounts = teachersList.map((teacher) => ({
+    ...teacher,
+    courseCount: courseCountMap.get(teacher.userId) || 0,
+  }));
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
@@ -58,7 +80,7 @@ export default async function TeachersTablePage({ params }: { params: Promise<{ 
           </Link>
         </div>
 
-        <TeachersDataTable data={teachersList} locale={locale} />
+        <TeachersDataTable data={teachersWithCounts} locale={locale} />
       </div>
     </div>
   );

@@ -67,12 +67,13 @@ export default async function CourseAttendancePage({
     .orderBy(desc(attendances.date));
 
   // Group attendance by enrollment
-  const attendanceByEnrollment = new Map();
+  type AttendanceRecord = typeof courseAttendance[number];
+  const attendanceByEnrollment = new Map<string, AttendanceRecord[]>();
   courseAttendance.forEach((record) => {
     if (!attendanceByEnrollment.has(record.enrollmentId)) {
       attendanceByEnrollment.set(record.enrollmentId, []);
     }
-    attendanceByEnrollment.get(record.enrollmentId).push(record);
+    attendanceByEnrollment.get(record.enrollmentId)!.push(record);
   });
 
   // Calculate attendance stats
@@ -82,9 +83,15 @@ export default async function CourseAttendancePage({
     const totalRecords = records.length;
     const attendanceRate = totalRecords > 0 ? Math.round((presentCount / totalRecords) * 100) : null;
 
+    // Convert date strings to Date objects for the component
+    const recordsWithDates = records.map(record => ({
+      ...record,
+      date: new Date(record.date),
+    }));
+
     return {
       ...student,
-      attendanceRecords: records,
+      attendanceRecords: recordsWithDates,
       presentCount,
       totalRecords,
       attendanceRate,

@@ -49,7 +49,7 @@ export async function PUT(
     // Update student profile
     await db.update(students)
       .set({
-        dob: validatedData.dob ? new Date(validatedData.dob) : null,
+        dob: validatedData.dob || null,
         gender: validatedData.gender || null,
         address: validatedData.address || null,
         photo: validatedData.photo || null,
@@ -60,7 +60,7 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating student:', error);
     if (error instanceof z.ZodError) {
-      const errorMessage = error.errors[0]?.message || 'Validation error';
+      const errorMessage = error.issues[0]?.message || 'Validation error';
       return NextResponse.json({ error: errorMessage }, { status: 400 });
     }
     return NextResponse.json({ error: 'Failed to update student' }, { status: 500 });

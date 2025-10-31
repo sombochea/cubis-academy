@@ -28,7 +28,7 @@ export default async function EditCoursePage({
   }
 
   // Get course details with category
-  const [courseData] = await db
+  const [courseDataRaw] = await db
     .select({
       id: courses.id,
       title: courses.title,
@@ -49,9 +49,15 @@ export default async function EditCoursePage({
     .leftJoin(courseCategories, eq(courses.categoryId, courseCategories.id))
     .where(and(eq(courses.id, id), eq(courses.teacherId, session.user.id)));
 
-  if (!courseData) {
+  if (!courseDataRaw) {
     notFound();
   }
+
+  // Convert duration to string for the form
+  const courseData = {
+    ...courseDataRaw,
+    duration: courseDataRaw.duration ? String(courseDataRaw.duration) : null,
+  };
 
   // Get all active course categories
   const categories = await db

@@ -6,7 +6,7 @@ import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
 
 const attendanceRecordSchema = z.object({
-  enrollmentId: z.string().uuid(),
+  enrollmentId: z.uuid(),
   date: z.string(),
   status: z.enum(['present', 'absent', 'late', 'excused']),
   notes: z.string().nullable().optional(),
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: error.errors },
+        { error: 'Invalid data', details: error.issues },
         { status: 400 }
       );
     }

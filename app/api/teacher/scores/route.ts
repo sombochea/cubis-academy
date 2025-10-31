@@ -6,7 +6,7 @@ import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
 
 const createScoreSchema = z.object({
-  enrollmentId: z.string().uuid(),
+  enrollmentId: z.uuid(),
   title: z.string().min(1, 'Title is required'),
   score: z.number().min(0),
   maxScore: z.number().min(1),
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: error.errors },
+        { error: 'Invalid data', details: error.issues },
         { status: 400 }
       );
     }

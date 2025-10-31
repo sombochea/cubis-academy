@@ -100,7 +100,9 @@ export function TeachersDataTable({ data, locale }: TeachersDataTableProps) {
           <div className="flex items-center gap-2 text-[#363942]">
             <span>{row.getValue('email')}</span>
             {teacher.emailVerifiedAt && (
-              <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" title="Email verified" />
+              <span title="Email verified">
+                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
+              </span>
             )}
           </div>
         );

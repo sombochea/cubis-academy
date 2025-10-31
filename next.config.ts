@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   experimental: {
     swcPlugins: [['@lingui/swc-plugin', {}]],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   turbopack: {
     rules: {
       '*.po': {

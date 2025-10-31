@@ -195,7 +195,7 @@ export default async function StudentDashboard({
     .orderBy(desc(scores.created))
     .limit(5);
 
-  const recentAttendances = await db
+  const recentAttendancesData = await db
     .select({
       type: sql<string>`'attendance'`,
       title: sql<string>`'Attendance'`,
@@ -209,6 +209,12 @@ export default async function StudentDashboard({
     .where(eq(enrollments.studentId, session.user.id))
     .orderBy(desc(attendances.date))
     .limit(5);
+
+  // Convert attendance date strings to Date objects
+  const recentAttendances = recentAttendancesData.map(attendance => ({
+    ...attendance,
+    date: new Date(attendance.date),
+  }));
 
   const recentPayments = await db
     .select({

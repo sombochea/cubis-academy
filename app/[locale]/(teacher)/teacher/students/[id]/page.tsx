@@ -162,7 +162,7 @@ export default async function StudentDetailPage({
     studentScores.length > 0
       ? Math.round(
           studentScores.reduce(
-            (sum, s) => sum + (s.score / s.maxScore) * 100,
+            (sum, s) => sum + (Number(s.score) / Number(s.maxScore)) * 100,
             0
           ) / studentScores.length
         )
@@ -197,7 +197,7 @@ export default async function StudentDetailPage({
       enrollmentScores.length > 0
         ? Math.round(
             enrollmentScores.reduce(
-              (sum, s) => sum + (s.score / s.maxScore) * 100,
+              (sum, s) => sum + (Number(s.score) / Number(s.maxScore)) * 100,
               0
             ) / enrollmentScores.length
           )
