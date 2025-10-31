@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   User,
   MapPin,
@@ -23,8 +24,10 @@ import {
   CheckCircle,
   Loader2,
   AlertCircle,
+  PartyPopper,
+  Info,
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
@@ -45,14 +48,14 @@ const profileSchema = z.object({
 });
 
 export function ProfileSetup({
-  userId,
   userName,
   userEmail,
-  locale,
   onComplete,
 }: ProfileSetupProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [skipSuccess, setSkipSuccess] = useState(false);
   const router = useRouter();
 
   const form = useForm({
@@ -65,6 +68,7 @@ export function ProfileSetup({
     onSubmit: async ({ value }) => {
       setIsSubmitting(true);
       setError(null);
+      setSuccess(false);
 
       try {
         const response = await fetch("/api/student/profile/setup", {
@@ -77,10 +81,17 @@ export function ProfileSetup({
           throw new Error("Failed to update profile");
         }
 
-        onComplete();
-        router.refresh();
+        // Show success alert
+        setSuccess(true);
+        
+        // Wait for animation before closing
+        setTimeout(() => {
+          onComplete();
+          router.refresh();
+        }, 2000);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
+        const errorMessage = err instanceof Error ? err.message : "An error occurred";
+        setError(errorMessage);
       } finally {
         setIsSubmitting(false);
       }
@@ -89,6 +100,9 @@ export function ProfileSetup({
 
   const handleSkip = async () => {
     setIsSubmitting(true);
+    setError(null);
+    setSkipSuccess(false);
+    
     try {
       // Mark onboarding as complete even if skipped
       await fetch("/api/student/profile/setup", {
@@ -96,10 +110,16 @@ export function ProfileSetup({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ skipOnboarding: true }),
       });
-      onComplete();
-      router.refresh();
+      
+      setSkipSuccess(true);
+      
+      setTimeout(() => {
+        onComplete();
+        router.refresh();
+      }, 2000);
     } catch (err) {
-      setError("Failed to skip onboarding");
+      const errorMessage = "Failed to skip onboarding";
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -113,7 +133,75 @@ export function ProfileSetup({
         transition={{ duration: 0.3 }}
         className="w-full max-w-2xl my-8"
       >
-        <Card className="p-8 shadow-2xl">
+        <Card className="p-8 shadow-2xl relative">
+          {/* Success Alert */}
+          <AnimatePresence>
+            {success && (
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                className="absolute inset-0 z-10 bg-white rounded-lg flex items-center justify-center p-8"
+              >
+                <div className="text-center space-y-4">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25, delay: 0.1 }}
+                    className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto"
+                  >
+                    <PartyPopper className="w-10 h-10 text-white" />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <h3 className="text-2xl font-bold text-[#17224D] mb-2">
+                      <Trans>Profile Updated Successfully!</Trans>
+                    </h3>
+                    <p className="text-[#363942]/70">
+                      <Trans>Your profile has been completed. Redirecting...</Trans>
+                    </p>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+            
+            {skipSuccess && (
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                className="absolute inset-0 z-10 bg-white rounded-lg flex items-center justify-center p-8"
+              >
+                <div className="text-center space-y-4">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25, delay: 0.1 }}
+                    className="w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center mx-auto"
+                  >
+                    <Info className="w-10 h-10 text-white" />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <h3 className="text-2xl font-bold text-[#17224D] mb-2">
+                      <Trans>Profile Setup Skipped</Trans>
+                    </h3>
+                    <p className="text-[#363942]/70">
+                      <Trans>You can complete it later in settings. Redirecting...</Trans>
+                    </p>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -292,12 +380,24 @@ export function ProfileSetup({
               )}
             </form.Field>
 
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-600">
-                {error}
-              </div>
-            )}
+            {/* Error Alert */}
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                >
+                  <Alert variant="destructive" className="border-red-200 bg-red-50">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription className="text-red-800">
+                      {error}
+                    </AlertDescription>
+                  </Alert>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Actions */}
             <div className="flex items-center justify-between gap-4 pt-4">
