@@ -579,48 +579,165 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-5xl mx-auto">
+      {/* CTA Section - Redesigned */}
+      <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <div className="max-w-6xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-[#007FFF] via-[#17224D] to-[#363942] rounded-2xl sm:rounded-3xl p-8 sm:p-12 md:p-16 text-center relative overflow-hidden shadow-2xl"
+            className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden"
           >
-            {/* Subtle Background Elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-white/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 sm:w-96 sm:h-96 bg-[#007FFF]/10 rounded-full blur-3xl" />
+            {/* Two Column Layout */}
+            <div className="grid lg:grid-cols-2 gap-0">
+              {/* Left Side - Content */}
+              <div className="p-8 sm:p-10 md:p-12 lg:p-14 flex flex-col justify-center">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#E5F2FF] border border-[#007FFF]/20 rounded-full text-xs font-semibold mb-6 w-fit">
+                  <Zap className="w-3.5 h-3.5 text-[#007FFF]" />
+                  <span className="text-[#007FFF]">
+                    <Trans>Start Your Journey</Trans>
+                  </span>
+                </div>
 
-            <div className="relative z-10">
-              <div className="inline-block p-3 sm:p-4 bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl mb-4 sm:mb-6">
-                <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#17224D] mb-4 leading-tight">
+                  <Trans>Ready to Level Up Your Skills?</Trans>
+                </h2>
+
+                <p className="text-base sm:text-lg text-[#363942]/70 mb-8 leading-relaxed">
+                  <Trans>
+                    Join 500+ students already learning with CUBIS Academy. Get
+                    instant access to expert-led courses, real-world projects,
+                    and career support.
+                  </Trans>
+                </p>
+
+                {/* Benefits List */}
+                <div className="space-y-3 mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                    </div>
+                    <span className="text-sm sm:text-base text-[#363942]">
+                      <Trans>
+                        Free account setup - no credit card required
+                      </Trans>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                    </div>
+                    <span className="text-sm sm:text-base text-[#363942]">
+                      <Trans>Access to 50+ expert-led courses</Trans>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                    </div>
+                    <span className="text-sm sm:text-base text-[#363942]">
+                      <Trans>Learn at your own pace, anytime</Trans>
+                    </span>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href={`/${locale}/register`}
+                    className="group px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-[#007FFF] to-[#17224D] text-white rounded-xl hover:shadow-xl hover:shadow-[#007FFF]/30 transition-all duration-300 font-semibold text-base flex items-center justify-center gap-2"
+                  >
+                    <Trans>Get Started Free</Trans>
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                  <Link
+                    href={`/${locale}/login`}
+                    className="px-6 sm:px-8 py-3.5 sm:py-4 bg-white text-[#363942] border-2 border-gray-200 rounded-xl hover:border-[#007FFF] hover:text-[#007FFF] transition-all duration-300 font-semibold text-base flex items-center justify-center"
+                  >
+                    <Trans>Sign In</Trans>
+                  </Link>
+                </div>
+
+                {/* Trust Badge */}
+                <div className="mt-8 pt-6 border-t border-gray-100">
+                  <div className="flex items-center gap-2 text-sm text-[#363942]/60">
+                    <Users className="w-4 h-4" />
+                    <span>
+                      <Trans>Trusted by 500+ students worldwide</Trans>
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
-                Ready to Transform Your Career?
-              </h2>
+              {/* Right Side - Visual */}
+              <div className="relative bg-gradient-to-br from-[#007FFF] to-[#17224D] p-8 sm:p-10 md:p-12 lg:p-14 flex items-center justify-center min-h-[400px] lg:min-h-0">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#007FFF]/20 rounded-full blur-3xl" />
 
-              <p className="text-base sm:text-lg md:text-xl text-[#E5F2FF] mb-8 sm:mb-10 max-w-2xl mx-auto px-4">
-                Join thousands of students mastering technology skills with
-                CUBIS Academy. Start your journey today!
-              </p>
+                {/* Stats Grid */}
+                <div className="relative z-10 grid grid-cols-2 gap-6 w-full max-w-sm">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                  >
+                    <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                      500+
+                    </div>
+                    <div className="text-sm text-white/80">
+                      <Trans>Students</Trans>
+                    </div>
+                  </motion.div>
 
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
-                <Link
-                  href={`/${locale}/register`}
-                  className="px-8 sm:px-10 py-3 sm:py-4 bg-white text-[#007FFF] rounded-lg sm:rounded-xl hover:bg-gray-50 transition-all duration-300 font-bold text-base sm:text-lg flex items-center justify-center gap-2 shadow-lg"
-                >
-                  <Trans>Get Started Free</Trans>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </Link>
-                <Link
-                  href={`/${locale}/login`}
-                  className="px-8 sm:px-10 py-3 sm:py-4 bg-transparent text-white border-2 border-white rounded-lg sm:rounded-xl hover:bg-white hover:text-[#007FFF] transition-all duration-300 font-bold text-base sm:text-lg"
-                >
-                  <Trans>Sign In</Trans>
-                </Link>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.3 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                  >
+                    <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                      50+
+                    </div>
+                    <div className="text-sm text-white/80">
+                      <Trans>Courses</Trans>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.4 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                  >
+                    <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                      20+
+                    </div>
+                    <div className="text-sm text-white/80">
+                      <Trans>Instructors</Trans>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center"
+                  >
+                    <div className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                      95%
+                    </div>
+                    <div className="text-sm text-white/80">
+                      <Trans>Success Rate</Trans>
+                    </div>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </motion.div>
