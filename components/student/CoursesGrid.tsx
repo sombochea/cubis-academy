@@ -223,7 +223,7 @@ function CourseCard({ course, locale, teacherCourseCountsMap }: { course: Course
 
   return (
     <Link href={`/${locale}/student/courses/${course.id}`}>
-      <div className="group bg-white rounded-xl border-2 border-gray-100 overflow-hidden hover:border-[#007FFF] hover:shadow-xl transition-all cursor-pointer">
+      <div className="group bg-white rounded-xl border-2 border-gray-200 overflow-hidden hover:border-[#007FFF] hover:shadow-xl transition-all cursor-pointer">
         {/* Course Header - Clean Design */}
         <div className="relative p-6 bg-gradient-to-br from-gray-50 to-gray-100">
           <div className="flex items-start justify-between mb-4">
@@ -337,7 +337,7 @@ function CourseListItem({ course, locale, teacherCourseCountsMap }: { course: Co
 
   return (
     <Link href={`/${locale}/student/courses/${course.id}`}>
-      <div className="group bg-white rounded-xl border-2 border-gray-100 p-6 hover:border-[#007FFF] hover:shadow-lg transition-all cursor-pointer flex items-center gap-6">
+      <div className="group bg-white rounded-xl border-2 border-gray-100 p-6 hover:border-[#007FFF] hover:shadow-lg transition-all cursor-pointer flex items-center gap-6 mb-2">
         {/* Course Icon */}
         <div className="w-20 h-20 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
           <BookOpen className="w-10 h-10 text-white" />
