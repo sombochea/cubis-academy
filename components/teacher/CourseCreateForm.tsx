@@ -32,6 +32,15 @@ import {
   Power,
 } from 'lucide-react';
 
+// Helper function to extract error message
+const getErrorMessage = (error: any): string => {
+  if (typeof error === 'string') return error;
+  if (error && typeof error === 'object' && 'message' in error) {
+    return error.message;
+  }
+  return 'Invalid value';
+};
+
 interface Category {
   id: string;
   name: string;
@@ -190,7 +199,7 @@ export function CourseCreateForm({ categories, locale }: CourseCreateFormProps) 
                 />
                 {field.state.meta.errors.length > 0 && (
                   <p className="text-sm text-red-600">
-                    {field.state.meta.errors[0]}
+                    {getErrorMessage(field.state.meta.errors[0])}
                   </p>
                 )}
               </div>
@@ -411,7 +420,7 @@ export function CourseCreateForm({ categories, locale }: CourseCreateFormProps) 
                   />
                   {field.state.meta.errors.length > 0 && (
                     <p className="text-sm text-red-600">
-                      {field.state.meta.errors[0]}
+                      {getErrorMessage(field.state.meta.errors[0])}
                     </p>
                   )}
                 </div>
@@ -437,7 +446,7 @@ export function CourseCreateForm({ categories, locale }: CourseCreateFormProps) 
                   />
                   {field.state.meta.errors.length > 0 && (
                     <p className="text-sm text-red-600">
-                      {field.state.meta.errors[0]}
+                      {getErrorMessage(field.state.meta.errors[0])}
                     </p>
                   )}
                 </div>

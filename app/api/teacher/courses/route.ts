@@ -30,15 +30,28 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validatedData = createCourseSchema.parse(body);
 
+    // Transform empty strings to null for optional fields
+    const courseData = {
+      title: validatedData.title,
+      desc: validatedData.desc || null,
+      category: validatedData.category,
+      level: validatedData.level,
+      price: validatedData.price || '0',
+      duration: validatedData.duration || null,
+      deliveryMode: validatedData.deliveryMode,
+      location: validatedData.location || null,
+      youtubeUrl: validatedData.youtubeUrl || null,
+      zoomUrl: validatedData.zoomUrl || null,
+      isActive: validatedData.isActive,
+      teacherId: session.user.id,
+      created: new Date(),
+      updated: new Date(),
+    };
+
     // Create course
     const [newCourse] = await db
       .insert(courses)
-      .values({
-        ...validatedData,
-        teacherId: session.user.id,
-        created: new Date(),
-        updated: new Date(),
-      })
+      .values(courseData)
       .returning({ id: courses.id });
 
     return NextResponse.json(
