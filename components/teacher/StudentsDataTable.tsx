@@ -245,18 +245,13 @@ export function StudentsDataTable({ students, locale }: StudentsDataTableProps) 
       </div>
 
       <div className="p-6">
-        {/* Custom Filters */}
-        <div className="mb-4">
-          <StudentFilters />
-        </div>
-
-        {/* Data Table */}
         <DataTable
           columns={columns}
           data={filteredStudents}
           searchKey="name"
           searchPlaceholder="Search students by name or email..."
           showRowNumber={true}
+          filterComponent={() => <StudentFilters />}
         />
       </div>
     </div>
