@@ -61,7 +61,7 @@ export function VerificationStatsWidget() {
       <div className="bg-white rounded-xl shadow-sm p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="h-24 bg-gray-200 rounded"></div>
             ))}
@@ -92,8 +92,8 @@ export function VerificationStatsWidget() {
         </div>
       </div>
 
-      {/* Overall Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      {/* Overall Stats - At least 2 columns on small devices */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
             <Users className="w-8 h-8 text-blue-600" />
@@ -143,8 +143,8 @@ export function VerificationStatsWidget() {
         </div>
       </div>
 
-      {/* By Role Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      {/* By Role Stats - At least 2 columns on small devices */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
         {stats.byRole.map((role) => (
           <div key={role.role} className="border border-gray-200 rounded-lg p-4">
             <h4 className="text-sm font-semibold text-gray-700 mb-3 capitalize">
@@ -174,8 +174,8 @@ export function VerificationStatsWidget() {
         ))}
       </div>
 
-      {/* Auth Methods Comparison */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Auth Methods Comparison - 2 columns on all devices */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div className="border border-gray-200 rounded-lg p-4">
           <h4 className="text-sm font-semibold text-gray-700 mb-3">
             <Trans>OAuth2 (Google, etc.)</Trans>

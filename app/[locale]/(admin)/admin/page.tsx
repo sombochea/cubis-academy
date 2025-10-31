@@ -104,8 +104,8 @@ export default async function AdminDashboard({ params }: { params: Promise<{ loc
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* Stats Grid - At least 2 columns on small devices */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
           {stats.map((stat) => (
             <Link
               key={stat.title}

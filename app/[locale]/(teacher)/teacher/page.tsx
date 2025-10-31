@@ -124,8 +124,8 @@ export default async function TeacherDashboard({
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Stats Grid - At least 2 columns on small devices */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Link
             href={`/${locale}/teacher/courses`}
             className="bg-white rounded-xl p-6 border-2 border-gray-100 hover:border-[#007FFF]/30 transition-all hover:shadow-lg group"

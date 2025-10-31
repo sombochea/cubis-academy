@@ -5,9 +5,9 @@ import { courses, enrollments } from '@/lib/drizzle/schema';
 import { eq, and, count } from 'drizzle-orm';
 import { TeacherNav } from '@/components/teacher/TeacherNav';
 import { CoursesDataTable } from '@/components/teacher/CoursesDataTable';
+import { CourseActionsMenu } from '@/components/teacher/CourseActionsMenu';
 import { Trans } from '@lingui/react/macro';
-import { BookOpen, Users, Plus } from 'lucide-react';
-import Link from 'next/link';
+import { BookOpen, Users } from 'lucide-react';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
 
@@ -85,17 +85,11 @@ export default async function TeacherCoursesPage({
               <Trans>Manage your courses and track student progress</Trans>
             </p>
           </div>
-          <Link
-            href={`/${locale}/teacher/courses/new`}
-            className="flex items-center gap-2 px-4 py-2 bg-[#007FFF] text-white rounded-lg hover:bg-[#0066CC] transition-colors font-medium"
-          >
-            <Plus className="w-4 h-4" />
-            <Trans>Add Course</Trans>
-          </Link>
+          <CourseActionsMenu locale={locale} />
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        {/* Stats - At least 2 columns on small devices */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
@@ -158,13 +152,9 @@ export default async function TeacherCoursesPage({
             <p className="text-[#363942]/70 mb-6">
               <Trans>Create your first course to get started</Trans>
             </p>
-            <Link
-              href={`/${locale}/teacher/courses/new`}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#007FFF] text-white rounded-lg hover:bg-[#0066CC] transition-colors font-medium"
-            >
-              <Plus className="w-4 h-4" />
-              <Trans>Create Course</Trans>
-            </Link>
+            <div className="flex justify-center">
+              <CourseActionsMenu locale={locale} />
+            </div>
           </div>
         ) : (
           <CoursesDataTable courses={coursesWithEnrollments} locale={locale} />
