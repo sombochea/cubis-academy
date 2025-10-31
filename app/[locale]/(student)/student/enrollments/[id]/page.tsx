@@ -1,16 +1,22 @@
-import { auth } from '@/auth';
-import { redirect, notFound } from 'next/navigation';
-import { db } from '@/lib/drizzle/db';
-import { enrollments, courses, scores, attendances, payments, courseFeedback, classSchedules } from '@/lib/drizzle/schema';
-import { eq, and, desc, sum } from 'drizzle-orm';
-import { Trans } from '@lingui/react/macro';
-import { StudentNav } from '@/components/student/StudentNav';
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  Calendar, 
-  Award, 
-  TrendingUp,
+import { auth } from "@/auth";
+import { redirect, notFound } from "next/navigation";
+import { db } from "@/lib/drizzle/db";
+import {
+  enrollments,
+  courses,
+  scores,
+  attendances,
+  payments,
+  courseFeedback,
+  classSchedules,
+} from "@/lib/drizzle/schema";
+import { eq, and, desc } from "drizzle-orm";
+import { Trans } from "@lingui/react/macro";
+import { StudentNav } from "@/components/student/StudentNav";
+import {
+  ArrowLeft,
+  Calendar,
+  Award,
   Play,
   Video,
   FileText,
@@ -21,27 +27,27 @@ import {
   MapPin,
   Monitor,
   Users,
-  MessageSquare
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { Progress } from '@/components/ui/progress';
-import { CourseFeedbackForm } from '@/components/student/CourseFeedbackForm';
-import { ClassSchedule } from '@/components/student/ClassSchedule';
-import { setI18n } from '@lingui/react/server';
-import { loadCatalog, i18n } from '@/lib/i18n';
+  MessageSquare,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Progress } from "@/components/ui/progress";
+import { CourseFeedbackForm } from "@/components/student/CourseFeedbackForm";
+import { ClassSchedule } from "@/components/student/ClassSchedule";
+import { setI18n } from "@lingui/react/server";
+import { loadCatalog, i18n } from "@/lib/i18n";
 
-export default async function EnrollmentDetailsPage({ 
-  params 
-}: { 
-  params: Promise<{ locale: string; id: string }> 
+export default async function EnrollmentDetailsPage({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
 }) {
   const { locale, id } = await params;
   await loadCatalog(locale);
   setI18n(i18n);
-  
+
   const session = await auth();
-  
+
   if (!session?.user) {
     redirect(`/${locale}/login`);
   }
@@ -71,10 +77,7 @@ export default async function EnrollmentDetailsPage({
     .from(enrollments)
     .innerJoin(courses, eq(enrollments.courseId, courses.id))
     .where(
-      and(
-        eq(enrollments.id, id),
-        eq(enrollments.studentId, session.user.id)
-      )
+      and(eq(enrollments.id, id), eq(enrollments.studentId, session.user.id))
     );
 
   const enrollment = enrollmentResult[0];
@@ -84,7 +87,9 @@ export default async function EnrollmentDetailsPage({
   }
 
   // Get course instructors
-  const { teacherCourses, teachers, users } = await import('@/lib/drizzle/schema');
+  const { teacherCourses, teachers, users } = await import(
+    "@/lib/drizzle/schema"
+  );
   const instructors = await db
     .select({
       id: teachers.userId,
@@ -171,27 +176,44 @@ export default async function EnrollmentDetailsPage({
 
   // Calculate stats
   const totalAttendance = attendanceList.length;
-  const presentCount = attendanceList.filter(a => a.status === 'present').length;
-  const attendanceRate = totalAttendance > 0 
-    ? Math.round((presentCount / totalAttendance) * 100) 
-    : 0;
+  const presentCount = attendanceList.filter(
+    (a) => a.status === "present"
+  ).length;
+  const attendanceRate =
+    totalAttendance > 0
+      ? Math.round((presentCount / totalAttendance) * 100)
+      : 0;
 
-  const avgScore = scoresList.length > 0
-    ? Math.round(
-        scoresList.reduce((sum, s) => sum + (Number(s.score) / Number(s.maxScore)) * 100, 0) / scoresList.length
-      )
-    : 0;
+  const avgScore =
+    scoresList.length > 0
+      ? Math.round(
+          scoresList.reduce(
+            (sum, s) => sum + (Number(s.score) / Number(s.maxScore)) * 100,
+            0
+          ) / scoresList.length
+        )
+      : 0;
 
   // Payment stats
   const totalAmount = Number(enrollment.totalAmount);
   const paidAmount = Number(enrollment.paidAmount);
   const remainingAmount = totalAmount - paidAmount;
-  const paymentProgress = totalAmount > 0 ? Math.round((paidAmount / totalAmount) * 100) : 0;
+  const paymentProgress =
+    totalAmount > 0 ? Math.round((paidAmount / totalAmount) * 100) : 0;
 
   const levelConfig = {
-    beginner: { label: <Trans>Beginner</Trans>, color: 'from-green-500 to-emerald-500' },
-    intermediate: { label: <Trans>Intermediate</Trans>, color: 'from-yellow-500 to-orange-500' },
-    advanced: { label: <Trans>Advanced</Trans>, color: 'from-red-500 to-pink-500' },
+    beginner: {
+      label: <Trans>Beginner</Trans>,
+      color: "from-green-500 to-emerald-500",
+    },
+    intermediate: {
+      label: <Trans>Intermediate</Trans>,
+      color: "from-yellow-500 to-orange-500",
+    },
+    advanced: {
+      label: <Trans>Advanced</Trans>,
+      color: "from-red-500 to-pink-500",
+    },
   };
 
   const level = levelConfig[enrollment.courseLevel];
@@ -199,7 +221,7 @@ export default async function EnrollmentDetailsPage({
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
       <StudentNav locale={locale} />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <Link href={`/${locale}/student/enrollments`}>
@@ -213,7 +235,7 @@ export default async function EnrollmentDetailsPage({
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm mb-6 overflow-hidden">
           {/* Gradient Header Bar */}
           <div className="h-2 bg-gradient-to-r from-[#007FFF] via-[#17224D] to-[#007FFF]"></div>
-          
+
           <div className="p-6">
             {/* Title and Badges Row */}
             <div className="flex items-start justify-between gap-4 mb-4">
@@ -225,30 +247,51 @@ export default async function EnrollmentDetailsPage({
                   {enrollment.courseCategory && (
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
                       <FileText className="w-3 h-3" />
-                      <span className="capitalize">{enrollment.courseCategory}</span>
+                      <span className="capitalize">
+                        {enrollment.courseCategory}
+                      </span>
                     </span>
                   )}
-                  <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${level.color} text-white shadow-sm`}>
+                  <span
+                    className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${level.color} text-white shadow-sm`}
+                  >
                     {level.label}
                   </span>
-                  <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${
-                    enrollment.status === 'active'
-                      ? 'bg-green-50 text-green-700 border border-green-200'
-                      : enrollment.status === 'completed'
-                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                      : 'bg-gray-50 text-gray-700 border border-gray-200'
-                  }`}>
+                  <span
+                    className={`inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${
+                      enrollment.status === "active"
+                        ? "bg-green-50 text-green-700 border border-green-200"
+                        : enrollment.status === "completed"
+                          ? "bg-blue-50 text-blue-700 border border-blue-200"
+                          : "bg-gray-50 text-gray-700 border border-gray-200"
+                    }`}
+                  >
                     <Trans>{enrollment.status}</Trans>
                   </span>
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200">
-                    {enrollment.deliveryMode === 'online' ? (
-                      <><Monitor className="w-3 h-3" /><Trans>Online</Trans></>
-                    ) : enrollment.deliveryMode === 'face_to_face' ? (
-                      <><Users className="w-3 h-3" /><Trans>Face-to-Face</Trans></>
+                    {enrollment.deliveryMode === "online" ? (
+                      <>
+                        <Monitor className="w-3 h-3" />
+                        <Trans>Online</Trans>
+                      </>
+                    ) : enrollment.deliveryMode === "face_to_face" ? (
+                      <>
+                        <Users className="w-3 h-3" />
+                        <Trans>Face-to-Face</Trans>
+                      </>
                     ) : (
-                      <><Monitor className="w-3 h-3" /><Trans>Hybrid</Trans></>
+                      <>
+                        <Monitor className="w-3 h-3" />
+                        <Trans>Hybrid</Trans>
+                      </>
                     )}
                   </span>
+                  {enrollment.courseDuration && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
+                      <Clock className="w-3 h-3" />
+                      {enrollment.courseDuration}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -261,9 +304,14 @@ export default async function EnrollmentDetailsPage({
                     rel="noopener noreferrer"
                     title="Watch on YouTube"
                   >
-                    <Button size="sm" className="gap-1.5 bg-red-600 hover:bg-red-700 h-9">
+                    <Button
+                      size="sm"
+                      className="gap-1.5 bg-red-600 hover:bg-red-700 h-9"
+                    >
                       <Play className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline"><Trans>YouTube</Trans></span>
+                      <span className="hidden sm:inline">
+                        <Trans>YouTube</Trans>
+                      </span>
                     </Button>
                   </a>
                 )}
@@ -274,80 +322,76 @@ export default async function EnrollmentDetailsPage({
                     rel="noopener noreferrer"
                     title="Join Zoom Class"
                   >
-                    <Button size="sm" className="gap-1.5 bg-blue-600 hover:bg-blue-700 h-9">
+                    <Button
+                      size="sm"
+                      className="gap-1.5 bg-blue-600 hover:bg-blue-700 h-9"
+                    >
                       <Video className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline"><Trans>Zoom</Trans></span>
+                      <span className="hidden sm:inline">
+                        <Trans>Zoom</Trans>
+                      </span>
                     </Button>
                   </a>
                 )}
               </div>
             </div>
 
-            {/* Description - Compact */}
-            {enrollment.courseDesc && (
-              <p className="text-sm text-[#363942]/70 mb-4 line-clamp-2">
-                {enrollment.courseDesc}
-              </p>
-            )}
-
-            {/* Info Grid - Compact */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {/* Location */}
-              {enrollment.location && (enrollment.deliveryMode === 'face_to_face' || enrollment.deliveryMode === 'hybrid') && (
-                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg">
-                  <MapPin className="w-4 h-4 text-[#007FFF] flex-shrink-0" />
-                  <span className="text-sm text-[#363942] truncate">{enrollment.location}</span>
-                </div>
+            {/* Description & Location - Compact */}
+            <div className="space-y-2">
+              {enrollment.courseDesc && (
+                <p className="text-sm text-[#363942]/70 line-clamp-2">
+                  {enrollment.courseDesc}
+                </p>
               )}
-
-              {/* Duration */}
-              {enrollment.courseDuration && (
-                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg">
-                  <Clock className="w-4 h-4 text-[#007FFF] flex-shrink-0" />
-                  <span className="text-sm text-[#363942]">{enrollment.courseDuration}</span>
-                </div>
-              )}
-
-              {/* Instructors - Compact */}
-              {instructors.length > 0 && (
-                <div className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg sm:col-span-2 lg:col-span-1">
-                  <div className="flex -space-x-2">
-                    {instructors.slice(0, 3).map((instructor) => (
-                      <Link
-                        key={instructor.id}
-                        href={`/${locale}/student/instructors/${instructor.id}`}
-                        className="relative group"
-                        title={instructor.name}
-                      >
-                        {instructor.photo ? (
-                          <img
-                            src={instructor.photo}
-                            alt={instructor.name}
-                            className="w-8 h-8 rounded-full object-cover border-2 border-white ring-1 ring-gray-200 hover:ring-[#007FFF] transition-all"
-                          />
-                        ) : (
-                          <div className="w-8 h-8 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-full flex items-center justify-center text-white text-xs font-semibold border-2 border-white ring-1 ring-gray-200 hover:ring-[#007FFF] transition-all">
-                            {instructor.name.charAt(0).toUpperCase()}
-                          </div>
-                        )}
-                      </Link>
-                    ))}
+              {enrollment.location &&
+                (enrollment.deliveryMode === "face_to_face" ||
+                  enrollment.deliveryMode === "hybrid") && (
+                  <div className="flex items-center gap-1.5 text-sm text-[#363942]/70">
+                    <MapPin className="w-3.5 h-3.5 text-[#007FFF]" />
+                    <span className="truncate">{enrollment.location}</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-[#17224D] truncate">
-                      {instructors.length === 1 ? (
-                        instructors[0].name
-                      ) : (
-                        <Trans>{instructors.length} Instructors</Trans>
-                      )}
-                    </p>
-                    {instructors.length === 1 && instructors[0].spec && (
-                      <p className="text-xs text-[#363942]/70 truncate">{instructors[0].spec}</p>
-                    )}
-                  </div>
-                </div>
-              )}
+                )}
             </div>
+
+            {/* Instructors Section */}
+            {instructors.length > 0 && (
+              <div className="border-t border-gray-100 pt-4">
+                <p className="text-xs font-semibold text-[#363942]/70 uppercase tracking-wide mb-3">
+                  <Trans>Taught by</Trans>
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {instructors.map((instructor) => (
+                    <Link
+                      key={instructor.id}
+                      href={`/${locale}/student/instructors/${instructor.id}`}
+                      className="flex items-center gap-2 p-2 pr-3 bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-lg hover:border-[#007FFF] hover:shadow-sm transition-all group"
+                    >
+                      {instructor.photo ? (
+                        <img
+                          src={instructor.photo}
+                          alt={instructor.name}
+                          className="w-9 h-9 rounded-full object-cover ring-2 ring-white group-hover:ring-[#007FFF]/20 transition-all"
+                        />
+                      ) : (
+                        <div className="w-9 h-9 bg-gradient-to-br from-[#007FFF] to-[#17224D] rounded-full flex items-center justify-center text-white text-sm font-semibold ring-2 ring-white group-hover:ring-[#007FFF]/20 transition-all">
+                          {instructor.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-[#17224D] group-hover:text-[#007FFF] transition-colors truncate">
+                          {instructor.name}
+                        </p>
+                        {instructor.spec && (
+                          <p className="text-xs text-[#363942]/70 truncate">
+                            {instructor.spec}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -364,8 +408,9 @@ export default async function EnrollmentDetailsPage({
                 </h3>
                 <p className="text-sm text-orange-800 mb-4">
                   <Trans>
-                    You have an outstanding balance of ${remainingAmount.toFixed(2)}. Make a payment to
-                    continue your learning journey.
+                    You have an outstanding balance of $
+                    {remainingAmount.toFixed(2)}. Make a payment to continue
+                    your learning journey.
                   </Trans>
                 </p>
                 <div className="flex items-center gap-4">
@@ -381,7 +426,9 @@ export default async function EnrollmentDetailsPage({
                     <div className="w-full bg-orange-200 rounded-full h-2">
                       <div
                         className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full"
-                        style={{ width: `${(paidAmount / totalAmount) * 100}%` }}
+                        style={{
+                          width: `${(paidAmount / totalAmount) * 100}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -407,7 +454,9 @@ export default async function EnrollmentDetailsPage({
                 <Target className="w-5 h-5 text-white" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-[#17224D] mb-1">{enrollment.progress}%</div>
+            <div className="text-2xl font-bold text-[#17224D] mb-1">
+              {enrollment.progress}%
+            </div>
             <div className="text-xs text-[#363942]/70 font-medium">
               <Trans>Progress</Trans>
             </div>
@@ -420,7 +469,9 @@ export default async function EnrollmentDetailsPage({
                 <Award className="w-5 h-5 text-white" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-[#17224D] mb-1">{avgScore}%</div>
+            <div className="text-2xl font-bold text-[#17224D] mb-1">
+              {avgScore}%
+            </div>
             <div className="text-xs text-[#363942]/70 font-medium">
               <Trans>Avg Score</Trans>
             </div>
@@ -432,7 +483,9 @@ export default async function EnrollmentDetailsPage({
                 <CheckCircle className="w-5 h-5 text-white" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-[#17224D] mb-1">{attendanceRate}%</div>
+            <div className="text-2xl font-bold text-[#17224D] mb-1">
+              {attendanceRate}%
+            </div>
             <div className="text-xs text-[#363942]/70 font-medium">
               <Trans>Attendance</Trans>
             </div>
@@ -444,7 +497,9 @@ export default async function EnrollmentDetailsPage({
                 <Calendar className="w-5 h-5 text-white" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-[#17224D] mb-1">{totalAttendance}</div>
+            <div className="text-2xl font-bold text-[#17224D] mb-1">
+              {totalAttendance}
+            </div>
             <div className="text-xs text-[#363942]/70 font-medium">
               <Trans>Classes</Trans>
             </div>
@@ -456,7 +511,9 @@ export default async function EnrollmentDetailsPage({
                 <DollarSign className="w-5 h-5 text-white" />
               </div>
             </div>
-            <div className="text-2xl font-bold text-[#17224D] mb-1">{paymentProgress}%</div>
+            <div className="text-2xl font-bold text-[#17224D] mb-1">
+              {paymentProgress}%
+            </div>
             <div className="text-xs text-[#363942]/70 font-medium">
               <Trans>Paid</Trans>
             </div>
@@ -471,7 +528,10 @@ export default async function EnrollmentDetailsPage({
               <Calendar className="w-5 h-5" />
               <Trans>Class Schedule</Trans>
             </h3>
-            <ClassSchedule schedules={schedulesList} deliveryMode={enrollment.deliveryMode} />
+            <ClassSchedule
+              schedules={schedulesList}
+              deliveryMode={enrollment.deliveryMode}
+            />
           </div>
 
           {/* Scores */}
@@ -493,7 +553,9 @@ export default async function EnrollmentDetailsPage({
                   <div key={score.id} className="p-4 bg-[#F4F5F7] rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <div>
-                        <p className="font-semibold text-[#17224D] mb-1">{score.title}</p>
+                        <p className="font-semibold text-[#17224D] mb-1">
+                          {score.title}
+                        </p>
                         <span className="text-sm text-[#363942]/70">
                           {new Date(score.created).toLocaleDateString()}
                         </span>
@@ -503,7 +565,9 @@ export default async function EnrollmentDetailsPage({
                       </span>
                     </div>
                     {score.remarks && (
-                      <p className="text-sm text-[#363942] mt-2">{score.remarks}</p>
+                      <p className="text-sm text-[#363942] mt-2">
+                        {score.remarks}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -527,23 +591,30 @@ export default async function EnrollmentDetailsPage({
             ) : (
               <div className="space-y-3">
                 {attendanceList.map((attendance) => (
-                  <div key={attendance.id} className="p-4 bg-[#F4F5F7] rounded-lg">
+                  <div
+                    key={attendance.id}
+                    className="p-4 bg-[#F4F5F7] rounded-lg"
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm text-[#363942]/70">
                         {new Date(attendance.date).toLocaleDateString()}
                       </span>
-                      <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                        attendance.status === 'present'
-                          ? 'bg-green-100 text-green-700'
-                          : attendance.status === 'absent'
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-yellow-100 text-yellow-700'
-                      }`}>
+                      <span
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
+                          attendance.status === "present"
+                            ? "bg-green-100 text-green-700"
+                            : attendance.status === "absent"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-yellow-100 text-yellow-700"
+                        }`}
+                      >
                         <Trans>{attendance.status}</Trans>
                       </span>
                     </div>
                     {attendance.notes && (
-                      <p className="text-sm text-[#363942]">{attendance.notes}</p>
+                      <p className="text-sm text-[#363942]">
+                        {attendance.notes}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -559,7 +630,9 @@ export default async function EnrollmentDetailsPage({
               <DollarSign className="w-5 h-5" />
               <Trans>Payment History</Trans>
             </h3>
-            <Link href={`/${locale}/student/payments/new?enrollmentId=${id}&amount=${remainingAmount}&courseName=${enrollment.courseTitle}`}>
+            <Link
+              href={`/${locale}/student/payments/new?enrollmentId=${id}&amount=${remainingAmount}&courseName=${enrollment.courseTitle}`}
+            >
               <Button size="sm">
                 <Trans>Make Payment</Trans>
               </Button>
@@ -569,16 +642,28 @@ export default async function EnrollmentDetailsPage({
           {/* Payment Summary */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-[#F4F5F7] rounded-lg">
             <div>
-              <p className="text-sm text-[#363942]/70 mb-1"><Trans>Total Amount</Trans></p>
-              <p className="text-xl font-bold text-[#17224D]">${totalAmount.toFixed(2)}</p>
+              <p className="text-sm text-[#363942]/70 mb-1">
+                <Trans>Total Amount</Trans>
+              </p>
+              <p className="text-xl font-bold text-[#17224D]">
+                ${totalAmount.toFixed(2)}
+              </p>
             </div>
             <div>
-              <p className="text-sm text-[#363942]/70 mb-1"><Trans>Paid Amount</Trans></p>
-              <p className="text-xl font-bold text-green-600">${paidAmount.toFixed(2)}</p>
+              <p className="text-sm text-[#363942]/70 mb-1">
+                <Trans>Paid Amount</Trans>
+              </p>
+              <p className="text-xl font-bold text-green-600">
+                ${paidAmount.toFixed(2)}
+              </p>
             </div>
             <div>
-              <p className="text-sm text-[#363942]/70 mb-1"><Trans>Remaining</Trans></p>
-              <p className="text-xl font-bold text-orange-600">${remainingAmount.toFixed(2)}</p>
+              <p className="text-sm text-[#363942]/70 mb-1">
+                <Trans>Remaining</Trans>
+              </p>
+              <p className="text-xl font-bold text-orange-600">
+                ${remainingAmount.toFixed(2)}
+              </p>
             </div>
           </div>
 
@@ -596,21 +681,26 @@ export default async function EnrollmentDetailsPage({
                 <div key={payment.id} className="p-4 bg-[#F4F5F7] rounded-lg">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex-1">
-                      <p className="font-semibold text-[#17224D]">${Number(payment.amount).toFixed(2)}</p>
+                      <p className="font-semibold text-[#17224D]">
+                        ${Number(payment.amount).toFixed(2)}
+                      </p>
                       <span className="text-sm text-[#363942]/70">
-                        {new Date(payment.created).toLocaleDateString()} • {payment.method}
+                        {new Date(payment.created).toLocaleDateString()} •{" "}
+                        {payment.method}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                        payment.status === 'completed'
-                          ? 'bg-green-100 text-green-700'
-                          : payment.status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : payment.status === 'failed'
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-gray-100 text-gray-700'
-                      }`}>
+                      <span
+                        className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
+                          payment.status === "completed"
+                            ? "bg-green-100 text-green-700"
+                            : payment.status === "pending"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : payment.status === "failed"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
                         <Trans>{payment.status}</Trans>
                       </span>
                       <Link href={`/${locale}/student/payments/${payment.id}`}>
@@ -621,10 +711,14 @@ export default async function EnrollmentDetailsPage({
                     </div>
                   </div>
                   {payment.txnId && (
-                    <p className="text-xs text-[#363942]/70 font-mono">TXN: {payment.txnId}</p>
+                    <p className="text-xs text-[#363942]/70 font-mono">
+                      TXN: {payment.txnId}
+                    </p>
                   )}
                   {payment.notes && (
-                    <p className="text-sm text-[#363942] mt-2">{payment.notes}</p>
+                    <p className="text-sm text-[#363942] mt-2">
+                      {payment.notes}
+                    </p>
                   )}
                 </div>
               ))}
