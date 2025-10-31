@@ -37,7 +37,7 @@ export default async function LocaleLayout({
   
   return (
     <html lang={locale}>
-      <body className={`${manrope.variable} ${kantumruyPro.variable} ${locale === 'km' ? 'font-kantumruy' : 'font-sans'} antialiased`}>
+      <body className={`${manrope.variable} ${kantumruyPro.variable} font-sans font-kantumruy antialiased`}>
         <SessionProvider>
           <SessionInitializer />
           <SessionValidator />

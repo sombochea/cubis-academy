@@ -1,10 +1,16 @@
 import type { Metadata } from 'next';
-import { Manrope } from 'next/font/google';
+import { Manrope, Kantumruy_Pro } from 'next/font/google';
 import './globals.css';
 
 const manrope = Manrope({
   subsets: ['latin'],
   variable: '--font-manrope',
+});
+
+const kantumruyPro = Kantumruy_Pro({
+  subsets: ['khmer', 'latin'],
+  variable: '--font-kantumruy',
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} font-sans antialiased`}>
+      <body className={`${manrope.variable} ${kantumruyPro.variable} font-sans font-kantumruy antialiased`}>
         {children}
       </body>
     </html>

@@ -152,7 +152,7 @@ export default function LandingPage() {
                 <span className="hidden sm:inline">
                   <Trans>Get Started Free</Trans>
                 </span>
-                <span className="sm:hidden">
+                <span className="sm:hidden text-sm">
                   <Trans>Sign Up</Trans>
                 </span>
               </Link>

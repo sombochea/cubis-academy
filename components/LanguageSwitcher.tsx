@@ -10,10 +10,12 @@ const languages = {
   km: {
     name: 'ភាសាខ្មែរ',
     countryCode: 'KH',
+    font: 'font-kantumruy',
   },
   en: {
     name: 'English',
     countryCode: 'US',
+    font: '',
   },
 };
 
@@ -47,7 +49,7 @@ export function LanguageSwitcher() {
             borderRadius: '2px',
           }}
         />
-        <span className={`text-sm font-medium text-[#363942] ${currentLocale === 'km' ? 'font-kantumruy' : ''}`}>
+        <span className={`text-sm font-medium text-[#363942] hidden sm:inline ${currentLocale === 'km' ? 'font-kantumruy' : ''}`}>
           {currentLanguage.name}
         </span>
         <ChevronDown className={`w-4 h-4 text-[#363942]/60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -74,7 +76,7 @@ export function LanguageSwitcher() {
                 <button
                   key={code}
                   onClick={() => switchLanguage(code)}
-                  className={`w-full px-4 py-2.5 text-left flex items-center gap-3 transition-colors ${
+                  className={`w-full px-4 py-2.5 text-left flex items-center gap-3 transition-colors ${lang.font} ${
                     currentLocale === code
                       ? 'bg-[#E5F2FF] text-[#007FFF]'
                       : 'text-[#363942] hover:bg-gray-50'
@@ -89,7 +91,7 @@ export function LanguageSwitcher() {
                       borderRadius: '2px',
                     }}
                   />
-                  <span className={`text-sm font-medium ${code === 'km' ? 'font-kantumruy' : ''}`}>
+                  <span className={`text-sm font-medium ${lang.font}`}>
                     {lang.name}
                   </span>
                   {currentLocale === code && (
