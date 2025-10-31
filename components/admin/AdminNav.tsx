@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { AdminNavClient } from './AdminNavClient';
+import { AdminMobileNav } from './AdminMobileNav';
 import { UserNav } from '@/components/UserNav';
 import { auth } from '@/auth';
 
@@ -22,10 +23,17 @@ export async function AdminNav({ locale }: { locale: string }) {
               </h1>
             </Link>
             
+            {/* Desktop Navigation */}
             <AdminNavClient locale={locale} />
           </div>
           
-          <UserNav locale={locale} />
+          <div className="flex items-center gap-2">
+            {/* User Menu */}
+            <UserNav locale={locale} />
+            
+            {/* Mobile Navigation */}
+            <AdminMobileNav locale={locale} />
+          </div>
         </div>
       </div>
     </nav>

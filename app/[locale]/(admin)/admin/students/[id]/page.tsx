@@ -229,7 +229,7 @@ export default async function StudentViewPage({
               )}
 
               <div className="pt-6 border-t border-gray-200">
-                <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-[#363942]/70"><Trans>Created</Trans></p>
                     <p className="text-[#17224D] font-medium">{formatDate(student.created, locale) || '-'}</p>

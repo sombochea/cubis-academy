@@ -2,15 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, LayoutDashboard, Users, GraduationCap, Menu, X } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Users, GraduationCap } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { UserNav } from '@/components/UserNav';
-import { useState } from 'react';
+import { TeacherMobileNav } from './TeacherMobileNav';
 import { cn } from '@/lib/utils';
 
 export function TeacherNav({ locale }: { locale: string }) {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
     {
@@ -81,50 +80,14 @@ export function TeacherNav({ locale }: { locale: string }) {
           </div>
 
           {/* Right Side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            {/* User Menu */}
             <UserNav locale={locale} />
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-5 h-5 text-[#363942]" />
-              ) : (
-                <Menu className="w-5 h-5 text-[#363942]" />
-              )}
-            </button>
+            {/* Mobile Navigation */}
+            <TeacherMobileNav locale={locale} />
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
-            <div className="space-y-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href, item.exact);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={cn(
-                      'flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all',
-                      active
-                        ? 'bg-[#007FFF] text-white'
-                        : 'text-[#363942] hover:bg-gray-100'
-                    )}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </div>
     </nav>
   );

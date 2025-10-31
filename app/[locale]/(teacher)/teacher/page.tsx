@@ -115,12 +115,12 @@ export default async function TeacherDashboard({
                 <Trans>Here's what's happening with your courses today</Trans>
               </p>
             </div>
-            <Link
+            {/* <Link
               href={`/${locale}/teacher/profile`}
               className="px-4 py-2 bg-[#007FFF] text-white rounded-lg hover:bg-[#0066CC] transition-colors text-sm font-medium"
             >
               <Trans>View Profile</Trans>
-            </Link>
+            </Link> */}
           </div>
         </div>
 
