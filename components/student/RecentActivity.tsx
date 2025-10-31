@@ -2,7 +2,7 @@
 
 import { Trans } from '@lingui/react/macro';
 import { Activity, Award, DollarSign, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { formatDate } from '@/lib/utils/date';
+import { formatDateRelative } from '@/lib/utils/date';
 
 type ActivityItem = {
   type: string;
@@ -46,24 +46,6 @@ export function RecentActivity({ activities, locale }: RecentActivityProps) {
       return 'from-purple-500 to-pink-500';
     }
     return 'from-gray-500 to-gray-600';
-  };
-
-  const formatDate = (date: Date) => {
-    const now = new Date();
-    const diffMs = now.getTime() - new Date(date).getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 60) {
-      return `${diffMins}m ago`;
-    } else if (diffHours < 24) {
-      return `${diffHours}h ago`;
-    } else if (diffDays < 7) {
-      return `${diffDays}d ago`;
-    } else {
-      return formatDate(date, locale) || '-';
-    }
   };
 
   if (activities.length === 0) {
@@ -138,7 +120,7 @@ export function RecentActivity({ activities, locale }: RecentActivityProps) {
                     )}
                   </div>
                   <span className="text-xs text-[#363942]/70 whitespace-nowrap">
-                    {formatDate(activity.date)}
+                    {formatDateRelative(activity.date, locale)}
                   </span>
                 </div>
               </div>
