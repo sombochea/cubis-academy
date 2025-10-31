@@ -59,7 +59,7 @@ export class S3StorageProvider implements IStorageProvider {
   }
 
   async upload(file: File, options: UploadOptions): Promise<UploadResult> {
-    const { category, resize, isPublic = true } = options;
+    const { category, resize, isPublic = true, userId } = options;
 
     // Get file buffer
     const bytes = await file.arrayBuffer();
@@ -73,6 +73,13 @@ export class S3StorageProvider implements IStorageProvider {
     // Generate file key
     const fileKey = this.generateFileKey(category, file.name);
 
+    // Prepare metadata (only essential tracking info)
+    const metadata = {
+      'user-id': userId,
+      'category': category,
+      'uploaded-at': new Date().toISOString(),
+    };
+
     // Upload to S3
     const command = new PutObjectCommand({
       Bucket: this.bucket,
@@ -81,6 +88,7 @@ export class S3StorageProvider implements IStorageProvider {
       ContentType: file.type,
       ACL: isPublic ? 'public-read' : 'private',
       CacheControl: 'max-age=31536000', // 1 year
+      Metadata: metadata,
     });
 
     await this.client.send(command);

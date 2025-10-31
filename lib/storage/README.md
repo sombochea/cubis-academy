@@ -79,6 +79,37 @@ R2_PUBLIC_URL=https://your-custom-domain.com  # Required for public access
 - Fast global CDN
 - Generous free tier (10GB storage, 10M requests/month)
 
+## Metadata Tracking (S3/R2)
+
+S3 and R2 uploads automatically include essential metadata for tracking:
+
+```typescript
+// Metadata automatically added to S3/R2 uploads:
+{
+  'user-id': 'uuid-of-uploader',
+  'category': 'profile',
+  'uploaded-at': '2025-01-15T10:30:00.000Z'
+}
+```
+
+**Why These Keys?**
+- `user-id` - Track who uploaded (for auditing and cleanup)
+- `category` - Organize and filter files by type
+- `uploaded-at` - Timestamp for lifecycle policies and auditing
+
+**Benefits**:
+- Track file ownership
+- Filter files by category
+- Audit trail with timestamps
+- Easy debugging and troubleshooting
+- Support for lifecycle policies
+
+**Viewing Metadata**:
+- **AWS S3**: Console → Object → Metadata tab
+- **Cloudflare R2**: Dashboard → Object → Metadata section
+
+**Note**: Local storage does not support metadata (filesystem limitation).
+
 ## Usage
 
 ### Basic Upload

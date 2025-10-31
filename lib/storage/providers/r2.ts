@@ -60,7 +60,7 @@ export class R2StorageProvider implements IStorageProvider {
   }
 
   async upload(file: File, options: UploadOptions): Promise<UploadResult> {
-    const { category, resize } = options;
+    const { category, resize, userId, isPublic = true } = options;
 
     // Get file buffer
     const bytes = await file.arrayBuffer();
@@ -74,6 +74,13 @@ export class R2StorageProvider implements IStorageProvider {
     // Generate file key
     const fileKey = this.generateFileKey(category, file.name);
 
+    // Prepare metadata (only essential tracking info)
+    const metadata = {
+      'user-id': userId,
+      'category': category,
+      'uploaded-at': new Date().toISOString(),
+    };
+
     // Upload to R2
     const command = new PutObjectCommand({
       Bucket: this.bucket,
@@ -81,6 +88,7 @@ export class R2StorageProvider implements IStorageProvider {
       Body: buffer,
       ContentType: file.type,
       CacheControl: 'max-age=31536000', // 1 year
+      Metadata: metadata,
     });
 
     await this.client.send(command);

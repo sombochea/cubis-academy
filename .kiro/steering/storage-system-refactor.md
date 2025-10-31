@@ -129,7 +129,41 @@ R2_PUBLIC_URL=https://cdn.yourdomain.com  # Required
 
 ## Features
 
-### 1. Automatic Image Optimization
+### 1. Metadata Tracking (S3/R2)
+
+S3 and R2 uploads automatically include essential metadata for tracking:
+
+**Metadata Fields**:
+- `user-id` - UUID of the user who uploaded the file
+- `category` - File category (profile, course_cover, document, etc.)
+- `uploaded-at` - ISO timestamp of upload
+
+**Why Only These Keys?**
+- Keep metadata minimal and focused
+- Avoid redundant data (file size, name already in object properties)
+- Essential for tracking ownership and organization
+- Support lifecycle policies and auditing
+
+**Benefits**:
+- ✅ Track file ownership (who uploaded)
+- ✅ Organize files by category
+- ✅ Audit trail with timestamps
+- ✅ Easy debugging and troubleshooting
+- ✅ Support for automated cleanup/lifecycle policies
+
+**Use Cases**:
+- Delete all files uploaded by a specific user
+- Find all profile photos or course covers
+- Implement retention policies based on upload date
+- Track storage usage per user or category
+
+**Viewing Metadata**:
+- **AWS S3**: Console → Object → Metadata tab
+- **Cloudflare R2**: Dashboard → Object → Metadata section
+
+**Note**: Local storage does not support metadata (filesystem limitation).
+
+### 2. Automatic Image Optimization
 
 Images are automatically optimized using Sharp:
 
@@ -151,7 +185,7 @@ const result = await uploadFile(file, {
 - Maintains aspect ratio
 - Multiple fit modes (cover, contain, fill, inside, outside)
 
-### 2. File Validation
+### 3. File Validation
 
 Built-in validation for security:
 
@@ -170,7 +204,7 @@ const result = await uploadFile(file, {
 - Extension validation
 - Server-side validation (never trust client)
 
-### 3. Category-Based Organization
+### 4. Category-Based Organization
 
 Files are organized by category:
 
@@ -180,7 +214,7 @@ Files are organized by category:
 - `course_material` - Course files (50MB, any type)
 - `general` - Other files (10MB, any type)
 
-### 4. Database Metadata Tracking
+### 5. Database Metadata Tracking
 
 All uploads are tracked in the database:
 
