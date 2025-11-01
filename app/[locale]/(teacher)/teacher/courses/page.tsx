@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/drizzle/db';
-import { courses, enrollments } from '@/lib/drizzle/schema';
+import { courses, enrollments, courseCategories } from '@/lib/drizzle/schema';
 import { eq, and, count } from 'drizzle-orm';
 import { TeacherNav } from '@/components/teacher/TeacherNav';
 import { CoursesDataTable } from '@/components/teacher/CoursesDataTable';
@@ -33,6 +33,8 @@ export default async function TeacherCoursesPage({
       title: courses.title,
       desc: courses.desc,
       category: courses.category,
+      category_id: courses.categoryId,
+      category_name: courseCategories.name,
       level: courses.level,
       price: courses.price,
       duration: courses.duration,
@@ -41,6 +43,7 @@ export default async function TeacherCoursesPage({
       created: courses.created,
     })
     .from(courses)
+    .leftJoin(courseCategories, eq(courses.categoryId, courseCategories.id))
     .where(eq(courses.teacherId, session.user.id))
     .orderBy(courses.created);
 

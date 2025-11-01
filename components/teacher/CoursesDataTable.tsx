@@ -37,6 +37,8 @@ interface Course {
   title: string;
   desc: string | null;
   category: string | null;
+  category_id:  string | null;
+  category_name: string | null;
   level: 'beginner' | 'intermediate' | 'advanced';
   price: string;
   duration: number | null;
@@ -112,7 +114,7 @@ export function CoursesDataTable({ courses, locale }: CoursesDataTableProps) {
       cell: ({ row }) => {
         return (
           <span className="px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-semibold">
-            {row.original.category || '-'}
+            {row.original.category || row.original.category_name || '-'}
           </span>
         );
       },
