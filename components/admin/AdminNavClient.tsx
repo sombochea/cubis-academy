@@ -18,7 +18,7 @@ export function AdminNavClient({ locale }: { locale: string }) {
   ];
 
   return (
-    <div className="hidden md:flex items-center gap-1">
+    <div className="hidden xl:flex items-center gap-1">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         const Icon = item.icon;
@@ -26,7 +26,7 @@ export function AdminNavClient({ locale }: { locale: string }) {
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               isActive
                 ? 'bg-[#007FFF]/10 text-[#007FFF]'
                 : 'text-[#363942] hover:bg-[#F4F5F7]'

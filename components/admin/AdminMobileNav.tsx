@@ -22,11 +22,11 @@ export function AdminMobileNav({ locale }: { locale: string }) {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button - Show on mobile and tablet */}
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden"
+        className="xl:hidden"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -35,14 +35,14 @@ export function AdminMobileNav({ locale }: { locale: string }) {
       {/* Mobile Menu Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-40 xl:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Mobile Menu Drawer */}
       <div
-        className={`fixed top-16 right-0 bottom-0 w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed top-16 right-0 bottom-0 w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out xl:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
