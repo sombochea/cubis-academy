@@ -1,24 +1,27 @@
 /**
  * Cache Wrapper Utilities
  * 
- * Provides easy-to-use wrappers for caching function results
+ * Provides convenient wrappers for caching functions
  */
 
 import { cache } from 'react';
-import { CacheService, CacheKeys, CacheTTL } from './redis';
+import { CacheService } from './redis';
 
 /**
- * Wrap a function with Redis caching
- * Falls back to function execution if cache is unavailable
+ * Wrap a function with caching (no parameters)
+ * 
+ * @param key - Cache key
+ * @param fn - Function to cache
+ * @param ttl - Time to live in seconds
  */
 export function withCache<T>(
-  cacheKey: string,
+  key: string,
   fn: () => Promise<T>,
-  ttl: number = CacheTTL.MEDIUM
+  ttl: number
 ): () => Promise<T> {
   return cache(async () => {
     // Try to get from cache
-    const cached = await CacheService.get<T>(cacheKey);
+    const cached = await CacheService.get<T>(key);
     if (cached !== null) {
       return cached;
     }
@@ -26,76 +29,67 @@ export function withCache<T>(
     // Execute function
     const result = await fn();
 
-    // Store in cache (fire and forget)
-    CacheService.set(cacheKey, result, ttl).catch(err => {
-      console.error('[Cache] Failed to cache result:', err);
-    });
+    // Store in cache
+    await CacheService.set(key, result, ttl);
 
     return result;
   });
 }
 
 /**
- * Wrap a function with Redis caching (with parameters)
+ * Wrap a function with caching (with parameters)
+ * 
+ * @param keyFn - Function to generate cache key from parameters
+ * @param fn - Function to cache
+ * @param ttl - Time to live in seconds
  */
-export function withCacheParam<T, P extends any[]>(
-  keyGenerator: (...args: P) => string,
-  fn: (...args: P) => Promise<T>,
-  ttl: number = CacheTTL.MEDIUM
-): (...args: P) => Promise<T> {
-  return cache(async (...args: P) => {
-    const cacheKey = keyGenerator(...args);
+export function withCacheParam<P, T>(
+  keyFn: (param: P) => string,
+  fn: (param: P) => Promise<T>,
+  ttl: number
+): (param: P) => Promise<T> {
+  return cache(async (param: P) => {
+    const key = keyFn(param);
 
     // Try to get from cache
-    const cached = await CacheService.get<T>(cacheKey);
+    const cached = await CacheService.get<T>(key);
     if (cached !== null) {
       return cached;
     }
 
     // Execute function
-    const result = await fn(...args);
+    const result = await fn(param);
 
-    // Store in cache (fire and forget)
-    CacheService.set(cacheKey, result, ttl).catch(err => {
-      console.error('[Cache] Failed to cache result:', err);
-    });
+    // Store in cache
+    await CacheService.set(key, result, ttl);
 
     return result;
   });
 }
 
 /**
- * Cache decorator for class methods
+ * Cache Warmer
+ * Pre-loads frequently accessed data into cache
  */
-export function Cached(ttl: number = CacheTTL.MEDIUM) {
-  return function (
-    target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
-    const originalMethod = descriptor.value;
+export class CacheWarmer {
+  /**
+   * Warm dashboard caches for active users
+   */
+  static async warmDashboards(): Promise<void> {
+    // Implementation would fetch active users and pre-load their dashboards
+    // This is a placeholder for future implementation
+    console.log('[Cache] Warming dashboards...');
+  }
 
-    descriptor.value = async function (...args: any[]) {
-      const cacheKey = `${target.constructor.name}:${propertyKey}:${JSON.stringify(args)}`;
-
-      // Try to get from cache
-      const cached = await CacheService.get(cacheKey);
-      if (cached !== null) {
-        return cached;
-      }
-
-      // Execute method
-      const result = await originalMethod.apply(this, args);
-
-      // Store in cache
-      await CacheService.set(cacheKey, result, ttl);
-
-      return result;
-    };
-
-    return descriptor;
-  };
+  /**
+   * Warm course caches for popular courses
+   */
+  static async warmCourses(): Promise<void> {
+    // Implementation would fetch popular courses and pre-load their data
+    // This is a placeholder for future implementation
+    console.log('[Cache] Warming courses...');
+  }
 }
 
 // Re-export cache utilities
-export { CacheService, CacheKeys, CacheTTL, CacheWarmer, CacheInvalidator } from './redis';
+export { CacheService, CacheKeys, CacheTTL, CacheInvalidator } from './redis';

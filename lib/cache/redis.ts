@@ -1,13 +1,12 @@
 /**
- * Redis Cache Client
+ * Redis Cache Service using Upstash
  * 
- * Provides caching layer for frequently accessed data
- * with automatic serialization and TTL management.
+ * Provides caching layer for improved performance
  */
 
 import { Redis } from '@upstash/redis';
 
-// Initialize Redis client (using Upstash for serverless compatibility)
+// Initialize Upstash Redis client
 const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
   ? new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL,
@@ -16,30 +15,30 @@ const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_RE
   : null;
 
 /**
- * Cache service with automatic serialization
+ * Cache Service
+ * Provides methods for caching data with Redis
  */
 export class CacheService {
   /**
    * Get value from cache
    */
   static async get<T>(key: string): Promise<T | null> {
-    if (!redis) {
-      console.warn('[Cache] Redis not configured, skipping cache');
-      return null;
-    }
+    if (!redis) return null;
 
     try {
       const start = performance.now();
-      const cached = await redis.get(key);
+      const value = await redis.get<T>(key);
       const duration = performance.now() - start;
-      
+
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Cache] GET ${key}: ${cached ? 'HIT' : 'MISS'} (${duration.toFixed(2)}ms)`);
+        console.log(
+          `[Cache] GET ${key}: ${value ? 'HIT' : 'MISS'} (${duration.toFixed(2)}ms)`
+        );
       }
-      
-      return cached as T | null;
+
+      return value;
     } catch (error) {
-      console.error('[Cache] GET error:', error);
+      console.error(`[Cache] GET ${key} error:`, error);
       return null;
     }
   }
@@ -47,21 +46,21 @@ export class CacheService {
   /**
    * Set value in cache with TTL
    */
-  static async set(key: string, data: any, ttl: number = 300): Promise<void> {
-    if (!redis) {
-      return;
-    }
+  static async set(key: string, value: any, ttl: number): Promise<void> {
+    if (!redis) return;
 
     try {
       const start = performance.now();
-      await redis.setex(key, ttl, JSON.stringify(data));
+      await redis.setex(key, ttl, JSON.stringify(value));
       const duration = performance.now() - start;
-      
+
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Cache] SET ${key}: ${ttl}s TTL (${duration.toFixed(2)}ms)`);
+        console.log(
+          `[Cache] SET ${key}: ${ttl}s TTL (${duration.toFixed(2)}ms)`
+        );
       }
     } catch (error) {
-      console.error('[Cache] SET error:', error);
+      console.error(`[Cache] SET ${key} error:`, error);
     }
   }
 
@@ -69,40 +68,44 @@ export class CacheService {
    * Delete value from cache
    */
   static async del(key: string): Promise<void> {
-    if (!redis) {
-      return;
-    }
+    if (!redis) return;
 
     try {
+      const start = performance.now();
       await redis.del(key);
-      
+      const duration = performance.now() - start;
+
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Cache] DEL ${key}`);
+        console.log(`[Cache] DEL ${key} (${duration.toFixed(2)}ms)`);
       }
     } catch (error) {
-      console.error('[Cache] DEL error:', error);
+      console.error(`[Cache] DEL ${key} error:`, error);
     }
   }
 
   /**
-   * Delete multiple keys matching pattern
+   * Delete all keys matching pattern
    */
   static async delPattern(pattern: string): Promise<void> {
-    if (!redis) {
-      return;
-    }
+    if (!redis) return;
 
     try {
+      const start = performance.now();
       const keys = await redis.keys(pattern);
+      
       if (keys.length > 0) {
         await redis.del(...keys);
-        
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`[Cache] DEL pattern ${pattern}: ${keys.length} keys`);
-        }
+      }
+      
+      const duration = performance.now() - start;
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log(
+          `[Cache] DEL pattern ${pattern}: ${keys.length} keys (${duration.toFixed(2)}ms)`
+        );
       }
     } catch (error) {
-      console.error('[Cache] DEL pattern error:', error);
+      console.error(`[Cache] DEL pattern ${pattern} error:`, error);
     }
   }
 
@@ -110,157 +113,140 @@ export class CacheService {
    * Check if key exists
    */
   static async exists(key: string): Promise<boolean> {
-    if (!redis) {
-      return false;
-    }
+    if (!redis) return false;
 
     try {
       const result = await redis.exists(key);
       return result === 1;
     } catch (error) {
-      console.error('[Cache] EXISTS error:', error);
+      console.error(`[Cache] EXISTS ${key} error:`, error);
       return false;
     }
   }
 
   /**
-   * Get remaining TTL for key
+   * Get TTL of key
    */
   static async ttl(key: string): Promise<number> {
-    if (!redis) {
-      return -1;
-    }
+    if (!redis) return -1;
 
     try {
       return await redis.ttl(key);
     } catch (error) {
-      console.error('[Cache] TTL error:', error);
+      console.error(`[Cache] TTL ${key} error:`, error);
       return -1;
     }
   }
 
   /**
-   * Increment counter
+   * Increment value
    */
   static async incr(key: string): Promise<number> {
-    if (!redis) {
-      return 0;
-    }
+    if (!redis) return 0;
 
     try {
       return await redis.incr(key);
     } catch (error) {
-      console.error('[Cache] INCR error:', error);
+      console.error(`[Cache] INCR ${key} error:`, error);
       return 0;
     }
   }
 
   /**
-   * Set expiration on existing key
+   * Set expiration time
    */
   static async expire(key: string, ttl: number): Promise<void> {
-    if (!redis) {
-      return;
-    }
+    if (!redis) return;
 
     try {
       await redis.expire(key, ttl);
     } catch (error) {
-      console.error('[Cache] EXPIRE error:', error);
+      console.error(`[Cache] EXPIRE ${key} error:`, error);
     }
   }
 }
 
 /**
- * Cache key generators for consistent naming
+ * Cache Keys
+ * Centralized cache key generation
  */
-export const CacheKeys = {
-  // Dashboard caches
-  studentDashboard: (studentId: string) => `dashboard:student:${studentId}`,
-  teacherDashboard: (teacherId: string) => `dashboard:teacher:${teacherId}`,
-  adminDashboard: () => 'dashboard:admin',
-
-  // Course caches
-  activeCourses: () => 'courses:active',
-  courseDetails: (courseId: string) => `course:${courseId}`,
-  courseStats: (courseId: string) => `course:${courseId}:stats`,
-  teacherCourses: (teacherId: string) => `courses:teacher:${teacherId}`,
-
-  // Student caches
-  studentProfile: (studentId: string) => `student:${studentId}`,
-  studentEnrollments: (studentId: string) => `enrollments:student:${studentId}`,
-  studentStats: (studentId: string) => `stats:student:${studentId}`,
-
-  // Teacher caches
-  teacherProfile: (teacherId: string) => `teacher:${teacherId}`,
-  teacherStats: (teacherId: string) => `stats:teacher:${teacherId}`,
-
-  // Analytics caches
-  platformStats: () => 'analytics:platform',
-  enrollmentAnalytics: () => 'analytics:enrollments',
-  revenueAnalytics: () => 'analytics:revenue',
-
-  // Pattern matchers for bulk invalidation
-  patterns: {
-    allDashboards: () => 'dashboard:*',
-    allCourses: () => 'courses:*',
-    allStudents: () => 'student:*',
-    allTeachers: () => 'teacher:*',
-    allAnalytics: () => 'analytics:*',
-    userDashboard: (userId: string) => `dashboard:*:${userId}`,
-  },
-};
-
-/**
- * Cache TTL constants (in seconds)
- */
-export const CacheTTL = {
-  SHORT: 60,           // 1 minute - frequently changing data
-  MEDIUM: 300,         // 5 minutes - moderately changing data
-  LONG: 1800,          // 30 minutes - rarely changing data
-  VERY_LONG: 3600,     // 1 hour - static data
-  DAY: 86400,          // 24 hours - very static data
-};
-
-/**
- * Cache warming utilities
- */
-export class CacheWarmer {
-  /**
-   * Warm dashboard caches for active users
-   */
-  static async warmDashboards(): Promise<void> {
-    if (!redis) {
-      return;
-    }
-
-    console.log('[Cache] Warming dashboard caches...');
-    
-    // This would be called by a cron job or background task
-    // Implementation depends on your user activity tracking
+export class CacheKeys {
+  // Dashboard keys
+  static studentDashboard(studentId: string) {
+    return `dashboard:student:${studentId}`;
   }
 
-  /**
-   * Warm course caches
-   */
-  static async warmCourses(): Promise<void> {
-    if (!redis) {
-      return;
-    }
+  static teacherDashboard(teacherId: string) {
+    return `dashboard:teacher:${teacherId}`;
+  }
 
-    console.log('[Cache] Warming course caches...');
-    
-    // Pre-load popular courses
-    // Implementation depends on your course popularity tracking
+  static adminDashboard() {
+    return 'dashboard:admin';
+  }
+
+  // Course keys
+  static activeCourses() {
+    return 'courses:active';
+  }
+
+  static courseDetails(courseId: string) {
+    return `course:${courseId}`;
+  }
+
+  static courseStats(courseId: string) {
+    return `course:${courseId}:stats`;
+  }
+
+  static teacherCourses(teacherId: string) {
+    return `courses:teacher:${teacherId}`;
+  }
+
+  // Student keys
+  static studentProfile(studentId: string) {
+    return `student:${studentId}`;
+  }
+
+  static studentEnrollments(studentId: string) {
+    return `enrollments:student:${studentId}`;
+  }
+
+  // Teacher keys
+  static teacherProfile(teacherId: string) {
+    return `teacher:${teacherId}`;
+  }
+
+  // Analytics keys
+  static platformStats() {
+    return 'analytics:platform';
+  }
+
+  static enrollmentAnalytics() {
+    return 'analytics:enrollments';
+  }
+
+  static revenueAnalytics() {
+    return 'analytics:revenue';
   }
 }
 
 /**
- * Cache invalidation utilities
+ * Cache TTL Constants (in seconds)
+ */
+export class CacheTTL {
+  static readonly SHORT = 60;        // 1 minute - Frequently changing
+  static readonly MEDIUM = 300;      // 5 minutes - Moderately changing
+  static readonly LONG = 1800;       // 30 minutes - Rarely changing
+  static readonly VERY_LONG = 3600;  // 1 hour - Static data
+  static readonly DAY = 86400;       // 24 hours - Very static
+}
+
+/**
+ * Cache Invalidator
+ * Handles cache invalidation for different entities
  */
 export class CacheInvalidator {
   /**
-   * Invalidate all caches related to a course
+   * Invalidate course-related caches
    */
   static async invalidateCourse(courseId: string): Promise<void> {
     await Promise.all([
@@ -271,43 +257,43 @@ export class CacheInvalidator {
   }
 
   /**
-   * Invalidate all caches related to a student
+   * Invalidate student-related caches
    */
   static async invalidateStudent(studentId: string): Promise<void> {
     await Promise.all([
       CacheService.del(CacheKeys.studentDashboard(studentId)),
       CacheService.del(CacheKeys.studentProfile(studentId)),
       CacheService.del(CacheKeys.studentEnrollments(studentId)),
-      CacheService.del(CacheKeys.studentStats(studentId)),
     ]);
   }
 
   /**
-   * Invalidate all caches related to a teacher
+   * Invalidate teacher-related caches
    */
   static async invalidateTeacher(teacherId: string): Promise<void> {
     await Promise.all([
       CacheService.del(CacheKeys.teacherDashboard(teacherId)),
       CacheService.del(CacheKeys.teacherProfile(teacherId)),
-      CacheService.del(CacheKeys.teacherStats(teacherId)),
-      CacheService.delPattern(CacheKeys.patterns.userDashboard(teacherId)),
+      CacheService.del(CacheKeys.teacherCourses(teacherId)),
     ]);
   }
 
   /**
-   * Invalidate all analytics caches
+   * Invalidate analytics caches
    */
   static async invalidateAnalytics(): Promise<void> {
-    await CacheService.delPattern(CacheKeys.patterns.allAnalytics());
+    await Promise.all([
+      CacheService.del(CacheKeys.platformStats()),
+      CacheService.del(CacheKeys.enrollmentAnalytics()),
+      CacheService.del(CacheKeys.revenueAnalytics()),
+      CacheService.del(CacheKeys.adminDashboard()),
+    ]);
   }
 
   /**
-   * Invalidate all caches (use sparingly!)
+   * Invalidate all caches
    */
   static async invalidateAll(): Promise<void> {
-    console.warn('[Cache] Invalidating ALL caches');
-    await Promise.all([
-      CacheService.delPattern('*'),
-    ]);
+    await CacheService.delPattern('*');
   }
 }
