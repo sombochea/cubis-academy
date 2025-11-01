@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Users, GraduationCap, DollarSign, UserCheck, LayoutDashboard } from 'lucide-react';
+import { BookOpen, Users, GraduationCap, DollarSign, UserCheck, LayoutDashboard, BarChart3 } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 
 export function AdminNavClient({ locale }: { locale: string }) {
@@ -15,6 +15,7 @@ export function AdminNavClient({ locale }: { locale: string }) {
     { href: `/${locale}/admin/students`, label: 'Students', icon: Users },
     { href: `/${locale}/admin/enrollments`, label: 'Enrollments', icon: UserCheck },
     { href: `/${locale}/admin/payments`, label: 'Payments', icon: DollarSign },
+    { href: `/${locale}/admin/analytics`, label: 'Analytics', icon: BarChart3 },
   ];
 
   return (

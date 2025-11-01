@@ -81,37 +81,43 @@ export class AnalyticsService {
   });
 
   /**
-   * Get enrollment analytics
+   * Get enrollment analytics with real data
    */
   static getEnrollmentAnalytics = cache(async () => {
-    // This would aggregate enrollment data across all courses
-    // For now, returning placeholder structure
+    const { AdvancedAnalyticsService } = await import('@/lib/analytics/reports');
+    const data = await AdvancedAnalyticsService.getEnrollmentAnalytics();
+    
     return {
-      totalEnrollments: 0,
-      activeEnrollments: 0,
-      completedEnrollments: 0,
-      avgCompletionRate: 0,
-      enrollmentTrend: [],
+      totalEnrollments: data.total,
+      activeEnrollments: data.active,
+      completedEnrollments: data.completed,
+      avgProgress: data.active > 0 ? Math.round((data.completed / data.active) * 100) : 0,
+      completionRate: data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0,
+      monthlyTrends: data.byMonth.map(m => ({
+        month: m.month.substring(5), // Get MM from YYYY-MM
+        count: m.count,
+      })),
+      byCategory: data.byCategory,
     };
   });
 
   /**
-   * Get revenue analytics
+   * Get revenue analytics with real data
    */
   static getRevenueAnalytics = cache(async () => {
-    const paymentStats = await PaymentRepository.getPaymentStats();
-
-    const totalRevenue = parseFloat(paymentStats.totalAmount?.toString() || '0');
-    const pendingRevenue = parseFloat(paymentStats.pendingAmount?.toString() || '0');
+    const { AdvancedAnalyticsService } = await import('@/lib/analytics/reports');
+    const data = await AdvancedAnalyticsService.getRevenueAnalytics();
 
     return {
-      totalRevenue,
-      pendingRevenue,
-      completedPayments: paymentStats.completedPayments,
-      pendingPayments: paymentStats.pendingPayments,
-      avgPaymentValue: paymentStats.completedPayments > 0 
-        ? totalRevenue / paymentStats.completedPayments 
-        : 0,
+      totalRevenue: data.totalRevenue,
+      pendingRevenue: 0, // Calculate if needed
+      completedPayments: data.completedPayments,
+      pendingPayments: data.pendingPayments,
+      avgPaymentValue: data.averagePayment,
+      monthlyRevenue: data.byMonth.map(m => ({
+        month: m.month.substring(5), // Get MM from YYYY-MM
+        amount: m.amount,
+      })),
     };
   });
 

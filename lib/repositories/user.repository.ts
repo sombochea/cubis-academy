@@ -24,7 +24,7 @@ export class UserRepository extends BaseRepository {
           phone: users.phone,
           role: users.role,
           isActive: users.isActive,
-          emailVerified: users.emailVerified,
+          emailVerifiedAt: users.emailVerifiedAt,
           created: users.created,
         })
         .from(users)
@@ -47,7 +47,7 @@ export class UserRepository extends BaseRepository {
           phone: users.phone,
           role: users.role,
           isActive: users.isActive,
-          emailVerified: users.emailVerified,
+          emailVerifiedAt: users.emailVerifiedAt,
           created: users.created,
         })
         .from(users)
@@ -70,7 +70,7 @@ export class UserRepository extends BaseRepository {
           phone: users.phone,
           role: users.role,
           isActive: users.isActive,
-          emailVerified: users.emailVerified,
+          emailVerifiedAt: users.emailVerifiedAt,
           created: users.created,
         })
         .from(users)
@@ -96,7 +96,7 @@ export class UserRepository extends BaseRepository {
           teachers: sql<number>`count(case when ${users.role} = 'teacher' then 1 end)::int`,
           admins: sql<number>`count(case when ${users.role} = 'admin' then 1 end)::int`,
           activeUsers: sql<number>`count(case when ${users.isActive} = true then 1 end)::int`,
-          verifiedEmails: sql<number>`count(case when ${users.emailVerified} is not null then 1 end)::int`,
+          verifiedEmails: sql<number>`count(case when ${users.emailVerifiedAt} is not null then 1 end)::int`,
         })
         .from(users);
 
@@ -151,7 +151,7 @@ export class UserRepository extends BaseRepository {
           phone: users.phone,
           role: users.role,
           isActive: users.isActive,
-          emailVerified: users.emailVerified,
+          emailVerifiedAt: users.emailVerifiedAt,
           created: users.created,
           // Student fields
           studentPhoto: students.photo,

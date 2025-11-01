@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, LayoutDashboard, BookOpen, Users, GraduationCap, DollarSign, UserCheck } from 'lucide-react';
+import { Menu, X, LayoutDashboard, BookOpen, Users, GraduationCap, DollarSign, UserCheck, BarChart3 } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { Button } from '@/components/ui/button';
 
@@ -18,6 +18,7 @@ export function AdminMobileNav({ locale }: { locale: string }) {
     { href: `/${locale}/admin/students`, label: 'Students', icon: Users },
     { href: `/${locale}/admin/enrollments`, label: 'Enrollments', icon: UserCheck },
     { href: `/${locale}/admin/payments`, label: 'Payments', icon: DollarSign },
+    { href: `/${locale}/admin/analytics`, label: 'Analytics', icon: BarChart3 },
   ];
 
   return (
