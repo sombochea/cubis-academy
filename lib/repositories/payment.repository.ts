@@ -110,6 +110,7 @@ export class PaymentRepository extends BaseRepository {
         .select({
           id: payments.id,
           studentId: payments.studentId,
+          studentSuid: students.suid,
           enrollmentId: payments.enrollmentId,
           amount: payments.amount,
           method: payments.method,
@@ -119,6 +120,7 @@ export class PaymentRepository extends BaseRepository {
           studentName: users.name,
           studentEmail: users.email,
           courseTitle: courses.title,
+          courseId: courses.id,
         })
         .from(payments)
         .innerJoin(students, eq(payments.studentId, students.userId))

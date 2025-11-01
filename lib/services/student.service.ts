@@ -17,24 +17,24 @@ export class StudentService {
    * Optimized with parallel fetching
    */
   static getStudentDashboard = cache(async (studentId: string) => {
-    // Parallel fetch all dashboard data
+    // Parallel fetch all dashboard data (including metrics)
     const [
       student,
       stats,
       recentScores,
       recentAttendance,
       recentPayments,
+      avgScore,
+      attendanceRate,
     ] = await Promise.all([
       StudentRepository.getStudentByUserId(studentId),
       StudentRepository.getStudentStats(studentId),
       ScoreRepository.getRecentScoresForStudent(studentId, 5),
       AttendanceRepository.getRecentAttendanceForStudent(studentId, 5),
       PaymentRepository.getRecentPayments(5),
+      ScoreRepository.getAverageScoreForStudent(studentId),
+      AttendanceRepository.getAttendanceRateForStudent(studentId),
     ]);
-
-    // Calculate additional metrics
-    const avgScore = await ScoreRepository.getAverageScoreForStudent(studentId);
-    const attendanceRate = await AttendanceRepository.getAttendanceRateForStudent(studentId);
 
     return {
       student,

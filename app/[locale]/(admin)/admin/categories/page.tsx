@@ -1,14 +1,33 @@
+import { Suspense } from 'react';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { db } from '@/lib/drizzle/db';
-import { courseCategories } from '@/lib/drizzle/schema';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { Trans } from '@lingui/react/macro';
 import { AdminNav } from '@/components/admin/AdminNav';
 import { CategoriesDataTable } from '@/components/admin/CategoriesDataTable';
+import { CategoryService } from '@/lib/services/category.service';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
+
+// Loading component
+function TableLoading() {
+  return (
+    <div className="bg-white rounded-xl border border-gray-100 p-6">
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="h-16 bg-gray-200 rounded animate-pulse" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Data fetching component
+async function CategoriesTable({ locale }: { locale: string }) {
+  const categories = await CategoryService.getAllCategories();
+  return <CategoriesDataTable data={categories} locale={locale} />;
+}
 
 export default async function CategoriesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -21,16 +40,12 @@ export default async function CategoriesPage({ params }: { params: Promise<{ loc
     redirect(`/${locale}/login`);
   }
 
-  const categories = await db
-    .select()
-    .from(courseCategories)
-    .orderBy(courseCategories.name);
-
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
       <AdminNav locale={locale} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header renders immediately */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold text-[#17224D] mb-2">
@@ -49,7 +64,10 @@ export default async function CategoriesPage({ params }: { params: Promise<{ loc
           </Link>
         </div>
 
-        <CategoriesDataTable data={categories} locale={locale} />
+        {/* Table loads independently with Suspense */}
+        <Suspense fallback={<TableLoading />}>
+          <CategoriesTable locale={locale} />
+        </Suspense>
       </div>
     </div>
   );

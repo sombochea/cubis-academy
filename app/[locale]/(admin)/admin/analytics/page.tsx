@@ -29,10 +29,12 @@ export default async function AnalyticsPage({
     redirect(`/${locale}/unauthorized`);
   }
 
-  // Fetch analytics data
-  const overview = await AnalyticsService.getAdminDashboardOverview();
-  const enrollmentAnalytics = await AnalyticsService.getEnrollmentAnalytics();
-  const revenueAnalytics = await AnalyticsService.getRevenueAnalytics();
+  // Fetch analytics data in PARALLEL (much faster!)
+  const [overview, enrollmentAnalytics, revenueAnalytics] = await Promise.all([
+    AnalyticsService.getAdminDashboardOverview(),
+    AnalyticsService.getEnrollmentAnalytics(),
+    AnalyticsService.getRevenueAnalytics(),
+  ]);
 
   // Prepare chart data
   const chartData = {

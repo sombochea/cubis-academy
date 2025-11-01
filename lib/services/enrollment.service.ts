@@ -114,4 +114,11 @@ export class EnrollmentService {
     
     return Math.max(0, total - paid);
   }
+
+  /**
+   * Get all enrollments with student and course details for admin page
+   */
+  static getAllEnrollmentsWithDetails = cache(async () => {
+    return EnrollmentRepository.getAllEnrollmentsWithDetails();
+  });
 }

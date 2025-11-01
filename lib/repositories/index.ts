@@ -13,3 +13,4 @@ export { PaymentRepository } from './payment.repository';
 export { ScoreRepository } from './score.repository';
 export { AttendanceRepository } from './attendance.repository';
 export { UserRepository } from './user.repository';
+export { CategoryRepository } from './category.repository';

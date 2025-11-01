@@ -214,4 +214,30 @@ export class EnrollmentRepository extends BaseRepository {
       return result?.avgProgress || 0;
     });
   });
+
+  /**
+   * Get all enrollments with student and course details for admin page
+   */
+  static getAllEnrollmentsWithDetails = cache(async () => {
+    return await this.executeQuery('getAllEnrollmentsWithDetails', async () => {
+      return await db
+        .select({
+          id: enrollments.id,
+          studentName: users.name,
+          studentSuid: students.suid,
+          studentId: students.userId,
+          courseTitle: courses.title,
+          courseId: courses.id,
+          status: enrollments.status,
+          progress: enrollments.progress,
+          enrolled: enrollments.enrolled,
+          completed: enrollments.completed,
+        })
+        .from(enrollments)
+        .innerJoin(students, eq(enrollments.studentId, students.userId))
+        .innerJoin(users, eq(students.userId, users.id))
+        .innerJoin(courses, eq(enrollments.courseId, courses.id))
+        .orderBy(desc(enrollments.enrolled));
+    });
+  });
 }

@@ -98,6 +98,7 @@ export interface CoursePerformanceAnalytics {
 export class AdvancedAnalyticsService {
   /**
    * Get enrollment analytics for time range
+   * OPTIMIZED: Parallel queries for faster performance
    */
   static getEnrollmentAnalytics = cache(async (
     timeRange?: TimeRange
@@ -112,50 +113,55 @@ export class AdvancedAnalyticsService {
         );
       }
 
-      // Total enrollments
-      const [totals] = await db
-        .select({
-          total: count(),
-          active: sql<number>`count(*) filter (where ${enrollments.status} = 'active')`,
-          completed: sql<number>`count(*) filter (where ${enrollments.status} = 'completed')`,
-        })
-        .from(enrollments)
-        .where(conditions.length > 0 ? and(...conditions) : undefined);
+      // PARALLEL FETCH - All queries run simultaneously
+      const [totalsResult, byMonth, byCategory, byLevel] = await Promise.all([
+        // Total enrollments
+        db
+          .select({
+            total: count(),
+            active: sql<number>`count(*) filter (where ${enrollments.status} = 'active')`,
+            completed: sql<number>`count(*) filter (where ${enrollments.status} = 'completed')`,
+          })
+          .from(enrollments)
+          .where(conditions.length > 0 ? and(...conditions) : undefined),
 
-      // Enrollments by month
-      const byMonth = await db
-        .select({
-          month: sql<string>`to_char(${enrollments.enrolled}, 'YYYY-MM')`,
-          count: count(),
-        })
-        .from(enrollments)
-        .where(conditions.length > 0 ? and(...conditions) : undefined)
-        .groupBy(sql`to_char(${enrollments.enrolled}, 'YYYY-MM')`)
-        .orderBy(sql`to_char(${enrollments.enrolled}, 'YYYY-MM')`);
+        // Enrollments by month
+        db
+          .select({
+            month: sql<string>`to_char(${enrollments.enrolled}, 'YYYY-MM')`,
+            count: count(),
+          })
+          .from(enrollments)
+          .where(conditions.length > 0 ? and(...conditions) : undefined)
+          .groupBy(sql`to_char(${enrollments.enrolled}, 'YYYY-MM')`)
+          .orderBy(sql`to_char(${enrollments.enrolled}, 'YYYY-MM')`),
 
-      // Enrollments by category
-      const byCategory = await db
-        .select({
-          category: courses.category,
-          count: count(),
-        })
-        .from(enrollments)
-        .innerJoin(courses, eq(enrollments.courseId, courses.id))
-        .where(conditions.length > 0 ? and(...conditions) : undefined)
-        .groupBy(courses.category)
-        .orderBy(desc(count()));
+        // Enrollments by category
+        db
+          .select({
+            category: courses.category,
+            count: count(),
+          })
+          .from(enrollments)
+          .innerJoin(courses, eq(enrollments.courseId, courses.id))
+          .where(conditions.length > 0 ? and(...conditions) : undefined)
+          .groupBy(courses.category)
+          .orderBy(desc(count())),
 
-      // Enrollments by level
-      const byLevel = await db
-        .select({
-          level: courses.level,
-          count: count(),
-        })
-        .from(enrollments)
-        .innerJoin(courses, eq(enrollments.courseId, courses.id))
-        .where(conditions.length > 0 ? and(...conditions) : undefined)
-        .groupBy(courses.level)
-        .orderBy(desc(count()));
+        // Enrollments by level
+        db
+          .select({
+            level: courses.level,
+            count: count(),
+          })
+          .from(enrollments)
+          .innerJoin(courses, eq(enrollments.courseId, courses.id))
+          .where(conditions.length > 0 ? and(...conditions) : undefined)
+          .groupBy(courses.level)
+          .orderBy(desc(count())),
+      ]);
+
+      const [totals] = totalsResult;
 
       // Calculate growth rate (compare to previous period)
       const growthRate = 0; // TODO: Implement growth calculation
@@ -200,61 +206,67 @@ export class AdvancedAnalyticsService {
         );
       }
 
-      // Total revenue and payment stats
-      const [totals] = await db
-        .select({
-          totalRevenue: sql<number>`coalesce(sum(${payments.amount}), 0)`,
-          completedPayments: count(),
-          averagePayment: sql<number>`coalesce(avg(${payments.amount}), 0)`,
-        })
-        .from(payments)
-        .where(and(...conditions));
+      // PARALLEL FETCH - All queries run simultaneously for faster performance
+      const [totalsResult, pendingResult, byMonth, byMethod, topCourses] = await Promise.all([
+        // Total revenue and payment stats
+        db
+          .select({
+            totalRevenue: sql<number>`coalesce(sum(${payments.amount}), 0)`,
+            completedPayments: count(),
+            averagePayment: sql<number>`coalesce(avg(${payments.amount}), 0)`,
+          })
+          .from(payments)
+          .where(and(...conditions)),
 
-      // Pending payments
-      const [pending] = await db
-        .select({
-          count: count(),
-        })
-        .from(payments)
-        .where(eq(payments.status, 'pending'));
+        // Pending payments
+        db
+          .select({
+            count: count(),
+          })
+          .from(payments)
+          .where(eq(payments.status, 'pending')),
 
-      // Revenue by month
-      const byMonth = await db
-        .select({
-          month: sql<string>`to_char(${payments.created}, 'YYYY-MM')`,
-          amount: sql<number>`sum(${payments.amount})`,
-        })
-        .from(payments)
-        .where(and(...conditions))
-        .groupBy(sql`to_char(${payments.created}, 'YYYY-MM')`)
-        .orderBy(sql`to_char(${payments.created}, 'YYYY-MM')`);
+        // Revenue by month
+        db
+          .select({
+            month: sql<string>`to_char(${payments.created}, 'YYYY-MM')`,
+            amount: sql<number>`sum(${payments.amount})`,
+          })
+          .from(payments)
+          .where(and(...conditions))
+          .groupBy(sql`to_char(${payments.created}, 'YYYY-MM')`)
+          .orderBy(sql`to_char(${payments.created}, 'YYYY-MM')`),
 
-      // Revenue by payment method
-      const byMethod = await db
-        .select({
-          method: payments.method,
-          amount: sql<number>`sum(${payments.amount})`,
-          count: count(),
-        })
-        .from(payments)
-        .where(and(...conditions))
-        .groupBy(payments.method)
-        .orderBy(desc(sql`sum(${payments.amount})`));
+        // Revenue by payment method
+        db
+          .select({
+            method: payments.method,
+            amount: sql<number>`sum(${payments.amount})`,
+            count: count(),
+          })
+          .from(payments)
+          .where(and(...conditions))
+          .groupBy(payments.method)
+          .orderBy(desc(sql`sum(${payments.amount})`)),
 
-      // Top revenue-generating courses
-      const topCourses = await db
-        .select({
-          courseTitle: courses.title,
-          revenue: sql<number>`sum(${payments.amount})`,
-          enrollments: count(),
-        })
-        .from(payments)
-        .innerJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
-        .innerJoin(courses, eq(enrollments.courseId, courses.id))
-        .where(and(...conditions))
-        .groupBy(courses.id, courses.title)
-        .orderBy(desc(sql`sum(${payments.amount})`))
-        .limit(10);
+        // Top revenue-generating courses
+        db
+          .select({
+            courseTitle: courses.title,
+            revenue: sql<number>`sum(${payments.amount})`,
+            enrollments: count(),
+          })
+          .from(payments)
+          .innerJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
+          .innerJoin(courses, eq(enrollments.courseId, courses.id))
+          .where(and(...conditions))
+          .groupBy(courses.id, courses.title)
+          .orderBy(desc(sql`sum(${payments.amount})`))
+          .limit(10),
+      ]);
+
+      const [totals] = totalsResult;
+      const [pending] = pendingResult;
 
       return {
         totalRevenue: Number(totals.totalRevenue),
