@@ -24,17 +24,25 @@ import {
 
 interface UserNavProps {
   locale: string;
+  initialUser?: {
+    id: string;
+    name: string | null;
+    email: string | null;
+    image: string | null;
+    role: string | null;
+    suid?: string | null;
+  } | null;
 }
 
-export function UserNav({ locale }: UserNavProps) {
+export function UserNav({ locale, initialUser }: UserNavProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { data: session } = useSession();
 
-  // Get user from session (will update automatically when session updates)
+  // Use initialUser from server if available, otherwise fall back to client session
   const sessionUser = session?.user as any;
-  const user = sessionUser
+  const user = initialUser || (sessionUser
     ? {
         id: sessionUser.id,
         name: sessionUser.name,
@@ -43,7 +51,7 @@ export function UserNav({ locale }: UserNavProps) {
         role: sessionUser.role,
         suid: sessionUser.suid,
       }
-    : null;
+    : null);
 
   if (!user) return null;
 

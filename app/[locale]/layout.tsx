@@ -5,6 +5,7 @@ import { LanguageProvider } from '@/components/LanguageProvider';
 import { SessionProvider } from '@/components/SessionProvider';
 import { SessionInitializer } from '@/components/SessionInitializer';
 import { SessionValidator } from '@/components/SessionValidator';
+import { auth } from '@/auth';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -34,11 +35,12 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const session = await auth();
   
   return (
     <html lang={locale}>
       <body className={`${manrope.variable} ${kantumruyPro.variable} font-sans font-kantumruy antialiased`}>
-        <SessionProvider>
+        <SessionProvider session={session}>
           <SessionInitializer />
           <SessionValidator />
           <LanguageProvider locale={locale}>
