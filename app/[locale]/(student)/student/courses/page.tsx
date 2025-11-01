@@ -1,13 +1,61 @@
+import { Suspense } from 'react';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { db } from '@/lib/drizzle/db';
-import { courses, users, teachers } from '@/lib/drizzle/schema';
-import { eq } from 'drizzle-orm';
 import { Trans } from '@lingui/react/macro';
 import { StudentNav } from '@/components/student/StudentNav';
 import { CoursesGrid } from '@/components/student/CoursesGrid';
+import { CourseService } from '@/lib/services/course.service';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
+
+// Loading component
+function CoursesLoading() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div key={i} className="bg-white rounded-xl border border-gray-100 overflow-hidden animate-pulse">
+          <div className="h-48 bg-gray-200" />
+          <div className="p-6 space-y-4">
+            <div className="h-6 bg-gray-200 rounded w-3/4" />
+            <div className="h-4 bg-gray-200 rounded w-full" />
+            <div className="h-4 bg-gray-200 rounded w-5/6" />
+            <div className="flex items-center gap-2 pt-4">
+              <div className="w-10 h-10 bg-gray-200 rounded-full" />
+              <div className="flex-1">
+                <div className="h-4 bg-gray-200 rounded w-24 mb-1" />
+                <div className="h-3 bg-gray-200 rounded w-32" />
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Courses component (loads independently)
+async function CoursesList({ locale }: { locale: string }) {
+  const coursesWithStats = await CourseService.getCoursesWithStats();
+
+  // Get course counts for each teacher
+  const teacherCourseCountsMap = new Map<string, number>();
+  for (const course of coursesWithStats) {
+    if (course.teacherId) {
+      if (!teacherCourseCountsMap.has(course.teacherId)) {
+        const count = coursesWithStats.filter(c => c.teacherId === course.teacherId).length;
+        teacherCourseCountsMap.set(course.teacherId, count);
+      }
+    }
+  }
+
+  return (
+    <CoursesGrid 
+      courses={coursesWithStats} 
+      locale={locale}
+      teacherCourseCountsMap={teacherCourseCountsMap}
+    />
+  );
+}
 
 export default async function CoursesPage({ 
   params 
@@ -24,39 +72,6 @@ export default async function CoursesPage({
     redirect(`/${locale}/login`);
   }
 
-  // Get all active courses with teacher info
-  const coursesList = await db
-    .select({
-      id: courses.id,
-      title: courses.title,
-      desc: courses.desc,
-      category: courses.category,
-      price: courses.price,
-      duration: courses.duration,
-      level: courses.level,
-      isActive: courses.isActive,
-      teacherId: courses.teacherId,
-      teacherName: users.name,
-      teacherPhoto: teachers.photo,
-      teacherBio: teachers.bio,
-      teacherSpec: teachers.spec,
-    })
-    .from(courses)
-    .leftJoin(teachers, eq(courses.teacherId, teachers.userId))
-    .leftJoin(users, eq(teachers.userId, users.id))
-    .where(eq(courses.isActive, true));
-
-  // Get course counts for each teacher
-  const teacherCourseCountsMap = new Map<string, number>();
-  for (const course of coursesList) {
-    if (course.teacherId) {
-      if (!teacherCourseCountsMap.has(course.teacherId)) {
-        const count = coursesList.filter(c => c.teacherId === course.teacherId).length;
-        teacherCourseCountsMap.set(course.teacherId, count);
-      }
-    }
-  }
-
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
       <StudentNav locale={locale} />
@@ -71,11 +86,10 @@ export default async function CoursesPage({
           </p>
         </div>
 
-        <CoursesGrid 
-          courses={coursesList} 
-          locale={locale}
-          teacherCourseCountsMap={teacherCourseCountsMap}
-        />
+        {/* Courses with Suspense */}
+        <Suspense fallback={<CoursesLoading />}>
+          <CoursesList locale={locale} />
+        </Suspense>
       </div>
     </div>
   );

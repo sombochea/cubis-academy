@@ -7,6 +7,9 @@
 export { BaseRepository } from './base.repository';
 export { CourseRepository } from './course.repository';
 export { EnrollmentRepository } from './enrollment.repository';
-
-// Export types if needed
-export type { } from './base.repository';
+export { StudentRepository } from './student.repository';
+export { TeacherRepository } from './teacher.repository';
+export { PaymentRepository } from './payment.repository';
+export { ScoreRepository } from './score.repository';
+export { AttendanceRepository } from './attendance.repository';
+export { UserRepository } from './user.repository';

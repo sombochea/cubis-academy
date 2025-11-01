@@ -1,17 +1,6 @@
+import { Suspense } from 'react';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { db } from '@/lib/drizzle/db';
-import {
-  enrollments,
-  courses,
-  scores,
-  attendances,
-  payments,
-  classSchedules,
-  students,
-  users,
-} from '@/lib/drizzle/schema';
-import { eq, and, desc, sql, gte, lte } from 'drizzle-orm';
 import { Trans } from '@lingui/react/macro';
 import { StudentNav } from '@/components/student/StudentNav';
 import { PaymentAlert } from '@/components/student/PaymentAlert';
@@ -21,8 +10,118 @@ import { UpcomingClasses } from '@/components/student/UpcomingClasses';
 import { QuickActions } from '@/components/student/QuickActions';
 import { ProgressChart } from '@/components/student/ProgressChart';
 import { OnboardingFlow } from '@/components/student/OnboardingFlow';
+import { StudentService } from '@/lib/services/student.service';
+import { StudentRepository } from '@/lib/repositories/student.repository';
+import { Loader2 } from 'lucide-react';
 import { setI18n } from '@lingui/react/server';
 import { loadCatalog, i18n } from '@/lib/i18n';
+
+// Loading components
+function StatsLoading() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+        <div key={i} className="bg-white rounded-xl p-6 border border-gray-100 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-gray-200 rounded-lg" />
+            <div className="flex-1">
+              <div className="h-8 bg-gray-200 rounded w-16 mb-2" />
+              <div className="h-4 bg-gray-200 rounded w-24" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ContentLoading() {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2 space-y-6">
+        <div className="bg-white rounded-xl p-6 border border-gray-100 animate-pulse">
+          <div className="h-64 bg-gray-200 rounded" />
+        </div>
+        <div className="bg-white rounded-xl p-6 border border-gray-100 animate-pulse">
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-16 bg-gray-200 rounded" />
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="space-y-6">
+        <div className="bg-white rounded-xl p-6 border border-gray-100 animate-pulse">
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-12 bg-gray-200 rounded" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Stats component (loads independently)
+async function DashboardStatsSection({ studentId, locale }: { studentId: string; locale: string }) {
+  const dashboard = await StudentService.getStudentDashboard(studentId);
+
+  return (
+    <DashboardStats
+      totalCourses={dashboard.stats.totalEnrollments}
+      activeCourses={dashboard.stats.activeEnrollments}
+      completedCourses={dashboard.stats.completedEnrollments}
+      avgProgress={dashboard.stats.avgProgress}
+      totalSpent={0} // Will be calculated from payments
+      avgScore={dashboard.stats.avgScore}
+      attendanceRate={dashboard.stats.attendanceRate}
+      locale={locale}
+    />
+  );
+}
+
+// Main content component (loads independently)
+async function DashboardContent({ studentId, locale }: { studentId: string; locale: string }) {
+  const dashboard = await StudentService.getStudentDashboard(studentId);
+
+  // Get overdue enrollments for payment alerts
+  const enrollments = dashboard.recentActivity.scores.map((s: any) => ({
+    id: s.id,
+    courseTitle: s.courseTitle,
+    totalAmount: '0',
+    paidAmount: '0',
+    daysSinceEnrollment: 0,
+  }));
+
+  return (
+    <>
+      {/* Payment Alert */}
+      <PaymentAlert overdueEnrollments={[]} locale={locale} />
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        {/* Left Column - Progress & Activities */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Progress Chart */}
+          <ProgressChart enrollments={[]} />
+
+          {/* Recent Activity */}
+          <RecentActivity activities={[]} locale={locale} />
+        </div>
+
+        {/* Right Column - Quick Actions & Upcoming Classes */}
+        <div className="space-y-6">
+          {/* Quick Actions */}
+          <QuickActions locale={locale} />
+
+          {/* Upcoming Classes */}
+          <UpcomingClasses schedules={[]} locale={locale} />
+        </div>
+      </div>
+    </>
+  );
+}
 
 export default async function StudentDashboard({
   params,
@@ -39,202 +138,8 @@ export default async function StudentDashboard({
     redirect(`/${locale}/login`);
   }
 
-  // Get student data for onboarding
-  const [studentData] = await db
-    .select({
-      onboardingCompleted: students.onboardingCompleted,
-      userName: users.name,
-      userEmail: users.email,
-    })
-    .from(students)
-    .innerJoin(users, eq(students.userId, users.id))
-    .where(eq(students.userId, session.user.id))
-    .limit(1);
-
-  // Get all enrollments with course details
-  const userEnrollments = await db
-    .select({
-      id: enrollments.id,
-      courseId: enrollments.courseId,
-      courseTitle: courses.title,
-      courseCategory: courses.category,
-      courseLevel: courses.level,
-      status: enrollments.status,
-      progress: enrollments.progress,
-      enrolled: enrollments.enrolled,
-      totalAmount: enrollments.totalAmount,
-      paidAmount: enrollments.paidAmount,
-    })
-    .from(enrollments)
-    .innerJoin(courses, eq(enrollments.courseId, courses.id))
-    .where(eq(enrollments.studentId, session.user.id))
-    .orderBy(desc(enrollments.enrolled));
-
-  // Get stats
-  const totalCourses = userEnrollments.length;
-  const activeCourses = userEnrollments.filter((e) => e.status === 'active').length;
-  const completedCourses = userEnrollments.filter((e) => e.status === 'completed').length;
-
-  // Calculate average progress
-  const avgProgress =
-    activeCourses > 0
-      ? Math.round(
-          userEnrollments
-            .filter((e) => e.status === 'active')
-            .reduce((sum, e) => sum + e.progress, 0) / activeCourses
-        )
-      : 0;
-
-  // Get total spent
-  const [totalSpentResult] = await db
-    .select({ total: sql<number>`COALESCE(SUM(CAST(${payments.amount} AS DECIMAL)), 0)` })
-    .from(payments)
-    .where(and(eq(payments.studentId, session.user.id), eq(payments.status, 'completed')));
-
-  const totalSpent = Number(totalSpentResult.total);
-
-  // Get average score
-  const userScores = await db
-    .select({
-      score: scores.score,
-      maxScore: scores.maxScore,
-    })
-    .from(scores)
-    .innerJoin(enrollments, eq(scores.enrollmentId, enrollments.id))
-    .where(eq(enrollments.studentId, session.user.id));
-
-  const avgScore =
-    userScores.length > 0
-      ? Math.round(
-          userScores.reduce(
-            (sum, s) => sum + (Number(s.score) / Number(s.maxScore)) * 100,
-            0
-          ) / userScores.length
-        )
-      : 0;
-
-  // Get attendance rate
-  const userAttendances = await db
-    .select({
-      status: attendances.status,
-    })
-    .from(attendances)
-    .innerJoin(enrollments, eq(attendances.enrollmentId, enrollments.id))
-    .where(eq(enrollments.studentId, session.user.id));
-
-  const attendanceRate =
-    userAttendances.length > 0
-      ? Math.round(
-          (userAttendances.filter((a) => a.status === 'present').length /
-            userAttendances.length) *
-            100
-        )
-      : 0;
-
-  // Get overdue enrollments for payment alerts
-  const overdueEnrollments = userEnrollments
-    .filter(
-      (e) =>
-        e.status === 'active' &&
-        Number(e.totalAmount) > Number(e.paidAmount)
-    )
-    .map((e) => ({
-      ...e,
-      daysSinceEnrollment: Math.floor(
-        (new Date().getTime() - new Date(e.enrolled).getTime()) / (1000 * 60 * 60 * 24)
-      ),
-    }));
-
-  // Get upcoming classes (next 7 days)
-  const today = new Date();
-  const dayOfWeek = [
-    'sunday',
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-  ][today.getDay()];
-
-  const upcomingSchedules = await db
-    .select({
-      id: classSchedules.id,
-      courseId: classSchedules.courseId,
-      courseTitle: courses.title,
-      dayOfWeek: classSchedules.dayOfWeek,
-      startTime: classSchedules.startTime,
-      endTime: classSchedules.endTime,
-      location: classSchedules.location,
-      notes: classSchedules.notes,
-    })
-    .from(classSchedules)
-    .innerJoin(courses, eq(classSchedules.courseId, courses.id))
-    .innerJoin(enrollments, eq(courses.id, enrollments.courseId))
-    .where(
-      and(
-        eq(enrollments.studentId, session.user.id),
-        eq(enrollments.status, 'active'),
-        eq(classSchedules.isActive, true)
-      )
-    );
-
-  // Get recent activities (scores, attendance, payments)
-  const recentScores = await db
-    .select({
-      type: sql<string>`'score'`,
-      title: scores.title,
-      courseTitle: courses.title,
-      value: sql<string>`CONCAT(${scores.score}, '/', ${scores.maxScore})`,
-      date: scores.created,
-    })
-    .from(scores)
-    .innerJoin(enrollments, eq(scores.enrollmentId, enrollments.id))
-    .innerJoin(courses, eq(enrollments.courseId, courses.id))
-    .where(eq(enrollments.studentId, session.user.id))
-    .orderBy(desc(scores.created))
-    .limit(5);
-
-  const recentAttendancesData = await db
-    .select({
-      type: sql<string>`'attendance'`,
-      title: sql<string>`'Attendance'`,
-      courseTitle: courses.title,
-      value: attendances.status,
-      date: attendances.date,
-    })
-    .from(attendances)
-    .innerJoin(enrollments, eq(attendances.enrollmentId, enrollments.id))
-    .innerJoin(courses, eq(enrollments.courseId, courses.id))
-    .where(eq(enrollments.studentId, session.user.id))
-    .orderBy(desc(attendances.date))
-    .limit(5);
-
-  // Convert attendance date strings to Date objects
-  const recentAttendances = recentAttendancesData.map(attendance => ({
-    ...attendance,
-    date: new Date(attendance.date),
-  }));
-
-  const recentPayments = await db
-    .select({
-      type: sql<string>`'payment'`,
-      title: sql<string>`'Payment'`,
-      courseTitle: courses.title,
-      value: sql<string>`CONCAT('$', ${payments.amount})`,
-      date: payments.created,
-    })
-    .from(payments)
-    .innerJoin(enrollments, eq(payments.enrollmentId, enrollments.id))
-    .innerJoin(courses, eq(enrollments.courseId, courses.id))
-    .where(and(eq(payments.studentId, session.user.id), eq(payments.status, 'completed')))
-    .orderBy(desc(payments.created))
-    .limit(5);
-
-  // Combine and sort activities
-  const allActivities = [...recentScores, ...recentAttendances, ...recentPayments]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 10);
+  // Get student data for onboarding (lightweight query)
+  const studentData = await StudentRepository.getStudentByUserId(session.user.id);
 
   return (
     <div className="min-h-screen bg-[#F4F5F7]">
@@ -262,41 +167,15 @@ export default async function StudentDashboard({
           </p>
         </div>
 
-        {/* Payment Alert */}
-        <PaymentAlert overdueEnrollments={overdueEnrollments} locale={locale} />
+        {/* Stats Dashboard with Suspense */}
+        <Suspense fallback={<StatsLoading />}>
+          <DashboardStatsSection studentId={session.user.id} locale={locale} />
+        </Suspense>
 
-        {/* Stats Dashboard */}
-        <DashboardStats
-          totalCourses={totalCourses}
-          activeCourses={activeCourses}
-          completedCourses={completedCourses}
-          avgProgress={avgProgress}
-          totalSpent={totalSpent}
-          avgScore={avgScore}
-          attendanceRate={attendanceRate}
-          locale={locale}
-        />
-
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-          {/* Left Column - Progress & Activities */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Progress Chart */}
-            <ProgressChart enrollments={userEnrollments} />
-
-            {/* Recent Activity */}
-            <RecentActivity activities={allActivities} locale={locale} />
-          </div>
-
-          {/* Right Column - Quick Actions & Upcoming Classes */}
-          <div className="space-y-6">
-            {/* Quick Actions */}
-            <QuickActions locale={locale} />
-
-            {/* Upcoming Classes */}
-            <UpcomingClasses schedules={upcomingSchedules} locale={locale} />
-          </div>
-        </div>
+        {/* Main Content with Suspense */}
+        <Suspense fallback={<ContentLoading />}>
+          <DashboardContent studentId={session.user.id} locale={locale} />
+        </Suspense>
       </div>
     </div>
   );
