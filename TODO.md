@@ -13,3 +13,26 @@
 - Class's activity (course that enrolled) and feedback.
 - Students earn archievements (first register, etc).
 - Teachers earn archivements.
+
+
+---
+Next Steps (Future Implementation)
+
+Duplicate Course:
+
+Add API endpoint to duplicate course data
+Copy course details, schedules, materials
+Generate new course ID
+Redirect to edit page
+Import Course:
+
+File upload functionality
+CSV/Excel parser
+Data validation
+Bulk insert logic
+Course Templates:
+
+Template database table
+Template selection UI
+Template customization
+Course creation from template
